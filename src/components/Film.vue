@@ -15,7 +15,12 @@
         <p>Sorry nothing was found is your watchlist empty</p>
       </div>
       <div v-else id="container">
-        <a v-bind:href="url" :style="{ backgroundImage: 'url(' + img_url + ')' }" class="film-cover" alt="film poster"></a>
+        <a
+          v-bind:href="url"
+          :style="{ backgroundImage: 'url(' + img_url + ')' }"
+          class="film-cover"
+          alt="film poster"
+        ></a>
         <a v-bind:href="url">{{ name }}</a>
       </div>
     </div>
@@ -39,8 +44,10 @@ export default {
       this.pressed = true;
       this.loading = true;
       let inputted = this.users.split(/(?:,| )+/);
-      let userlist = inputted.filter(function(el) { return el; });
-      if(userlist.length < 1) return;
+      let userlist = inputted.filter(function (el) {
+        return el;
+      });
+      if (userlist.length < 1) return;
       console.log(userlist);
       let url = "https://letterboxd-random.ue.r.appspot.com/film?";
       for (let i = 0; i < userlist.length; i++) {
@@ -90,6 +97,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+a {
+  font-size: 1.5rem;
+  color: #415569;
+}
 h3 {
   margin: 40px 0 0;
 }
@@ -102,27 +113,34 @@ li {
   margin: 0 10px;
 }
 .film-cover {
-  box-shadow: 0 1px 3px rgba(0,0,0,.35), 0 0 2px 1px rgb(0 0 0 / 5%);
+  margin: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
   display: block;
-  width: 125px;
-  height: 187px;
+  width: 230px;
+  height: 345px;
   border-radius: 4px;
 }
 .film-cover:hover {
-  box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0,0,0,.35), 0 0 2px 1px rgb(0 0 0 / 5%);
+  box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0, 0, 0, 0.35),
+    0 0 2px 1px rgb(0 0 0 / 5%);
 }
 .film-cover::after {
   content: "";
-  background-image: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.5) 50%,hsla(0,0%,100%,0));
+  background-image: linear-gradient(
+    90deg,
+    hsla(0, 0%, 100%, 0) 0,
+    hsla(0, 0%, 100%, 0.5) 50%,
+    hsla(0, 0%, 100%, 0)
+  );
   display: block;
   width: 100%;
   height: 1px;
 }
 #container {
   display: grid;
-  grid-template-columns: 125px auto;
+  grid-template-rows: 345px auto;
   gap: 20px;
-  text-align: left;
+  text-align: center;
   max-width: 400px;
   width: 90%;
   margin: 60px auto;
