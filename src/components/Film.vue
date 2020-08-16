@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div class="input">
-      <label>Usernames seperate multiple with ,</label>
+      <label>Username(s)</label>
       <input type="text" v-model="users" />
       <button v-on:click="submit()">Submit</button>
     </div>
@@ -38,7 +38,9 @@ export default {
     submit() {
       this.pressed = true;
       this.loading = true;
-      let userlist = this.users.split(",");
+      let inputted = this.users.split(/(?:,| )+/);
+      let userlist = inputted.filter(function(el) { return el; });
+      if(userlist.length < 1) return;
       console.log(userlist);
       let url = "https://letterboxd-random.ue.r.appspot.com/film?";
       for (let i = 0; i < userlist.length; i++) {
