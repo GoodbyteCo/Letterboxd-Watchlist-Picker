@@ -14,8 +14,8 @@
         <h2>Nothing Found</h2>
         <p>Sorry nothing was found is your watchlist empty</p>
       </div>
-      <div v-else id="hello">
-        <img v-bind:src="img_url" alt="image or film" />
+      <div v-else id="container">
+        <a v-bind:href="url" :style="{ backgroundImage: 'url(' + img_url + ')' }" class="film-cover" alt="film poster"></a>
         <a v-bind:href="url">{{ name }}</a>
       </div>
     </div>
@@ -100,5 +100,31 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
+}
+.film-cover {
+  box-shadow: 0 1px 3px rgba(0,0,0,.35), 0 0 2px 1px rgb(0 0 0 / 5%);
+  display: block;
+  width: 125px;
+  height: 187px;
+  border-radius: 4px;
+}
+.film-cover:hover {
+  box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0,0,0,.35), 0 0 2px 1px rgb(0 0 0 / 5%);
+}
+.film-cover::after {
+  content: "";
+  background-image: linear-gradient(90deg,hsla(0,0%,100%,0) 0,hsla(0,0%,100%,.5) 50%,hsla(0,0%,100%,0));
+  display: block;
+  width: 100%;
+  height: 1px;
+}
+#container {
+  display: grid;
+  grid-template-columns: 125px auto;
+  gap: 20px;
+  text-align: left;
+  max-width: 400px;
+  width: 90%;
+  margin: 60px auto;
 }
 </style>
