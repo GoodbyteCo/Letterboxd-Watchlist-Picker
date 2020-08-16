@@ -1,5 +1,5 @@
 <template>
-  <div id="container">
+  <div class="hello">
     <div class="input">
       <label>Username(s)</label>
       <input type="text" v-model="users" />
@@ -14,7 +14,7 @@
         <h2>Nothing Found</h2>
         <p>Sorry nothing was found is your watchlist empty</p>
       </div>
-      <div v-else id="hello">
+      <div v-else id="container">
         <a v-bind:href="url" :style="{ backgroundImage: 'url(' + img_url + ')' }" class="film-cover" alt="film poster"></a>
         <a v-bind:href="url">{{ name }}</a>
       </div>
