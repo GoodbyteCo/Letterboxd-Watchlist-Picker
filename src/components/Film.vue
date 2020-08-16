@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div class="input">
-      <label>Username(s)</label>
+      <label>Username(s) </label>
       <input type="text" v-model="users" />
       <button v-on:click="submit()">Submit</button>
     </div>
@@ -21,7 +21,10 @@
           class="film-cover"
           alt="film poster"
         ></a>
-        <a v-bind:href="url">{{ name }}</a>
+        <div>
+          <p>You should watch</p>
+          <a v-bind:href="url" class="title">{{ name }}</a>
+        </div>
       </div>
     </div>
   </div>
@@ -144,5 +147,11 @@ li {
   max-width: 400px;
   width: 90%;
   margin: 60px auto;
+}
+a.title {
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0;
+  color: inherit;
 }
 </style>
