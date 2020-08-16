@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div id="container">
     <div class="input">
       <label>Username(s)</label>
       <input type="text" v-model="users" />
@@ -117,5 +117,14 @@ li {
   display: block;
   width: 100%;
   height: 1px;
+}
+#container {
+  display: grid;
+  grid-template-columns: 125px auto;
+  gap: 20px;
+  text-align: left;
+  max-width: 400px;
+  width: 90%;
+  margin: 60px auto;
 }
 </style>
