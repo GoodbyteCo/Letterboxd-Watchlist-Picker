@@ -1,11 +1,10 @@
 <template>
   <div class="hello">
+    <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
     <div class="input">
       <label>Username(s):</label>
       <input type="text" v-model="users" />
-      <div id="button">
-        <button v-on:click="submit()">Submit</button>
-      </div>
+      <button v-on:click="submit()">Submit</button>
     </div>
     <div v-if="loading">
       <h2>Loading Film</h2>
@@ -106,17 +105,25 @@ a {
   font-size: 1.5rem;
   color: #415569;
 }
+
+h1 {
+  font-size: 1.5rem;
+}
+
 h3 {
   margin: 40px 0 0;
 }
+
 ul {
   list-style-type: none;
   padding: 0;
 }
+
 li {
   display: inline-block;
   margin: 0 10px;
 }
+
 .film-cover {
   margin: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
@@ -125,10 +132,12 @@ li {
   height: 345px;
   border-radius: 4px;
 }
+
 .film-cover:hover {
   box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0, 0, 0, 0.35),
     0 0 2px 1px rgb(0 0 0 / 5%);
 }
+
 .film-cover::after {
   content: "";
   background-image: linear-gradient(
@@ -141,6 +150,7 @@ li {
   width: 100%;
   height: 1px;
 }
+
 #container {
   display: grid;
   grid-template-rows: 345px auto;
@@ -150,6 +160,7 @@ li {
   width: 90%;
   margin: 60px auto;
 }
+
 a.title {
   font-weight: bold;
   font-size: 2rem;
@@ -158,36 +169,47 @@ a.title {
 }
 
 button {
-  margin: 20px 0;
-  padding: 5px 10px;
-  font-size: 0.875rem;
-}
-input {
-  font-size: 0.875rem;
-  line-height: 1.125rem;
-  letter-spacing: 0.16px;
-  vertical-align: initial;
-  border-radius: 0;
-  border: none;
-  border-bottom: 1px solid #8d8d8d;
-  background-color: #f4f4f4;
   padding: 0 1rem;
-  height: 1.5rem;
-  box-sizing: border-box;
-  margin: 0;
-  outline: 1px solid transparent;
-  outline-offset: -1px;
-  transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
-    outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  line-height: 2.8rem;
+  font-size: 1.1rem;
+  border: 0;
+  background: black;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+}
+
+button:hover,
+button:focus,
+button:focus-within {
+  background: #40bcf4;
+}
+
+input {
+  border: 0;
+  background: #ebebeb;
+  padding: 0 1rem;
+  line-height: 2.8rem;
+  font-size: 1.1rem;
+  outline: none;
+  border-radius: 4px 0 0 4px;
 }
 
 input:active,
-input:focus {
-  outline: 1px solid #2c3e50;
-  outline-offset: -1px;
+input:focus,
+input:focus-within {
+  box-shadow: inset 0 0 0 3px #40bcf4;
 }
 
 label {
-  margin: 10px;
+  visibility: hidden;
+  display: block;
+}
+
+p {
+  max-width: 60ch;
+  margin: 0rem auto 1rem;
 }
 </style>
