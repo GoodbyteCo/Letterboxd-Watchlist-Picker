@@ -44,6 +44,7 @@
       </div>
       <div v-if="loading">
         <h2>Loading Film</h2>
+        <div id="loadbar"></div>
         <p>Sorry this may take a bit as we scrape letterboxd do to api restrictions</p>
       </div>
       <div v-else-if="pressed">
@@ -145,10 +146,6 @@ a {
   color: #415569;
 }
 
-a:hover {
-  color: #40bcf4;
-}
-
 .hello {
   padding-top: 1.5rem;
   transform: translateY(40px);
@@ -175,8 +172,38 @@ h1 {
   transform: none;
 }
 
+h2 {
+  margin-top: 5rem;
+  font-size: 1.2rem;
+}
+
 h3 {
   margin: 40px 0 0;
+}
+
+#loadbar {
+  margin: 1rem auto;
+  max-width: 90%;
+  width: 600px;
+  height: 3px;
+  background: #ebebeb;
+  border-radius: 10px;
+}
+
+#loadbar::after {
+  content: "";
+  display: block;
+  background: #40bcf4;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0.8);
+  transform-origin: left;
+  transition: transform 18s ease;
+}
+
+.done #loadbar::after {
+  transition: transform 0.2s ease-in;
+  transform: none;
 }
 
 .film-cover {
@@ -223,6 +250,10 @@ a.title {
   color: inherit;
 }
 
+a.title:hover {
+  color: #40bcf4;
+}
+
 button {
   padding: 0 1rem;
   line-height: 2.8rem;
@@ -267,6 +298,7 @@ label {
 p {
   max-width: 60ch;
   margin: 0rem auto 1rem;
+  padding: 0 2rem;
 }
 
 p.you-should {
