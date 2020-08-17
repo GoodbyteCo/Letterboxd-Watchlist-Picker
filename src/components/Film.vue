@@ -116,13 +116,13 @@ a:hover {
 
 .hello {
   transform: translateY(70px);
-  transition: transform 2s ease;
+  transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
 
 h1 {
   font-size: 1.5rem;
   transform: scale(3) translateY(15px);
-  transition: transform 2s ease;
+  transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
 
 .entered h1,
