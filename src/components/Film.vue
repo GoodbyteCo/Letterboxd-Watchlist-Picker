@@ -104,6 +104,7 @@ export default {
         fetch(url)
           .then(function (res) {
             vue.loading = false;
+            document.body.className = "done";
             if (res.status != 200) {
               vue.notfound = true;
               return "";
@@ -112,13 +113,11 @@ export default {
             return res.json();
           })
           .then((json) => (this.info = json));
-          document.body.className = "done";
       } catch (e) {
         this.$alert(
           "Something went wrong. Please try again in a moment. Error:" + e,
           "An error occured"
         );
-        document.body.className = "done";
     }
     },
   },
@@ -151,6 +150,7 @@ a:hover {
 }
 
 .hello {
+  padding-top: 1.5rem;
   transform: translateY(70px);
   transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
