@@ -45,6 +45,7 @@ export default {
   },
   methods: {
     submit() {
+      document.body.classlist.push("entered");
       this.pressed = true;
       this.loading = true;
       let inputted = this.users.split(/(?:,| )+/);
@@ -106,8 +107,24 @@ a {
   color: #415569;
 }
 
+a:hover {
+  color: #40bcf4;
+}
+
+.hello {
+  transform: translateY(70px);
+  transition: transform 2s ease;
+}
+
 h1 {
   font-size: 1.5rem;
+  transform: scale(3) translateY(15px);
+  transition: transform 2s ease;
+}
+
+.entered h1,
+.entered .hello {
+  transform: none;
 }
 
 h3 {
