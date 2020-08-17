@@ -1,4 +1,5 @@
 <template>
+  <h1>Random Watchlist Picker</h1>
   <div class="hello">
     <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
     <div class="input">
@@ -45,7 +46,7 @@ export default {
   },
   methods: {
     submit() {
-      document.body.classlist.push("entered");
+      document.body.className = "entered";
       this.pressed = true;
       this.loading = true;
       let inputted = this.users.split(/(?:,| )+/);
