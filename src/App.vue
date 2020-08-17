@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h1>Random Watchlist Picker</h1>
     <Film />
   </div>
 </template>
