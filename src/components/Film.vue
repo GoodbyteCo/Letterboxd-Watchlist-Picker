@@ -36,7 +36,7 @@
       </svg>
   </div>
     <div class="hello">
-      <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
+      <p>Enter your <a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
       <div class="input">
         <label for="userbox">Username(s):</label>
         <input id="userbox" type="text" v-model="users" />
@@ -104,8 +104,10 @@ export default {
         console.log(url);
         fetch(url)
           .then(function (res) {
-            vue.loading = false;
             document.body.className = "done";
+            setTimeout(function () {
+              vue.loading = false;
+            }, 200);
             if (res.status != 200) {
               vue.notfound = true;
               return "";
@@ -141,6 +143,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+::selection {
+  background: #40bcf4;
+  color: white;
+}
+
 a {
   font-size: 1.5rem;
   color: #415569;
