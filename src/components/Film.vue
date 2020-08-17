@@ -274,11 +274,11 @@ p.you-should {
 
 
 /* logo stuff */
-logo {
+#logo {
   width: 158px;
   height: 50px;
   overflow: hidden;
-  border: 2px solid black;
+  border: 3px solid black;
   border-radius: 4px;
 }
 
