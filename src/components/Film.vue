@@ -112,13 +112,14 @@ export default {
             return res.json();
           })
           .then((json) => (this.info = json));
+          document.body.className = "done";
       } catch (e) {
         this.$alert(
           "Something went wrong. Please try again in a moment. Error:" + e,
           "An error occured"
         );
+        document.body.className = "done";
     }
-    document.body.className = "done";
     },
   },
   computed: {
@@ -156,12 +157,12 @@ a:hover {
 
 h1 {
   font-size: 1.5rem;
-  transform: scale(3) translateY(15px);
+  transform: scale(2) translateY(15px);
   transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
 
 #logo {
-  transform: scale(3) translateY(15px);
+  transform: scale(1.5) translateY(15px);
   transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
 
@@ -280,6 +281,7 @@ p.you-should {
   overflow: hidden;
   border: 3px solid black;
   border-radius: 4px;
+  margin: auto;
 }
 
 .entered #logo svg {
