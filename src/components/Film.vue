@@ -23,7 +23,7 @@
           alt="film poster"
         ></a>
         <div>
-          <p>You should watch</p>
+          <p class="you-should">You should watch</p>
           <a v-bind:href="url" class="title">{{ name }}</a>
         </div>
       </div>
@@ -179,6 +179,7 @@ button {
   letter-spacing: 0.02em;
   cursor: pointer;
   border-radius: 0 4px 4px 0;
+  outline: none;
 }
 
 button:hover,
@@ -211,5 +212,9 @@ label {
 p {
   max-width: 60ch;
   margin: 0rem auto 1rem;
+}
+
+p.you-should {
+  margin: 1rem auto 0.5rem;
 }
 </style>
