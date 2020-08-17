@@ -1,31 +1,33 @@
 <template>
-  <h1>Random Watchlist Picker</h1>
-  <div class="hello">
-    <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
-    <div class="input">
-      <label>Username(s):</label>
-      <input type="text" v-model="users" />
-      <button v-on:click="submit()">Submit</button>
-    </div>
-    <div v-if="loading">
-      <h2>Loading Film</h2>
-      <p>Sorry this may take a bit as we scrape letterboxd do to api restrictions</p>
-    </div>
-    <div v-else-if="pressed">
-      <div v-if="notfound">
-        <h2>Nothing Found</h2>
-        <p>Sorry nothing was found is your watchlist empty</p>
+  <div>
+    <h1>Random Watchlist Picker</h1>
+    <div class="hello">
+      <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
+      <div class="input">
+        <label>Username(s):</label>
+        <input type="text" v-model="users" />
+        <button v-on:click="submit()">Submit</button>
       </div>
-      <div v-else id="container">
-        <a
-          v-bind:href="url"
-          :style="{ backgroundImage: 'url(' + img_url + ')' }"
-          class="film-cover"
-          alt="film poster"
-        ></a>
-        <div>
-          <p class="you-should">You should watch</p>
-          <a v-bind:href="url" class="title">{{ name }}</a>
+      <div v-if="loading">
+        <h2>Loading Film</h2>
+        <p>Sorry this may take a bit as we scrape letterboxd do to api restrictions</p>
+      </div>
+      <div v-else-if="pressed">
+        <div v-if="notfound">
+          <h2>Nothing Found</h2>
+          <p>Sorry nothing was found is your watchlist empty</p>
+        </div>
+        <div v-else id="container">
+          <a
+            v-bind:href="url"
+            :style="{ backgroundImage: 'url(' + img_url + ')' }"
+            class="film-cover"
+            alt="film poster"
+          ></a>
+          <div>
+            <p class="you-should">You should watch</p>
+            <a v-bind:href="url" class="title">{{ name }}</a>
+          </div>
         </div>
       </div>
     </div>
