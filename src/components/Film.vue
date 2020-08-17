@@ -214,14 +214,20 @@ h3 {
   animation-fill-mode: forwards;
 }
 
+.done #loadbar::after {
+  transform: scaleX(0.8);
+  animation: load-finish 0.2s ease-in;
+  animation-fill-mode: forwards;
+  transition: transform 0.2s ease-in;
+}
+
 @keyframes load {
   0% { transform: scaleX(0); }
   100% { transform: scaleX(0.8); }
 }
 
-.done #loadbar::after {
-  transition: transform 0.2s ease-in;
-  transform: none;
+@keyframes load-finish {
+  100% { transform: scaleX(1); }
 }
 
 .film-cover {
