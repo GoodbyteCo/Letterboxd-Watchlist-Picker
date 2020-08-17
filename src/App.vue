@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <Film />
+    <div id="main">
+      <Film />
+    </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import Film from "./components/Film.vue";
-
+import Footer from "./components/Footer.vue";
 export default {
   name: "App",
   components: {
     Film,
+    Footer,
   },
 };
 </script>
@@ -23,5 +27,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 30px;
+}
+
+#main {
+  min-height: -webkit-calc(75vh - 15px);
 }
 </style>
