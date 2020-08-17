@@ -196,9 +196,13 @@ h3 {
   background: #40bcf4;
   height: 3px;
   width: 100%;
-  transform: scaleX(0.8);
+  transform: scaleX(0);
   transform-origin: left;
   transition: transform 18s ease;
+}
+
+.entered #loadbar::after {
+  transform: scaleX(0.8);
 }
 
 .done #loadbar::after {
