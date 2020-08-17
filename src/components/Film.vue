@@ -38,8 +38,8 @@
     <div class="hello">
       <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
       <div class="input">
-        <label>Username(s):</label>
-        <input type="text" v-model="users" />
+        <label for="userbox">Username(s):</label>
+        <input id="userbox" type="text" v-model="users" />
         <button v-on:click="submit()">Submit</button>
       </div>
       <div v-if="loading">
