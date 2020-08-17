@@ -1,9 +1,11 @@
 <template>
   <div class="hello">
     <div class="input">
-      <label>Username(s) </label>
+      <label>Username(s):</label>
       <input type="text" v-model="users" />
-      <button v-on:click="submit()">Submit</button>
+      <div id="button">
+        <button v-on:click="submit()">Submit</button>
+      </div>
     </div>
     <div v-if="loading">
       <h2>Loading Film</h2>
@@ -153,5 +155,39 @@ a.title {
   font-size: 2rem;
   margin: 0;
   color: inherit;
+}
+
+button {
+  margin: 20px 0;
+  padding: 5px 10px;
+  font-size: 0.875rem;
+}
+input {
+  font-size: 0.875rem;
+  line-height: 1.125rem;
+  letter-spacing: 0.16px;
+  vertical-align: initial;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #8d8d8d;
+  background-color: #f4f4f4;
+  padding: 0 1rem;
+  height: 1.5rem;
+  box-sizing: border-box;
+  margin: 0;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
+    outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+input:active,
+input:focus {
+  outline: 1px solid #2c3e50;
+  outline-offset: -1px;
+}
+
+label {
+  margin: 10px;
 }
 </style>
