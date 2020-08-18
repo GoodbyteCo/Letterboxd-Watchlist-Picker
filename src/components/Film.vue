@@ -223,18 +223,25 @@ export default {
         console.log(url);
         fetch(url)
           .then(function (res) {
+          
             document.body.className = "done";
-            setTimeout(function () {
-              vue.loading = false;
-            }, 200);
+            
             if (res.status != 200) {
               vue.notfound = true;
               return "";
             }
+            
+            setTimeout(function () {
+              vue.loading = false;
+            }, 200);
 
             return res.json();
           })
-          .then((json) => (this.info = json));
+          .then(function (json) {
+            var pre_image = new Image();
+            pre_image.src = json.image_url;
+            vue.info = json;
+          });
       } catch (e) {
         this.$alert(
           "Something went wrong. Please try again in a moment. Error:" + e,
@@ -389,6 +396,7 @@ h3 {
 .film-cover {
   margin: auto;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
+  background-color: #ebebeb;
   display: block;
   width: 230px;
   height: 345px;
