@@ -156,7 +156,7 @@
       <div v-if="loading">
         <h2>Loading Film</h2>
         <div id="loadbar"></div>
-        <p>Sorry this may take a bit as we scrape letterboxd due to api restrictions</p>
+        <p>This takes a bit of time. While you're waiting, is there a movie you're secretly rooting for? Choose that one! I give you permission.</p>
       </div>
       <div v-else-if="pressed">
         <div v-if="notfound">
