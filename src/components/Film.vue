@@ -198,6 +198,16 @@ export default {
       pressed: false,
     };
   },
+  created() {
+    const queryString = window.location.search;
+    console.log(queryString);
+    const urlParams = new URLSearchParams(queryString);
+    const users = urlParams.getAll("u");
+    if (users.length > 0) {
+      this.users = users.toString();
+    }
+    this.submit();
+  },
   methods: {
     submit() {
       this.notfound = false;
