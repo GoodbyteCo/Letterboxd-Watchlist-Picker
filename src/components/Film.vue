@@ -20,7 +20,7 @@
             fill="#964fcb"
           />
           <path
-            d="M306.1,412.5h21.95v-7.064h-10.42A33.551,33.551,0,0,1,306.1,412.5Z"
+            d="M306.1,412.5h21.95v-7.064h-10.42A33.551,33.551,0,0,1,306.1,412b.5Z"
             transform="translate(-245.435 -114.61)"
             fill="#18ad2f"
           />
@@ -453,7 +453,7 @@ button {
   font-size: 0.8rem;
   transform: translateY(-0.1rem);
   display: inline-block;
-  font-weight: bold;
+  font-weight: 900;
   letter-spacing: .04em;
 }
 
