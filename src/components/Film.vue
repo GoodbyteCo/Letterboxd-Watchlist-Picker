@@ -36,7 +36,7 @@
       </svg>
   </div>
     <div class="hello">
-      <p>Enter your Letterboxd username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
+      <p>Enter your <a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.</p>
       <div class="input">
         <label for="userbox">Username(s):</label>
         <input id="userbox" type="text" v-model="users" />
@@ -104,8 +104,10 @@ export default {
         console.log(url);
         fetch(url)
           .then(function (res) {
-            vue.loading = false;
             document.body.className = "done";
+            setTimeout(function () {
+              vue.loading = false;
+            }, 200);
             if (res.status != 200) {
               vue.notfound = true;
               return "";
@@ -141,6 +143,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+::selection {
+  background: #40bcf4;
+  color: white;
+}
+
 a {
   font-size: 1.5rem;
   color: #415569;
@@ -196,6 +203,7 @@ h3 {
   background: #40bcf4;
   height: 3px;
   width: 100%;
+  border-radius: 4px;
   animation-fill-mode: forwards;
   transform: scaleX(0);
   transform-origin: left;
@@ -207,14 +215,20 @@ h3 {
   animation-fill-mode: forwards;
 }
 
+.done #loadbar::after {
+  transform: scaleX(0.8);
+  animation: load-finish 0.2s ease-in;
+  animation-fill-mode: forwards;
+  transition: transform 0.2s ease-in;
+}
+
 @keyframes load {
   0% { transform: scaleX(0); }
   100% { transform: scaleX(0.8); }
 }
 
-.done #loadbar::after {
-  transition: transform 0.2s ease-in;
-  transform: none;
+@keyframes load-finish {
+  100% { transform: scaleX(1); }
 }
 
 .film-cover {
@@ -229,19 +243,6 @@ h3 {
 .film-cover:hover {
   box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0, 0, 0, 0.35),
     0 0 2px 1px rgb(0 0 0 / 5%);
-}
-
-.film-cover::after {
-  content: "";
-  background-image: linear-gradient(
-    90deg,
-    hsla(0, 0%, 100%, 0) 0,
-    hsla(0, 0%, 100%, 0.5) 50%,
-    hsla(0, 0%, 100%, 0)
-  );
-  display: block;
-  width: 100%;
-  height: 1px;
 }
 
 #container {
