@@ -215,7 +215,7 @@ export default {
         window.history.replaceState(null, null, "/");
         this.loading = false;
         this.pressed = false;
-        document.body.className = "done";
+        document.body.className = "";
         return;
       }
       let inputted = this.users.split(/(?:,| )+/);
