@@ -220,7 +220,7 @@ export default {
         return el;
       });
       if (userlist.length < 1) return;
-      window.history.replaceState(null, null, "?u=" + userlist[0]);
+      window.history.replaceState(null, null, "?u=" + userlist.join("&u="));
       console.log(userlist);
       let url = "https://letterboxd-random.ue.r.appspot.com/film?";
       for (let i = 0; i < userlist.length; i++) {
