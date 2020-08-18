@@ -162,7 +162,12 @@
         <div v-if="notfound">
           <h2>Nothing Found</h2>
           <p>Sorry, that watchlist is empty or doesn't exist at all.</p>
-          <img width="250" src="https://watchlistpicker.com/poe.gif" alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll.">
+          <img
+            id="poe"
+            width="250"
+            src="https://watchlistpicker.com/poe.gif"
+            alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
+          />
         </div>
         <div v-else id="container">
           <a
@@ -275,6 +280,11 @@ a.title {
 #title-link:hover,
 #title-link:focus {
   color: #40bcf4;
+}
+
+#poe {
+  margin: 30px 0;
+  border-radius: 4px;
 }
 
 a {
