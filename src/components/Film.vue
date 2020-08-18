@@ -145,7 +145,7 @@
       <div class="input">
         <label for="userbox">Username(s):</label>
         <input
-          placeholder="holopollock"
+          placeholder="ex: holopollock, qjack"
           id="userbox"
           type="text"
           v-on:keyup.enter="submit()"
@@ -156,7 +156,7 @@
       <div v-if="loading">
         <h2>Loading Film</h2>
         <div id="loadbar"></div>
-        <p>Sorry this may take a bit as we scrape letterboxd do to api restrictions</p>
+        <p>Sorry this may take a bit as we scrape letterboxd due to api restrictions</p>
       </div>
       <div v-else-if="pressed">
         <div v-if="notfound">
@@ -262,10 +262,23 @@ export default {
 #title-link {
   font-size: 1.5rem;
   color: #415569;
+  
+a.title {
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0;
+}
+
+#title-link:hover {
+  color: #40bcf4;
 }
 
 a {
   color: #415569;
+}
+
+a:hover {
+  color: #40bcf4;
 }
 
 .hello {
@@ -378,17 +391,6 @@ h3 {
   max-width: 400px;
   width: 90%;
   margin: 60px auto;
-}
-
-a.title {
-  font-weight: bold;
-  font-size: 2rem;
-  margin: 0;
-  color: inherit;
-}
-
-a.title:hover {
-  color: #40bcf4;
 }
 
 button {
