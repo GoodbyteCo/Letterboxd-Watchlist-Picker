@@ -211,7 +211,10 @@ export default {
   methods: {
     submit() {
       this.notfound = false;
-      if (this.users == "") return;
+      if (this.users == "") {
+        this.pressed = false;
+        return;
+      }
       document.body.className = "entered";
       this.pressed = true;
       this.loading = true;
