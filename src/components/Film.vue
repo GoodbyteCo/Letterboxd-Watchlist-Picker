@@ -270,7 +270,8 @@ a.title {
   margin: 0;
 }
 
-#title-link:hover {
+#title-link:hover,
+#title-link:focus {
   color: #40bcf4;
 }
 
@@ -278,8 +279,10 @@ a {
   color: #415569;
 }
 
-a:hover {
+a:hover,
+a:focus {
   color: #40bcf4;
+  outline: none;
 }
 
 .hello {
@@ -379,9 +382,11 @@ h3 {
   border-radius: 4px;
 }
 
-.film-cover:hover {
+.film-cover:hover,
+.film-cover:focus {
   box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0, 0, 0, 0.35),
     0 0 2px 1px rgb(0 0 0 / 5%);
+    outline: none;
 }
 
 #container {
