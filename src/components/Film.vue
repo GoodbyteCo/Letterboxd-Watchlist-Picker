@@ -230,16 +230,17 @@ export default {
               return "";
             }
             
-            var pre_image = new Image();
-            pre_image.src = res.json().image_url;
-            
             setTimeout(function () {
               vue.loading = false;
             }, 200);
 
             return res.json();
           })
-          .then((json) => (this.info = json));
+          .then(function (json) {
+            var pre_image = new Image();
+            pre_image.src = json.image_url;
+            this.info = json;
+          });
       } catch (e) {
         this.$alert(
           "Something went wrong. Please try again in a moment. Error:" + e,
