@@ -200,6 +200,7 @@ export default {
   },
   methods: {
     submit() {
+      this.notfound = false;
       if (this.users == "") return;
       document.body.className = "entered";
       this.pressed = true;
