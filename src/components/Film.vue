@@ -239,7 +239,7 @@ export default {
           .then(function (json) {
             var pre_image = new Image();
             pre_image.src = json.image_url;
-            this.info = json;
+            vue.info = json;
           });
       } catch (e) {
         this.$alert(
