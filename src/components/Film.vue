@@ -387,7 +387,7 @@ h3 {
 .film-cover:focus {
   box-shadow: inset 0 0 0 3px #40bcf4, 0 1px 3px rgba(0, 0, 0, 0.35),
     0 0 2px 1px rgb(0 0 0 / 5%);
-    outline: none;
+  outline: none;
 }
 
 #container {
