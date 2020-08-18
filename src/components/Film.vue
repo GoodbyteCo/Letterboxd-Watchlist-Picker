@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="logo">
+    <a id="logo" href="https://watchlistpicker.com/">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -136,7 +136,7 @@
           />
         </g>
       </svg>
-    </div>
+    </a>
     <div class="hello">
       <p>
         Enter your
@@ -486,6 +486,8 @@ p.you-should {
 
 /* logo stuff */
 #logo {
+  display: block;
+  text-decoration: none;
   width: 78px;
   height: 25px;
   overflow: hidden;
