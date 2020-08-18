@@ -209,6 +209,16 @@ export default {
     this.submit();
   },
   methods: {
+    userlistToParam(strList) {
+      let urlParms = "?";
+      for (let i = 0; i < strList.length; i++) {
+        if (i != 0) {
+          urlParms += "&";
+        }
+        urlParms += "u=" + strList[i];
+      }
+      return urlParms;
+    },
     submit() {
       this.notfound = false;
       if (this.users == "") return;
@@ -220,7 +230,8 @@ export default {
         return el;
       });
       if (userlist.length < 1) return;
-      window.history.replaceState(null, null, "?u=" + userlist[0]);
+      let urlParms = this.userlistToParam(userlist);
+      window.history.replaceState(null, null, urlParms);
       console.log(userlist);
       let url = "https://letterboxd-random.ue.r.appspot.com/film?";
       for (let i = 0; i < userlist.length; i++) {
@@ -234,14 +245,13 @@ export default {
         console.log(url);
         fetch(url)
           .then(function (res) {
-          
             document.body.className = "done";
-            
+
             if (res.status != 200) {
               vue.notfound = true;
               return "";
             }
-            
+
             setTimeout(function () {
               vue.loading = false;
             }, 200);
@@ -249,7 +259,7 @@ export default {
             return res.json();
           })
           .then(function (json) {
-            if(!vue.notfound) {
+            if (!vue.notfound) {
               var pre_image = new Image();
               pre_image.src = json.image_url;
             }
