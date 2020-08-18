@@ -212,7 +212,10 @@ export default {
     submit() {
       this.notfound = false;
       if (this.users == "") {
+        window.history.replaceState(null, null, "/");
+        this.loading = false;
         this.pressed = false;
+        document.body.className = "done";
         return;
       }
       let inputted = this.users.split(/(?:,| )+/);
