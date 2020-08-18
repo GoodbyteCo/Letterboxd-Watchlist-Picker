@@ -438,17 +438,23 @@ h3 {
 }
 
 button {
+  font-family: Avenir,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   padding: 0 1rem;
   line-height: 2.8rem;
-  font-size: 1.1rem;
   border: 0;
   background: black;
   color: white;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
   cursor: pointer;
   border-radius: 0 4px 4px 0;
   outline: none;
+  font-size: 0.8rem;
+  transform: translateY(-0.1rem);
+  display: inline-block;
+  font-weight: bold;
+  letter-spacing: .04em;
 }
 
 button:hover,
@@ -458,6 +464,10 @@ button:focus-within {
 }
 
 input {
+  font-family: Avenir,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-width: 220px;
   border: 0;
   background: #ebebeb;
   padding: 0 1rem;
