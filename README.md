@@ -9,3 +9,5 @@ Do to api restrictions we scrape your letterboxd pages to build your watchlist
 
 [CLI verion](https://github.com/HoloPollock/random-letterboxd)
 
+
+Build by Goodbyte
