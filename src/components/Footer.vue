@@ -1,5 +1,5 @@
 <template>
-  <footer><a href="goodbyte.ca/">Goodbyte</a> &copy; 2020</footer>
+  <footer><a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020</footer>
 </template>
 
 <script>
