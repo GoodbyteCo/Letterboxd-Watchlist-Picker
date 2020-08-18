@@ -161,7 +161,8 @@
       <div v-else-if="pressed">
         <div v-if="notfound">
           <h2>Nothing Found</h2>
-          <p>Sorry nothing was found is your watchlist empty</p>
+          <p>Sorry, that watchlist is empty or doesn't exist at all.</p>
+          <img width="250" src="https://watchlistpicker.com/poe.gif" alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll.">
         </div>
         <div v-else id="container">
           <a
