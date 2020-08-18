@@ -209,16 +209,6 @@ export default {
     this.submit();
   },
   methods: {
-    userlistToParam(strList) {
-      let urlParms = "?";
-      for (let i = 0; i < strList.length; i++) {
-        if (i != 0) {
-          urlParms += "&";
-        }
-        urlParms += "u=" + strList[i];
-      }
-      return urlParms;
-    },
     submit() {
       this.notfound = false;
       if (this.users == "") return;
@@ -230,8 +220,7 @@ export default {
         return el;
       });
       if (userlist.length < 1) return;
-      let urlParms = this.userlistToParam(userlist);
-      window.history.replaceState(null, null, urlParms);
+      window.history.replaceState(null, null, "?u=" + userlist.join("&u="));
       console.log(userlist);
       let url = "https://letterboxd-random.ue.r.appspot.com/film?";
       for (let i = 0; i < userlist.length; i++) {
