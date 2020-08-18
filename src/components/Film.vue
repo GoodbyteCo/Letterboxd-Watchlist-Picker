@@ -238,8 +238,10 @@ export default {
             return res.json();
           })
           .then(function (json) {
-            var pre_image = new Image();
-            pre_image.src = json.image_url;
+            if(!vue.notfound) {
+              var pre_image = new Image();
+              pre_image.src = json.image_url;
+            }
             vue.info = json;
           });
       } catch (e) {
