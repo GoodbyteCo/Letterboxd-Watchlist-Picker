@@ -194,6 +194,7 @@ export default {
   },
   methods: {
     submit() {
+      if (this.users == "") return;
       document.body.className = "entered";
       this.pressed = true;
       this.loading = true;
