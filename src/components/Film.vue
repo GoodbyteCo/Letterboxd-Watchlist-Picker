@@ -213,6 +213,7 @@ export default {
       this.notfound = false;
       if (this.users == "") {
         this.pressed = false;
+        window.history.replaceState(null, null, "/");
         return;
       }
       document.body.className = "entered";
