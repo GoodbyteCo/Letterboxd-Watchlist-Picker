@@ -213,17 +213,19 @@ export default {
       this.notfound = false;
       if (this.users == "") {
         this.pressed = false;
-        window.history.replaceState(null, null, "/");
+        return;
+      }
+      let inputted = this.users.split(/(?:,| )+/);
+      let userlist = inputted.filter(function (el) {
+        return el;
+      });
+      if (userlist.length < 1) {
+        this.pressed = false;
         return;
       }
       document.body.className = "entered";
       this.pressed = true;
       this.loading = true;
-      let inputted = this.users.split(/(?:,| )+/);
-      let userlist = inputted.filter(function (el) {
-        return el;
-      });
-      if (userlist.length < 1) return;
       window.history.replaceState(null, null, "?u=" + userlist.join("&u="));
       console.log(userlist);
       let url = "https://letterboxd-random.ue.r.appspot.com/film?";
