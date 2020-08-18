@@ -262,7 +262,8 @@ export default {
 #title-link {
   font-size: 1.5rem;
   color: #415569;
-  
+}
+
 a.title {
   font-weight: bold;
   font-size: 2rem;
