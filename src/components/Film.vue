@@ -238,6 +238,7 @@ export default {
 
             if (res.status != 200) {
               vue.notfound = true;
+              vue.loading = false;
               return "";
             }
 
