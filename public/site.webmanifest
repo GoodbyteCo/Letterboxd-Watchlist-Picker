@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Watchlist Picker",
+    "short_name": "Watchlist Picker",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
