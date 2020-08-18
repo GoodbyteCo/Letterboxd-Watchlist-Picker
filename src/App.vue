@@ -32,4 +32,9 @@ export default {
 #main {
   min-height: -webkit-calc(75vh - 15px);
 }
+
+::selection {
+  background: #40bcf4;
+  color: white;
+}
 </style>

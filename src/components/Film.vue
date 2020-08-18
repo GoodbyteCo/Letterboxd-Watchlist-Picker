@@ -286,11 +286,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-::selection {
-  background: #40bcf4;
-  color: white;
-}
-
 #title-link {
   font-size: 1.5rem;
   color: #415569;
