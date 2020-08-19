@@ -231,13 +231,15 @@ export default {
 			this.loading = true;
 			window.history.replaceState(null, null, "?u=" + userlist.join("&u="));
 			console.log(userlist);
-			let url = "https://letterboxd-random.ue.r.appspot.com/film?";
-			for (let i = 0; i < userlist.length; i++) {
-				if (i > 0) {
-					url += "&";
-				}
-				url += `users=${userlist[i].trim()}`;
-			}
+
+			//Generate proper url for request
+			let url = "https://letterboxd-random.ue.r.appspot.com/film?users=" + userlist.join("&users=");
+			// for (let i = 0; i < userlist.length; i++) {
+			// 	if (i > 0) {
+			// 		url += "&";
+			// 	}
+			// 	url += `users=${userlist[i].trim()}`;
+			// }
 			try {
 				let vue = this;
 				console.log(url);
