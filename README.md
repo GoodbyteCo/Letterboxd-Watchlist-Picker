@@ -7,7 +7,7 @@ Do to api restrictions we scrape your letterboxd pages to build your watchlist
 
 [backend](https://github.com/HoloPollock/random-letterboxd/tree/appengine)
 
-[CLI verion](https://github.com/HoloPollock/random-letterboxd)
+[CLI verion](https://github.com/HoloPollock/random-letterboxd/tree/CLI)
 
 
 Build by Goodbyte
