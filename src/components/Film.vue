@@ -158,7 +158,7 @@
 				<div id="loadbar"></div>
 				<p>This takes a bit of time. While you're waiting, is there a movie you're secretly rooting for? Choose that one! I give you permission.</p>
 			</div>
-			<div v-else-if="pressed">
+			<div v-else-if="submitted">
 				<div v-if="notfound">
 					<h2>Nothing Found</h2>
 					<p>Sorry, that watchlist is empty or doesn't exist at all.</p>
@@ -191,13 +191,14 @@ export default {
 	name: "Film",
 	data() {
 		return {
-			users: "",
-			info: "",
-			notfound: false,
-			loading: false,
-			pressed: false,
+			users: "", //sting of requested users binding for input box 
+			info: "", //json blob fotten from AJAX request
+			notfound: false, //Boolean for when user is not found or a watchlist is empty
+			loading: false, //Boolean fot loading state
+			submitted: false, //Boolean for if the form has been submitted
 		};
 	},
+	//Query to see if users has passed url params to make quick request
 	created() {
 		const queryString = window.location.search;
 		console.log(queryString);
@@ -209,27 +210,28 @@ export default {
 		this.submit();
 	},
 	methods: {
+		//Main function to make request for random film
 		submit() {
 			this.notfound = false;
-			if (this.users == "") {
+			if (this.users == "") { //Reset state and if form submitted with empty input field
 				window.history.replaceState(null, null, "/");
 				this.loading = false;
-				this.pressed = false;
+				this.submitted = false;
 				document.body.className = "";
 				return;
 			}
-			let inputted = this.users.split(/(?:,| )+/);
+			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
 			let userlist = inputted.filter(function (el) {
 				return el;
 			});
-			if (userlist.length < 1) {
-				this.pressed = false;
+			if (userlist.length < 1) { // second check for non empty input field probably not required
+				this.submitted = false;
 				return;
 			}
 			document.body.className = "entered";
-			this.pressed = true;
+			this.submitted = true;
 			this.loading = true;
-			window.history.replaceState(null, null, "?u=" + userlist.join("&u="));
+			window.history.replaceState(null, null, "?u=" + userlist.join("&u=")); //add url param for users being queryied for discoverbilty of this feature
 			console.log(userlist);
 
 			//Generate proper url for request
@@ -241,12 +243,13 @@ export default {
 					.then(function (res) {
 						document.body.className = "done";
 
-						if (res.status != 200) {
+						if (res.status != 200) { //if request fails set state to failed stated
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
 						}
 
+						//wait 200ms to load text to allow for image to preload
 						setTimeout(function () {
 							vue.loading = false;
 						}, 200);
@@ -255,6 +258,7 @@ export default {
 					})
 					.then(function (json) {
 						if (!vue.notfound) {
+							// Preload image
 							var pre_image = new Image();
 							pre_image.src = json.image_url;
 						}
@@ -285,7 +289,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #title-link {
 	font-size: 1.5rem;
