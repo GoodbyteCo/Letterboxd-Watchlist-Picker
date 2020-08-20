@@ -383,7 +383,7 @@ h3 {
 }
 
 .entered #loadbar::after {
-	animation: load 18s ease;
+	animation: load 2s ease;
 	animation-fill-mode: forwards;
 }
 
