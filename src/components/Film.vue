@@ -42,7 +42,7 @@
 					<path
 						d="M33.257,0A33.257,33.257,0,1,1,0,33.257,33.257,33.257,0,0,1,33.257,0Z"
 						transform="translate(16.972 80.734)"
-						fill="#ff7800 "
+						fill="#ff7800"
 					/>
 				</g>
 			</svg>
@@ -140,7 +140,7 @@
 		<div class="hello">
 			<p>
 				Enter your
-				<a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma.
+				<a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Enter multiple usernames by seperating with a space or comma, and enter public lists in "username/list-title" format.
 			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
