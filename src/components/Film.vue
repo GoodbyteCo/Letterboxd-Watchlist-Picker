@@ -379,7 +379,7 @@ h3 {
 	animation-fill-mode: forwards;
 	transform: scaleX(0);
 	transform-origin: left;
-	transition: transform 18s ease;
+	transition: transform 1.4s ease;
 }
 
 .entered #loadbar::after {
