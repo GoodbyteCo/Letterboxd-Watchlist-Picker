@@ -481,6 +481,13 @@ input:focus-within {
 	box-shadow: inset 0 0 0 3px #40bcf4;
 }
 
+@media screen and (max-width: 360px) {
+	input {
+		min-width: 0px;
+		width: 50%;
+	}
+}
+
 label {
 	visibility: hidden;
 	display: block;
