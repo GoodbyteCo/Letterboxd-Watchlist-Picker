@@ -160,7 +160,7 @@
 			<div v-else-if="submitted">
 				<div v-if="notfound">
 					<h2>Nothing Found</h2>
-					<p>Sorry, that watchlist is empty or doesn't exist at all.</p>
+					<p>Sorry, that watchlist is empty, private, or doesn't exist at all.</p>
 					<img
 						id="poe"
 						width="250"
