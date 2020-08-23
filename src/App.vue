@@ -30,7 +30,7 @@ export default {
 }
 
 #main {
-	min-height: -webkit-calc(75vh - 15px);
+	min-height: -webkit-calc(85vh - 15px);
 }
 
 ::selection {
