@@ -235,7 +235,7 @@ export default {
 			console.log(userlist);
 
 			//Generate proper url for request
-			let url = "https://watchlistpicker.com/api?users=" + userlist.join("&users=");
+			let url = "/api?users=" + userlist.join("&users=");
 			try {
 				let vue = this;
 				console.log(url);
