@@ -139,7 +139,8 @@
 		</a>
 		<div class="hello">
 			<p>
-				Enter your <a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Add multiple usernames by separating with a space or comma, and enter public lists in "username/list-title" format.
+				Enter your
+				<a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Add multiple usernames by separating with a space or comma, and enter public lists in "username/list-title" format.
 			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
@@ -234,7 +235,7 @@ export default {
 			console.log(userlist);
 
 			//Generate proper url for request
-			let url = "https://letterboxd-random.ue.r.appspot.com/film?users=" + userlist.join("&users=");
+			let url = "https://watchlistpicker.com/api?users=" + userlist.join("&users=");
 			try {
 				let vue = this;
 				console.log(url);
