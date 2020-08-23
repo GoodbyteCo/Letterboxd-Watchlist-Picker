@@ -43,7 +43,7 @@ a.support {
     border: 3px solid #00bdfa;
 	opacity: 0;
 	pointer-events: none;
-	transition: opacity 0.4s ease;
+	transition: opacity 0.6s ease 0.2s;
 }
 
 a.support:hover {
