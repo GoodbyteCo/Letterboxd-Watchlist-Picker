@@ -1,5 +1,6 @@
 <template>
 	<footer>
+		<a href="https://ko-fi.com/goodbyte" class="support">Support this site</a>
 		<a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020
 	</footer>
 </template>
@@ -13,7 +14,7 @@ export default {
 <style scoped>
 footer {
 	text-align: center;
-	margin: 8rem auto 2rem;
+	margin: 0 auto 2rem;
 	opacity: 0.6;
 	font-size: 12px;
 	letter-spacing: 0.03em;
@@ -26,5 +27,24 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+a.support {
+	display: block;
+    padding: 0.5rem;
+    text-align: center;
+    margin: 0.5rem auto;
+    width: 120px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 900;
+    text-decoration: none;
+    color: #00bdfa;
+    border: 3px solid #00bdfa;
+}
+
+a.support:hover {
+	background: #00bdfa;
+	color: white;
 }
 </style>
