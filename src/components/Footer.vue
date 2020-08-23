@@ -41,10 +41,17 @@ a.support {
     text-decoration: none;
     color: #00bdfa;
     border: 3px solid #00bdfa;
+	opacity: 0;
+	transition: opacity 0.4s ease;
 }
 
 a.support:hover {
 	background: #00bdfa;
 	color: white;
+}
+
+.done a.support,
+.entered a.support {
+	opacity: 1;
 }
 </style>
