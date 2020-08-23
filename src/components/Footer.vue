@@ -42,6 +42,7 @@ a.support {
     color: #00bdfa;
     border: 3px solid #00bdfa;
 	opacity: 0;
+	pointer-events: none;
 	transition: opacity 0.4s ease;
 }
 
@@ -50,8 +51,8 @@ a.support:hover {
 	color: white;
 }
 
-.done a.support,
-.entered a.support {
+.done a.support {
 	opacity: 1;
+	pointer-events: all;
 }
 </style>
