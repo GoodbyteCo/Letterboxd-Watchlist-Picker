@@ -2,7 +2,7 @@
 	<footer>
 		<a
 			data-goatcounter-click="support-us"
-			data-goatcounter-title="Support US"
+			data-goatcounter-title="Support Us"
 			href="https://ko-fi.com/goodbyte"
 			class="support"
 		>Support this site</a>
