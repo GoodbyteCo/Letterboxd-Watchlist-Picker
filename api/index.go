@@ -52,7 +52,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "no users", 400)
 		return
 	}
-	userFilm := scrapeUser(users)
+	_, inter := query["intersect"]
+	var userFilm film
+	if inter {
+		userFilm = scrapeUser(users, true)
+	} else {
+		userFilm = scrapeUser(users, false)
+	}
 	if (userFilm == film{}) {
 		http.Error(w, "no users", 404)
 		return
@@ -66,7 +72,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 //main scraping function
-func scrapeUser(users []string) film {
+func scrapeUser(users []string, intersect bool) film {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
@@ -96,6 +102,16 @@ func scrapeUser(users []string) film {
 	//chose random film from list
 	if len(totalFilms) == 0 {
 		return film{}
+	}
+	log.Print("results")
+	if intersect {
+		intersectList := getintersect(totalFilms)
+		rand.Seed(time.Now().UTC().UnixNano())
+		n := rand.Intn(len(intersectList))
+		log.Println(len(intersectList))
+		log.Println(n)
+		log.Println(intersectList[n])
+		return intersectList[n]
 	}
 	rand.Seed(time.Now().UTC().UnixNano())
 	n := rand.Intn(len(totalFilms))
@@ -213,6 +229,20 @@ func done() filmSend {
 		film: film{},
 		done: true,
 	}
+}
+
+func getintersect(filmSlice []film) []film {
+	keys := make(map[film]int)
+	list := []film{}
+	for _, entry := range filmSlice {
+		i, _ := keys[entry]
+		if i < 1 {
+			keys[entry] = 1
+		} else {
+			list = append(list, entry)
+		}
+	}
+	return list
 }
 
 func enableCors(w *http.ResponseWriter) {
