@@ -1,6 +1,11 @@
 <template>
 	<footer>
-		<a href="https://ko-fi.com/goodbyte" class="support">Support this site</a>
+		<a
+			data-goatcounter-click="support-us"
+			data-goatcounter-title="Support Us"
+			href="https://ko-fi.com/goodbyte"
+			class="support"
+		>Support this site</a>
 		<a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020
 	</footer>
 </template>
