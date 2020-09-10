@@ -191,7 +191,7 @@ export default {
 	name: "Film",
 	data() {
 		return {
-			users: "", //sting of requested users binding for input box 
+			users: "", //sting of requested users binding for input box
 			info: "", //json blob fotten from AJAX request
 			notfound: false, //Boolean for when user is not found or a watchlist is empty
 			loading: false, //Boolean fot loading state
@@ -213,7 +213,8 @@ export default {
 		//Main function to make request for random film
 		submit() {
 			this.notfound = false;
-			if (this.users == "") { //Reset state and if form submitted with empty input field
+			if (this.users == "") {
+				//Reset state and if form submitted with empty input field
 				window.history.replaceState(null, null, "/");
 				this.loading = false;
 				this.submitted = false;
@@ -224,14 +225,19 @@ export default {
 			let userlist = inputted.filter(function (el) {
 				return el;
 			});
-			if (userlist.length < 1) { // second check for non empty input field probably not required
+			if (userlist.length < 1) {
+				// second check for non empty input field probably not required
 				this.submitted = false;
 				return;
 			}
 			document.body.className = "entered";
 			this.submitted = true;
 			this.loading = true;
-			window.history.replaceState(null, null, "?u=" + userlist.join("&u=")); //add url param for users being queryied for discoverbilty of this feature
+			window.history.replaceState(
+				null,
+				null,
+				"?u=" + userlist.join("&u=")
+			); //add url param for users being queryied for discoverbilty of this feature
 			console.log(userlist);
 
 			//Generate proper url for request
@@ -243,7 +249,8 @@ export default {
 					.then(function (res) {
 						document.body.className = "done";
 
-						if (res.status != 200) { //if request fails set state to failed stated
+						if (res.status != 200) {
+							//if request fails set state to failed stated
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
@@ -266,7 +273,8 @@ export default {
 					});
 			} catch (e) {
 				this.$alert(
-					"Something went wrong. Please try again in a moment. Error:" + e,
+					"Something went wrong. Please try again in a moment. Error:" +
+						e,
 					"An error occured"
 				);
 			}
@@ -533,6 +541,21 @@ p.you-should {
 #logo svg:last-child {
 	animation-delay: 0.1s;
 	transform: translateY(-16.3px);
+}
+
+@media (prefers-color-scheme: dark) {
+	#logo {
+		border: 2px solid white;
+	}
+	a {
+		color: #6c88a3;
+	}
+	#title-link {
+		color: #6c88a3;
+	}
+	input {
+		/* background: #647991; */
+	}
 }
 
 @keyframes spin {

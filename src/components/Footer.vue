@@ -36,16 +36,16 @@ a:hover {
 
 a.support {
 	display: block;
-    padding: 0.5rem;
-    text-align: center;
-    margin: 0.5rem auto;
-    width: 120px;
-    border-radius: 4px;
-    text-transform: uppercase;
-    font-weight: 900;
-    text-decoration: none;
-    color: #00bdfa;
-    border: 3px solid #00bdfa;
+	padding: 0.5rem;
+	text-align: center;
+	margin: 0.5rem auto;
+	width: 120px;
+	border-radius: 4px;
+	text-transform: uppercase;
+	font-weight: 900;
+	text-decoration: none;
+	color: #00bdfa;
+	border: 3px solid #00bdfa;
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity 0.6s ease 0.2s;
@@ -59,5 +59,16 @@ a.support:hover {
 .done a.support {
 	opacity: 1;
 	pointer-events: all;
+}
+
+@media (prefers-color-scheme: dark) {
+	a.support {
+		color: #48d2ff;
+		border: 3px solid #48d2ff;
+	}
+	a.support:hover {
+		background: #48d2ff;
+		color: #1d232a;
+	}
 }
 </style>

@@ -33,6 +33,15 @@ export default {
 	min-height: -webkit-calc(85vh - 15px);
 }
 
+@media (prefers-color-scheme: dark) {
+	body {
+		background: #1d232a;
+	}
+	#app {
+		color: #76a0ca;
+	}
+}
+
 ::selection {
 	background: #40bcf4;
 	color: white;
