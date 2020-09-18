@@ -548,10 +548,10 @@ p.you-should {
 		border: 2px solid white;
 	}
 	a {
-		color: #6c88a3;
+		color: #76a0ca;
 	}
 	#title-link {
-		color: #6c88a3;
+		color: #76a0ca;
 	}
 	input {
 		/* background: #647991; */
