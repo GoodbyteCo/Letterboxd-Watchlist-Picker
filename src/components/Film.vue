@@ -191,7 +191,7 @@ export default {
 	name: "Film",
 	data() {
 		return {
-			users: "", //sting of requested users binding for input box 
+			users: "", //sting of requested users binding for input box
 			info: "", //json blob fotten from AJAX request
 			notfound: false, //Boolean for when user is not found or a watchlist is empty
 			loading: false, //Boolean fot loading state
@@ -213,25 +213,33 @@ export default {
 		//Main function to make request for random film
 		submit() {
 			this.notfound = false;
-			if (this.users == "") { //Reset state and if form submitted with empty input field
+			if (this.users == "") {
+				//Reset state and if form submitted with empty input field
 				window.history.replaceState(null, null, "/");
 				this.loading = false;
 				this.submitted = false;
-				document.body.className = "";
+				document.body.classList.remove("done");
+				document.body.classList.remove("entered");
 				return;
 			}
 			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
 			let userlist = inputted.filter(function (el) {
 				return el;
 			});
-			if (userlist.length < 1) { // second check for non empty input field probably not required
+			if (userlist.length < 1) {
+				// second check for non empty input field probably not required
 				this.submitted = false;
 				return;
 			}
-			document.body.className = "entered";
+			document.body.classList.remove("done");
+			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
-			window.history.replaceState(null, null, "?u=" + userlist.join("&u=")); //add url param for users being queryied for discoverbilty of this feature
+			window.history.replaceState(
+				null,
+				null,
+				"?u=" + userlist.join("&u=")
+			); //add url param for users being queryied for discoverbilty of this feature
 			console.log(userlist);
 
 			//Generate proper url for request
@@ -241,9 +249,11 @@ export default {
 				console.log(url);
 				fetch(url)
 					.then(function (res) {
-						document.body.className = "done";
+						document.body.classList.remove("entered");
+						document.body.classList.add("done");
 
-						if (res.status != 200) { //if request fails set state to failed stated
+						if (res.status != 200) {
+							//if request fails set state to failed stated
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
@@ -266,7 +276,8 @@ export default {
 					});
 			} catch (e) {
 				this.$alert(
-					"Something went wrong. Please try again in a moment. Error:" + e,
+					"Something went wrong. Please try again in a moment. Error:" +
+						e,
 					"An error occured"
 				);
 			}
@@ -456,6 +467,10 @@ button {
 	letter-spacing: 0.04em;
 }
 
+.dark button {
+	background: #526e89;
+}
+
 button:hover,
 button:focus,
 button:focus-within {
@@ -534,6 +549,24 @@ p.you-should {
 	animation-delay: 0.1s;
 	transform: translateY(-16.3px);
 }
+
+/* @media (prefers-color-scheme: dark) { */
+.dark #logo {
+	border: 2px solid white;
+}
+.dark a {
+	color: #76a0ca;
+}
+.dark #title-link {
+	color: #76a0ca;
+}
+.dark input {
+	/* background: #647991; */
+}
+.dark .film-cover {
+	background-color: #76a0ca;
+}
+/* } */
 
 @keyframes spin {
 	0% {
