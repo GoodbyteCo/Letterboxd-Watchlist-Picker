@@ -16,18 +16,20 @@ export default {
 		Film,
 		Footer,
 	},
-	mounted() {
+	created() {
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
 		if (pref.matches) {
-			document.body.classList.toggle("dark");
+			document.body.classList.add("dark");
 		} else {
-			document.body.classList.toggle("dark");
+			document.body.classList.remove("dark");
 		}
+	},
+	mounted() {
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
 			if (e.matches) {
-				document.body.classList.toggle("dark");
+				document.body.classList.add("dark");
 			} else {
-				document.body.classList.toggle("dark");
+				document.body.classList.remove("dark");
 			}
 		});
 	},
