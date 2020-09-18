@@ -464,6 +464,10 @@ button {
 	letter-spacing: 0.04em;
 }
 
+.dark button {
+	background: #526e89;
+}
+
 button:hover,
 button:focus,
 button:focus-within {
