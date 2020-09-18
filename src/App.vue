@@ -22,17 +22,23 @@ export default {
 		};
 	},
 	mounted() {
+		var dark = "#1d232a";
+		var white = "#fff";
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
 		if (pref.matches) {
 			this.isActive = true;
+			document.body.style.background = dark;
 		} else {
 			this.isActive = false;
+			document.body.style.background = white;
 		}
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
 			if (e.matches) {
 				this.isActive = true;
+				document.body.style.background = dark;
 			} else {
 				this.isActive = false;
+				document.body.style.background = white;
 			}
 		});
 	},
@@ -53,14 +59,9 @@ export default {
 	min-height: -webkit-calc(85vh - 15px);
 }
 
-/* @media (prefers-color-scheme: dark) { */
-.dark body {
-	background: #1d232a;
-}
-.dark #app {
+.dark#app {
 	color: #76a0ca;
 }
-/* } */
 
 ::selection {
 	background: #40bcf4;
