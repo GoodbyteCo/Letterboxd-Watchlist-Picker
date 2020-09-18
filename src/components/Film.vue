@@ -231,6 +231,7 @@ export default {
 				this.submitted = false;
 				return;
 			}
+			document.body.classList.remove("done");
 			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
