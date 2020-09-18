@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div v-bind:class="{ dark: isActive }" id="app">
 		<div id="main">
 			<Film />
 		</div>
@@ -15,6 +15,26 @@ export default {
 	components: {
 		Film,
 		Footer,
+	},
+	data() {
+		return {
+			isActive: false,
+		};
+	},
+	mounted() {
+		var pref = window.matchMedia("(prefers-color-scheme: dark)");
+		if (pref.matches) {
+			this.isActive = true;
+		} else {
+			this.isActive = false;
+		}
+		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
+			if (e.matches) {
+				this.isActive = true;
+			} else {
+				this.isActive = false;
+			}
+		});
 	},
 };
 </script>
@@ -33,14 +53,14 @@ export default {
 	min-height: -webkit-calc(85vh - 15px);
 }
 
-@media (prefers-color-scheme: dark) {
-	body {
-		background: #1d232a;
-	}
-	#app {
-		color: #76a0ca;
-	}
+/* @media (prefers-color-scheme: dark) { */
+.dark body {
+	background: #1d232a;
 }
+.dark #app {
+	color: #76a0ca;
+}
+/* } */
 
 ::selection {
 	background: #40bcf4;

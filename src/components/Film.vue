@@ -543,23 +543,23 @@ p.you-should {
 	transform: translateY(-16.3px);
 }
 
-@media (prefers-color-scheme: dark) {
-	#logo {
-		border: 2px solid white;
-	}
-	a {
-		color: #76a0ca;
-	}
-	#title-link {
-		color: #76a0ca;
-	}
-	input {
-		/* background: #647991; */
-	}
-	.film-cover {
-		background-color: #76a0ca;
-	}
+/* @media (prefers-color-scheme: dark) { */
+.dark #logo {
+	border: 2px solid white;
 }
+.dark a {
+	color: #76a0ca;
+}
+.dark #title-link {
+	color: #76a0ca;
+}
+.dark input {
+	/* background: #647991; */
+}
+.dark .film-cover {
+	background-color: #76a0ca;
+}
+/* } */
 
 @keyframes spin {
 	0% {

@@ -61,14 +61,14 @@ a.support:hover {
 	pointer-events: all;
 }
 
-@media (prefers-color-scheme: dark) {
-	a.support {
-		color: #76a0ca;
-		border: 3px solid #76a0ca;
-	}
-	a.support:hover {
-		background: #76a0ca;
-		color: #1d232a;
-	}
+/* @media (prefers-color-scheme: dark) { */
+.dark a.support {
+	color: #76a0ca;
+	border: 3px solid #76a0ca;
 }
+.dark a.support:hover {
+	background: #76a0ca;
+	color: #1d232a;
+}
+/* } */
 </style>
