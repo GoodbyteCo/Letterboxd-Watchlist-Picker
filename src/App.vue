@@ -16,15 +16,13 @@ export default {
 		Film,
 		Footer,
 	},
-	created() {
+	mounted() {
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
 		if (pref.matches) {
 			document.body.classList.add("dark");
 		} else {
 			document.body.classList.remove("dark");
 		}
-	},
-	mounted() {
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
 			if (e.matches) {
 				document.body.classList.add("dark");
