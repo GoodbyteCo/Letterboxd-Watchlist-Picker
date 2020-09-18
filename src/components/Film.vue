@@ -218,7 +218,8 @@ export default {
 				window.history.replaceState(null, null, "/");
 				this.loading = false;
 				this.submitted = false;
-				document.body.className = "";
+				document.body.classList.remove("done");
+				document.body.classList.remove("entered");
 				return;
 			}
 			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
@@ -230,7 +231,7 @@ export default {
 				this.submitted = false;
 				return;
 			}
-			document.body.className = "entered";
+			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
 			window.history.replaceState(
@@ -247,7 +248,8 @@ export default {
 				console.log(url);
 				fetch(url)
 					.then(function (res) {
-						document.body.className = "done";
+						document.body.classList.remove("entered");
+						document.body.classList.add("done");
 
 						if (res.status != 200) {
 							//if request fails set state to failed stated
