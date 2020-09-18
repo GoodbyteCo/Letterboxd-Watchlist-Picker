@@ -63,11 +63,11 @@ a.support:hover {
 
 @media (prefers-color-scheme: dark) {
 	a.support {
-		color: #48d2ff;
-		border: 3px solid #48d2ff;
+		color: #76a0ca;
+		border: 3px solid #76a0ca;
 	}
 	a.support:hover {
-		background: #48d2ff;
+		background: #76a0ca;
 		color: #1d232a;
 	}
 }

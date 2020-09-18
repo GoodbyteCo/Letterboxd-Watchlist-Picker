@@ -556,6 +556,9 @@ p.you-should {
 	input {
 		/* background: #647991; */
 	}
+	.film-cover {
+		background-color: #76a0ca;
+	}
 }
 
 @keyframes spin {
