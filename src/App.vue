@@ -1,5 +1,5 @@
 <template>
-	<div v-bind:class="{ dark: isActive }" id="app">
+	<div id="app">
 		<div id="main">
 			<Film />
 		</div>
@@ -16,29 +16,18 @@ export default {
 		Film,
 		Footer,
 	},
-	data() {
-		return {
-			isActive: false,
-		};
-	},
 	mounted() {
-		var dark = "#1d232a";
-		var white = "#fff";
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
 		if (pref.matches) {
-			this.isActive = true;
-			document.body.style.background = dark;
+			document.body.classList.toggle("dark");
 		} else {
-			this.isActive = false;
-			document.body.style.background = white;
+			document.body.classList.toggle("dark");
 		}
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
 			if (e.matches) {
-				this.isActive = true;
-				document.body.style.background = dark;
+				document.body.classList.toggle("dark");
 			} else {
-				this.isActive = false;
-				document.body.style.background = white;
+				document.body.classList.toggle("dark");
 			}
 		});
 	},
@@ -59,7 +48,11 @@ export default {
 	min-height: -webkit-calc(85vh - 15px);
 }
 
-.dark#app {
+body.dark {
+	background: #1d232a;
+}
+
+.dark #app {
 	color: #76a0ca;
 }
 
