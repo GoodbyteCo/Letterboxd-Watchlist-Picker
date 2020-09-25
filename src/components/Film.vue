@@ -140,11 +140,15 @@
 		<div class="hello">
 			<p>
 				Enter your
-				<a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Add multiple usernames by separating with a space or comma, and enter public lists in "username/list-title" format.
+				<a href="https://letterboxd.com/">Letterboxd</a> username to get
+				a random film off of your watchlist. Add multiple usernames by
+				separating with a space or comma, and enter public lists in
+				"username/list-title" format.
 			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
 				<input
+					class="userfield"
 					placeholder="ex: holopollock, qjack"
 					id="userbox"
 					type="text"
@@ -152,33 +156,71 @@
 					v-model="users"
 				/>
 				<button v-on:click="submit()">Submit</button>
-			</div>
-			<div v-if="loading">
-				<h2>Loading Film</h2>
-				<div id="loadbar"></div>
-				<p>This takes a bit of time. While you're waiting, is there a movie you're secretly rooting for? Choose that one! I give you permission.</p>
-			</div>
-			<div v-else-if="submitted">
-				<div v-if="notfound">
-					<h2>Nothing Found</h2>
-					<p>Sorry, that watchlist is empty, private, or doesn't exist at all.</p>
-					<img
-						id="poe"
-						width="250"
-						src="https://watchlistpicker.com/poe.gif"
-						alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
-					/>
+				<div id="advanced-section">
+					<button v-on:click="activateAdvanced()" id="tertiary">
+						<span>Advanced Search</span>
+					</button>
+					<div id="advanced">
+						<input
+							type="radio"
+							id="union"
+							value="Union"
+							name="union-intersect"
+							v-model="selectionMode"
+							selected
+						/>
+						<label for="union">Union</label>
+						<input
+							type="radio"
+							id="intersect"
+							value="Intersect"
+							name="union-intersect"
+							v-model="selectionMode"
+						/>
+						<label for="intersect">Intersect</label>
+					</div>
 				</div>
-				<div v-else id="container">
-					<a
-						v-bind:href="url"
-						:style="{ backgroundImage: 'url(' + img_url + ')' }"
-						class="film-cover"
-						alt="film poster"
-					></a>
-					<div>
-						<p class="you-should">You should watch</p>
-						<a id="title-link" v-bind:href="url" class="title">{{ name }}</a>
+			</div>
+			<div id="advanced-show">
+				<div v-if="loading">
+					<h2>Loading Film</h2>
+					<div id="loadbar"></div>
+					<p>
+						This takes a bit of time. While you're waiting, is there
+						a movie you're secretly rooting for? Choose that one! I
+						give you permission.
+					</p>
+				</div>
+				<div v-else-if="submitted">
+					<div v-if="notfound">
+						<h2>Nothing Found</h2>
+						<p>
+							Sorry, that watchlist is empty, private, or doesn't
+							exist at all.
+						</p>
+						<img
+							id="poe"
+							width="250"
+							src="https://watchlistpicker.com/poe.gif"
+							alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
+						/>
+					</div>
+					<div v-else id="container">
+						<a
+							v-bind:href="url"
+							:style="{ backgroundImage: 'url(' + img_url + ')' }"
+							class="film-cover"
+							alt="film poster"
+						></a>
+						<div>
+							<p class="you-should">You should watch</p>
+							<a
+								id="title-link"
+								v-bind:href="url"
+								class="title"
+								>{{ name }}</a
+							>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -191,11 +233,12 @@ export default {
 	name: "Film",
 	data() {
 		return {
-			users: "", //sting of requested users binding for input box 
+			users: "", //sting of requested users binding for input box
 			info: "", //json blob fotten from AJAX request
 			notfound: false, //Boolean for when user is not found or a watchlist is empty
 			loading: false, //Boolean fot loading state
 			submitted: false, //Boolean for if the form has been submitted
+			selectionMode: "Union",
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -213,7 +256,8 @@ export default {
 		//Main function to make request for random film
 		submit() {
 			this.notfound = false;
-			if (this.users == "") { //Reset state and if form submitted with empty input field
+			if (this.users == "") {
+				//Reset state and if form submitted with empty input field
 				window.history.replaceState(null, null, "/");
 				this.loading = false;
 				this.submitted = false;
@@ -224,18 +268,28 @@ export default {
 			let userlist = inputted.filter(function (el) {
 				return el;
 			});
-			if (userlist.length < 1) { // second check for non empty input field probably not required
+			if (userlist.length < 1) {
+				// second check for non empty input field probably not required
 				this.submitted = false;
 				return;
 			}
 			document.body.className = "entered";
 			this.submitted = true;
 			this.loading = true;
-			window.history.replaceState(null, null, "?u=" + userlist.join("&u=")); //add url param for users being queryied for discoverbilty of this feature
+			window.history.replaceState(
+				null,
+				null,
+				"?u=" + userlist.join("&u=")
+			); //add url param for users being queryied for discoverbilty of this feature
 			console.log(userlist);
 
 			//Generate proper url for request
+
 			let url = "/api?users=" + userlist.join("&users=");
+			console.log(this.selectionMode);
+			if (this.selectionMode == "Intersect") {
+				url += "&intersect=true";
+			}
 			try {
 				let vue = this;
 				console.log(url);
@@ -243,7 +297,8 @@ export default {
 					.then(function (res) {
 						document.body.className = "done";
 
-						if (res.status != 200) { //if request fails set state to failed stated
+						if (res.status != 200) {
+							//if request fails set state to failed stated
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
@@ -266,10 +321,17 @@ export default {
 					});
 			} catch (e) {
 				this.$alert(
-					"Something went wrong. Please try again in a moment. Error:" + e,
+					"Something went wrong. Please try again in a moment. Error:" +
+						e,
 					"An error occured"
 				);
 			}
+		},
+		activateAdvanced() {
+			var large = document.getElementById("advanced-show");
+			var element = document.getElementById("advanced");
+			large.classList.toggle("advanceactive");
+			element.classList.toggle("active");
 		},
 	},
 	computed: {
@@ -325,6 +387,33 @@ a:focus {
 	padding-top: 1.5rem;
 	transform: translateY(40px);
 	transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
+}
+
+#advanced {
+	opacity: 0;
+	transition: 0.3s ease;
+	transform: translateY(0px);
+}
+
+#advanced label {
+	display: inline;
+	visibility: visible;
+}
+
+.active#advanced {
+	opacity: 1;
+	transition: 0.3s ease;
+	transform: translateY(5px);
+}
+
+#advanced-show {
+	transform: translateY(-30px);
+	transition: transform 0.3s ease;
+}
+
+#advanced-show.advanceactive {
+	transform: translateY(10px);
+	transition: transform 0.3s ease;
 }
 
 h1 {
@@ -434,6 +523,7 @@ h3 {
 	max-width: 400px;
 	width: 90%;
 	margin: 60px auto;
+	margin-top: 30px;
 }
 
 button {
@@ -461,8 +551,28 @@ button:focus,
 button:focus-within {
 	background: #40bcf4;
 }
+#tertiary {
+	background: none;
+	color: #415569;
+	display: block;
+	margin: auto;
+}
+#tertiary:hover,
+#tertiary:focus {
+	text-decoration: underline;
+}
 
-input {
+#tertiary span {
+	text-transform: none;
+	font-weight: 400;
+}
+
+/* #advanced-section {
+	margin: auto;
+	text-align: left;
+} */
+
+.userfield {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -476,14 +586,14 @@ input {
 	border-radius: 4px 0 0 4px;
 }
 
-input:active,
-input:focus,
-input:focus-within {
+.userfield:active,
+.userfield:focus,
+.userfield:focus-within {
 	box-shadow: inset 0 0 0 3px #40bcf4;
 }
 
 @media screen and (max-width: 360px) {
-	input {
+	.userfield {
 		min-width: 0px;
 		width: 50%;
 	}
