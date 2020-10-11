@@ -304,6 +304,7 @@ export default {
 
 						if (res.status != 200) {
 							res.text().then(function (text) {
+								text = text.trim();
 								console.log(text);
 								console.log(text.length);
 								console.log("Intersect error".length);
