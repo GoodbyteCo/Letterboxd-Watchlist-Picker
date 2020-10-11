@@ -83,8 +83,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	_, inter := query["intersect"]
 	var userFilm film
 	var err error
+	
 	if inter {
-		userFilm, err = scrapeUser(users, true)
+		if len(users) == 1 {
+			userFilm, err = scrapeUser(users, false)
+		} else {
+			userFilm, err = scrapeUser(users, true)
+		}
 	} else {
 		userFilm, err = scrapeUser(users, false)
 	}
