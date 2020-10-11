@@ -305,8 +305,8 @@ export default {
 						if (res.status != 200) {
 							res.text().then(function (text) {
 								console.log(text);
-								console.log(text == "Intersect error");
-								console.log(text == "Intersect error ");
+								console.log(text.length);
+								console.log("Intersect error".length);
 								if (text == "Intersect error") {
 									console.log("true");
 									vue.emptyintersect = true;
