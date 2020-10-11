@@ -156,7 +156,11 @@
 					v-model="users"
 				/>
 				<button v-on:click="submit()">Submit</button>
-				<div id="advanced-section">
+				<div
+					id="advanced-section"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
 					<button v-on:click="activateAdvanced()" id="tertiary">
 						<span>Advanced Search</span>
 					</button>
@@ -346,11 +350,16 @@ export default {
 			if (this.advancedOpen) {
 				document.getElementById("union").tabIndex = -1;
 				document.getElementById("intersect").tabIndex = -1;
+				document
+					.getElementById("advanced-section")
+					.setAttribute("ariaexpanded", "false");
 				this.advancedOpen = false;
 			} else {
-				console.log("please works");
 				document.getElementById("union").tabIndex = 0;
 				document.getElementById("intersect").tabIndex = 0;
+				document
+					.getElementById("advanced-section")
+					.setAttribute("ariaexpanded", "true");
 				this.advancedOpen = true;
 			}
 		},
