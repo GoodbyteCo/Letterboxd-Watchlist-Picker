@@ -97,7 +97,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		if errors.As(err, &e) {
 			switch e.reason {
 			case INTERSECT:
-				http.Error(w, "Intersect error", 404)
+				http.Error(w, "Intersect error", 406)
 				return
 			case UNION:
 				http.Error(w, "Union error", 404)
