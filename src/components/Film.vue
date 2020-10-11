@@ -304,6 +304,7 @@ export default {
 
 						if (res.status != 200) {
 							res.text().then(function (text) {
+								console.log(text);
 								if (text == "Intersect error") {
 									vue.emptyintersect = true;
 								}
