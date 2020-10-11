@@ -106,9 +106,13 @@ func scrapeUser(users []string, intersect bool) film {
 	log.Print("results")
 	if intersect {
 		intersectList := getintersect(totalFilms)
+		length := len(intersectList)
+		if length == 0 {
+			return film{}
+		}
 		rand.Seed(time.Now().UTC().UnixNano())
-		n := rand.Intn(len(intersectList))
-		log.Println(len(intersectList))
+		n := rand.Intn(length)
+		log.Println(length)
 		log.Println(n)
 		log.Println(intersectList[n])
 		return intersectList[n]
