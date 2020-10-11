@@ -303,7 +303,7 @@ export default {
 						document.body.className = "done";
 
 						if (res.status != 200) {
-							res.body.text().then(function (text) {
+							res.text().then(function (text) {
 								if (text == "Intersect error") {
 									vue.emptyintersect = true;
 								}
