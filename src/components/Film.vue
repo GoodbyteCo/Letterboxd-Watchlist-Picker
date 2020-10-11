@@ -303,11 +303,13 @@ export default {
 						document.body.className = "done";
 
 						if (res.status != 200) {
-							console.log(res.statusMessage);
+							res.body.text().then(function (text) {
+								if (text == "Intersect error") {
+									vue.emptyintersect = true;
+								}
+							});
 							//if request fails set state to failed stated
-							if (res.status == 204) {
-								vue.emptyintersect = true;
-							}
+
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
