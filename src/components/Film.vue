@@ -167,6 +167,7 @@
 							value="Union"
 							name="union-intersect"
 							v-model="selectionMode"
+							tabindex="-1"
 							selected
 						/>
 						<label for="union">Union</label>
@@ -175,6 +176,7 @@
 							id="intersect"
 							value="Intersect"
 							name="union-intersect"
+							tabindex="-1"
 							v-model="selectionMode"
 						/>
 						<label for="intersect">Intersect</label>
@@ -195,8 +197,8 @@
 					<div v-if="notfound">
 						<h2>Nothing Found</h2>
 						<p v-if="emptyintersect">
-							Sorry, but the intersect between those two list is
-							empty
+							Sorry, but the intersection between those two list
+							is empty
 						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
@@ -244,6 +246,7 @@ export default {
 			loading: false, //Boolean fot loading state
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
+			advancedOpen: false,
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -340,6 +343,16 @@ export default {
 			var element = document.getElementById("advanced");
 			large.classList.toggle("advanceactive");
 			element.classList.toggle("active");
+			if (this.advancedOpen) {
+				document.getElementById("union").tabIndex = -1;
+				document.getElementById("intersect").tabIndex = -1;
+				this.advancedOpen = false;
+			} else {
+				console.log("please works");
+				document.getElementById("union").tabIndex = 0;
+				document.getElementById("intersect").tabIndex = 0;
+				this.advancedOpen = true;
+			}
 		},
 	},
 	computed: {
