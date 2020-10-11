@@ -174,7 +174,10 @@
 							tabindex="-1"
 							selected
 						/>
-						<label for="union">Union</label>
+						<label for="union">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131 87"><g stroke="#000" stroke-width="3"><g fill="#fff" transform="translate(-796 -208)"><circle cx="839.7" cy="251.7" r="43.7" stroke="none"/><circle cx="839.7" cy="251.7" r="42.2" fill="none"/></g><g fill="#fff" transform="translate(-796 -208)"><circle cx="883.3" cy="251.7" r="43.7" stroke="none"/><circle cx="883.3" cy="251.7" r="42.2" fill="none"/></g><g fill="none" transform="translate(-796 -208)"><circle cx="839.7" cy="251.7" r="43.7" stroke="none"/><circle cx="839.7" cy="251.7" r="42.2"/></g><path fill="#fff" d="M15 13l73 73zM2 40l46 46zm35 45L2 50zM20 8l77 77zm56 76L10 18zM3 31l53 53zM27 5l77 77zM6 24l57 57zm16 56L8 66zM35 3l76 76zm9-1l72 72zm11 1l66 66zm13 3l57 57zm7-3l53 53zm9-1l45 45zm10 0l35 35zm16 6l13 13z"/></g></svg>
+							Union
+						</label>
 						<input
 							type="radio"
 							id="intersect"
@@ -183,7 +186,9 @@
 							tabindex="-1"
 							v-model="selectionMode"
 						/>
-						<label for="intersect">Intersect</label>
+						<label for="intersect">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131 87"><g stroke="#000" stroke-width="3"><g fill="#fff" transform="translate(-786 -52)"><circle cx="829.7" cy="95.7" r="43.7" stroke="none"></circle><circle cx="829.7" cy="95.7" r="42.2" fill="none"></circle></g><g fill="#fff" transform="translate(-786 -52)"><circle cx="873.3" cy="95.7" r="43.7" stroke="none"></circle><circle cx="873.3" cy="95.7" r="42.2" fill="none"></circle></g><g fill="none" transform="translate(-786 -52)"><circle cx="829.7" cy="95.7" r="43.7" stroke="none"></circle><circle cx="829.7" cy="95.7" r="42.2"></circle></g><path fill="#fff" d="M47 55l22 22zm-2-12l29 29zm1-9l33 33zm3-7l33 33zm3-7l33 33zm5-5l29 29zm5-5l22 22z"></path></g></svg>
+							Intersect</label>
 					</div>
 				</div>
 			</div>
@@ -444,6 +449,36 @@ a:focus {
 #advanced-show.advanceactive {
 	transform: translateY(10px);
 	transition: transform 0.3s ease;
+}
+
+#advanced svg {
+	width: 40px;
+	transform: translateY(8.5px);
+	margin-right: 4px;
+}
+
+label {
+	display: inline-block;
+	background: rgb(64 188 244 / 0.5);
+	padding: 10px;
+	border-radius: 4px;
+	font-weight: bold;
+	color: rgb(0 0 0 / 70%);
+	border: 2px solid transparent;
+	cursor: pointer;
+	margin: 4px;
+}
+
+input[type="radio"]:checked+label {
+	background: #40bcf4;
+	border-color: #000;
+	color: #fff;
+}
+
+input#union, input#intersect {
+	opacity: 0;
+	width: 0px;
+	margin: 0;
 }
 
 h1 {
