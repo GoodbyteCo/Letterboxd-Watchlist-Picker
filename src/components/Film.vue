@@ -303,6 +303,7 @@ export default {
 						document.body.className = "done";
 
 						if (res.status != 200) {
+							console.log(res.body);
 							//if request fails set state to failed stated
 							if (res.status == 204) {
 								vue.emptyintersect = true;
