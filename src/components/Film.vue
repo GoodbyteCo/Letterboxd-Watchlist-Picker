@@ -194,7 +194,11 @@
 				<div v-else-if="submitted">
 					<div v-if="notfound">
 						<h2>Nothing Found</h2>
-						<p>
+						<p v-if="emptyintersect">
+							Sorry, but the intersect between those two list is
+							empty
+						</p>
+						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
 							exist at all.
 						</p>
@@ -236,6 +240,7 @@ export default {
 			users: "", //sting of requested users binding for input box
 			info: "", //json blob fotten from AJAX request
 			notfound: false, //Boolean for when user is not found or a watchlist is empty
+			emptyintersect: false,
 			loading: false, //Boolean fot loading state
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
@@ -299,6 +304,9 @@ export default {
 
 						if (res.status != 200) {
 							//if request fails set state to failed stated
+							if (res.status == 204) {
+								vue.emptyintersect = true;
+							}
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
