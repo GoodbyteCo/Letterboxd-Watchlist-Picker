@@ -306,11 +306,11 @@ export default {
 							res.text().then(function (text) {
 								console.log(text);
 								if (text == "Intersect error") {
+									console.log("true");
 									vue.emptyintersect = true;
 								}
 							});
 							//if request fails set state to failed stated
-
 							vue.notfound = true;
 							vue.loading = false;
 							return "";
