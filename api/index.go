@@ -2,6 +2,7 @@ package film
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"math/rand"
 	"net/http"
@@ -22,6 +23,33 @@ type film struct {
 type filmSend struct {
 	film film //film to be sent over channel
 	done bool //if user is done
+}
+
+type nothingReason int
+
+const (
+	INTERSECT = iota
+	UNION
+)
+
+type nothingError struct {
+	reason nothingReason
+}
+
+func (e *nothingError) ToString() string {
+	switch e.reason {
+	case INTERSECT:
+		return "empty intersect"
+	case UNION:
+		return "empty union"
+	default:
+		return "big error"
+	}
+
+}
+
+func (e *nothingError) Error() string {
+	return e.ToString()
 }
 
 const url = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
@@ -54,15 +82,30 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	_, inter := query["intersect"]
 	var userFilm film
+	var err error
 	if inter {
-		userFilm = scrapeUser(users, true)
+		if len(users) == 1 {
+			userFilm, err = scrapeUser(users, false)
+		} else {
+			userFilm, err = scrapeUser(users, true)
+		}
 	} else {
-		userFilm = scrapeUser(users, false)
+		userFilm, err = scrapeUser(users, false)
 	}
-	if (userFilm == film{}) {
-		http.Error(w, "no users", 404)
-		return
+	if err != nil {
+		var e *nothingError
+		if errors.As(err, &e) {
+			switch e.reason {
+			case INTERSECT:
+				http.Error(w, "Intersect error", 406)
+				return
+			case UNION:
+				http.Error(w, "Union error", 404)
+				return
+			}
+		}
 	}
+
 	js, err := json.Marshal(userFilm)
 	if err != nil {
 		http.Error(w, "internal error", 500)
@@ -72,7 +115,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 //main scraping function
-func scrapeUser(users []string, intersect bool) film {
+func scrapeUser(users []string, intersect bool) (film, error) {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
@@ -101,24 +144,28 @@ func scrapeUser(users []string, intersect bool) film {
 
 	//chose random film from list
 	if len(totalFilms) == 0 {
-		return film{}
+		return film{}, &nothingError{reason: UNION}
 	}
 	log.Print("results")
 	if intersect {
 		intersectList := getintersect(totalFilms)
+		length := len(intersectList)
+		if length == 0 {
+			return film{}, &nothingError{reason: INTERSECT}
+		}
 		rand.Seed(time.Now().UTC().UnixNano())
-		n := rand.Intn(len(intersectList))
-		log.Println(len(intersectList))
+		n := rand.Intn(length)
+		log.Println(length)
 		log.Println(n)
 		log.Println(intersectList[n])
-		return intersectList[n]
+		return intersectList[n], nil
 	}
 	rand.Seed(time.Now().UTC().UnixNano())
 	n := rand.Intn(len(totalFilms))
 	log.Println(len(totalFilms))
 	log.Println(n)
 	log.Println(totalFilms[n])
-	return totalFilms[n]
+	return totalFilms[n], nil
 }
 
 //function to scapre an single user

@@ -140,11 +140,15 @@
 		<div class="hello">
 			<p>
 				Enter your
-				<a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Add multiple usernames by separating with a space or comma, and enter public lists in "username/list-title" format.
+				<a href="https://letterboxd.com/">Letterboxd</a> username to get
+				a random film off of your watchlist. Add multiple usernames by
+				separating with a space or comma, and enter public lists in
+				"username/list-title" format.
 			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
 				<input
+					class="userfield"
 					placeholder="ex: holopollock, qjack"
 					id="userbox"
 					type="text"
@@ -152,33 +156,207 @@
 					v-model="users"
 				/>
 				<button v-on:click="submit()">Submit</button>
-			</div>
-			<div v-if="loading">
-				<h2>Loading Film</h2>
-				<div id="loadbar"></div>
-				<p>This takes a bit of time. While you're waiting, is there a movie you're secretly rooting for? Choose that one! I give you permission.</p>
-			</div>
-			<div v-else-if="submitted">
-				<div v-if="notfound">
-					<h2>Nothing Found</h2>
-					<p>Sorry, that watchlist is empty, private, or doesn't exist at all.</p>
-					<img
-						id="poe"
-						width="250"
-						src="https://watchlistpicker.com/poe.gif"
-						alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
-					/>
+				<div
+					id="advanced-section"
+					aria-haspopup="true"
+					aria-expanded="false"
+				>
+					<button v-on:click="activateAdvanced()" id="tertiary">
+						<span>Advanced Search</span>
+					</button>
+					<div id="advanced">
+						<input
+							type="radio"
+							id="union"
+							value="Union"
+							name="union-intersect"
+							v-model="selectionMode"
+							tabindex="-1"
+							selected
+						/>
+						<label for="union">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 131 87"
+							>
+								<g stroke="#000" stroke-width="3">
+									<g
+										fill="#fff"
+										transform="translate(-796 -208)"
+									>
+										<circle
+											cx="839.7"
+											cy="251.7"
+											r="43.7"
+											stroke="none"
+										/>
+										<circle
+											cx="839.7"
+											cy="251.7"
+											r="42.2"
+											fill="none"
+										/>
+									</g>
+									<g
+										fill="#fff"
+										transform="translate(-796 -208)"
+									>
+										<circle
+											cx="883.3"
+											cy="251.7"
+											r="43.7"
+											stroke="none"
+										/>
+										<circle
+											cx="883.3"
+											cy="251.7"
+											r="42.2"
+											fill="none"
+										/>
+									</g>
+									<g
+										fill="none"
+										transform="translate(-796 -208)"
+									>
+										<circle
+											cx="839.7"
+											cy="251.7"
+											r="43.7"
+											stroke="none"
+										/>
+										<circle
+											cx="839.7"
+											cy="251.7"
+											r="42.2"
+										/>
+									</g>
+									<path
+										fill="#fff"
+										d="M15 13l73 73zM2 40l46 46zm35 45L2 50zM20 8l77 77zm56 76L10 18zM3 31l53 53zM27 5l77 77zM6 24l57 57zm16 56L8 66zM35 3l76 76zm9-1l72 72zm11 1l66 66zm13 3l57 57zm7-3l53 53zm9-1l45 45zm10 0l35 35zm16 6l13 13z"
+									/>
+								</g>
+							</svg>
+							Union
+						</label>
+						<input
+							type="radio"
+							id="intersect"
+							value="Intersect"
+							name="union-intersect"
+							tabindex="-1"
+							v-model="selectionMode"
+						/>
+						<label for="intersect">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="0 0 131 87"
+							>
+								<g stroke="#000" stroke-width="3">
+									<g
+										fill="#fff"
+										transform="translate(-786 -52)"
+									>
+										<circle
+											cx="829.7"
+											cy="95.7"
+											r="43.7"
+											stroke="none"
+										></circle>
+										<circle
+											cx="829.7"
+											cy="95.7"
+											r="42.2"
+											fill="none"
+										></circle>
+									</g>
+									<g
+										fill="#fff"
+										transform="translate(-786 -52)"
+									>
+										<circle
+											cx="873.3"
+											cy="95.7"
+											r="43.7"
+											stroke="none"
+										></circle>
+										<circle
+											cx="873.3"
+											cy="95.7"
+											r="42.2"
+											fill="none"
+										></circle>
+									</g>
+									<g
+										fill="none"
+										transform="translate(-786 -52)"
+									>
+										<circle
+											cx="829.7"
+											cy="95.7"
+											r="43.7"
+											stroke="none"
+										></circle>
+										<circle
+											cx="829.7"
+											cy="95.7"
+											r="42.2"
+										></circle>
+									</g>
+									<path
+										fill="#fff"
+										d="M47 55l22 22zm-2-12l29 29zm1-9l33 33zm3-7l33 33zm3-7l33 33zm5-5l29 29zm5-5l22 22z"
+									></path>
+								</g>
+							</svg>
+							Intersect</label
+						>
+					</div>
 				</div>
-				<div v-else id="container">
-					<a
-						v-bind:href="url"
-						:style="{ backgroundImage: 'url(' + img_url + ')' }"
-						class="film-cover"
-						alt="film poster"
-					></a>
-					<div>
-						<p class="you-should">You should watch</p>
-						<a id="title-link" v-bind:href="url" class="title">{{ name }}</a>
+			</div>
+			<div id="advanced-show">
+				<div v-if="loading">
+					<h2>Loading Film</h2>
+					<div id="loadbar"></div>
+					<p>
+						This takes a bit of time. While you're waiting, is there
+						a movie you're secretly rooting for? Choose that one! I
+						give you permission.
+					</p>
+				</div>
+				<div v-else-if="submitted">
+					<div v-if="notfound">
+						<h2>Nothing Found</h2>
+						<p v-if="emptyintersect">
+							Sorry, but the intersection between those two list
+							is empty
+						</p>
+						<p v-else>
+							Sorry, that watchlist is empty, private, or doesn't
+							exist at all.
+						</p>
+						<img
+							id="poe"
+							width="250"
+							src="https://watchlistpicker.com/poe.gif"
+							alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
+						/>
+					</div>
+					<div v-else id="container">
+						<a
+							v-bind:href="url"
+							:style="{ backgroundImage: 'url(' + img_url + ')' }"
+							class="film-cover"
+							alt="film poster"
+						></a>
+						<div>
+							<p class="you-should">You should watch</p>
+							<a
+								id="title-link"
+								v-bind:href="url"
+								class="title"
+								>{{ name }}</a
+							>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -194,8 +372,11 @@ export default {
 			users: "", //sting of requested users binding for input box
 			info: "", //json blob fotten from AJAX request
 			notfound: false, //Boolean for when user is not found or a watchlist is empty
+			emptyintersect: false,
 			loading: false, //Boolean fot loading state
 			submitted: false, //Boolean for if the form has been submitted
+			selectionMode: "Union",
+			advancedOpen: false,
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -204,8 +385,12 @@ export default {
 		console.log(queryString);
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
+		const inter = urlParams.get("i");
 		if (users.length > 0) {
 			this.users = users.toString();
+		}
+		if (inter != null) {
+			this.selectionMode = "Intersect";
 		}
 		this.submit();
 	},
@@ -235,15 +420,28 @@ export default {
 			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
-			window.history.replaceState(
-				null,
-				null,
-				"?u=" + userlist.join("&u=")
-			); //add url param for users being queryied for discoverbilty of this feature
+			if (this.selectionMode == "Intersect") {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=") + "&i=true"
+				); //add url param for users being queryied for discoverbilty of this feature
+			} else {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=")
+				); //add url param for users being queryied for discoverbilty of this feature
+			}
 			console.log(userlist);
 
 			//Generate proper url for request
+
 			let url = "/api?users=" + userlist.join("&users=");
+			console.log(this.selectionMode);
+			if (this.selectionMode == "Intersect") {
+				url += "&intersect=true";
+			}
 			try {
 				let vue = this;
 				console.log(url);
@@ -253,6 +451,10 @@ export default {
 						document.body.classList.add("done");
 
 						if (res.status != 200) {
+
+							if (res.status == 406) {
+								vue.emptyintersect = true;
+							}
 							//if request fails set state to failed stated
 							vue.notfound = true;
 							vue.loading = false;
@@ -280,6 +482,27 @@ export default {
 						e,
 					"An error occured"
 				);
+			}
+		},
+		activateAdvanced() {
+			var large = document.getElementById("advanced-show");
+			var element = document.getElementById("advanced");
+			large.classList.toggle("advanceactive");
+			element.classList.toggle("active");
+			if (this.advancedOpen) {
+				document.getElementById("union").tabIndex = -1;
+				document.getElementById("intersect").tabIndex = -1;
+				document
+					.getElementById("advanced-section")
+					.setAttribute("ariaexpanded", "false");
+				this.advancedOpen = false;
+			} else {
+				document.getElementById("union").tabIndex = 0;
+				document.getElementById("intersect").tabIndex = 0;
+				document
+					.getElementById("advanced-section")
+					.setAttribute("ariaexpanded", "true");
+				this.advancedOpen = true;
 			}
 		},
 	},
@@ -336,6 +559,68 @@ a:focus {
 	padding-top: 1.5rem;
 	transform: translateY(40px);
 	transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
+}
+
+#advanced {
+	opacity: 0;
+	transition: 0.3s ease;
+	transform: translateY(0px);
+}
+
+#advanced label {
+	display: inline;
+	visibility: visible;
+}
+
+.active#advanced {
+	opacity: 1;
+	transition: 0.3s ease;
+	transform: translateY(5px);
+}
+
+#advanced-show {
+	transform: translateY(-30px);
+	transition: transform 0.3s ease;
+}
+
+#advanced-show.advanceactive {
+	transform: translateY(10px);
+	transition: transform 0.3s ease;
+}
+
+#advanced svg {
+	width: 40px;
+	transform: translateY(8.5px);
+	margin-right: 4px;
+}
+
+#advanced label {
+	background: rgb(64 188 244 / 0.5);
+	padding: 10px;
+	border-radius: 4px;
+	font-weight: bold;
+	color: rgb(0 0 0 / 70%);
+	border: 2px solid transparent;
+	cursor: pointer;
+	margin: 4px;
+}
+
+#advanced input[type="radio"]:checked + label {
+	background: #40bcf4;
+	border-color: #000;
+	color: #fff;
+}
+
+#advanced input[type="radio"]:focus + label {
+	box-shadow: 0 0 0 3px #fff,
+				0 0 0 5px #1caff2;
+}
+
+input#union,
+input#intersect {
+	opacity: 0;
+	width: 0px;
+	margin: 0;
 }
 
 h1 {
@@ -445,6 +730,7 @@ h3 {
 	max-width: 400px;
 	width: 90%;
 	margin: 60px auto;
+	margin-top: 30px;
 }
 
 button {
@@ -476,8 +762,28 @@ button:focus,
 button:focus-within {
 	background: #40bcf4;
 }
+#tertiary {
+	background: none;
+	color: #415569;
+	display: block;
+	margin: auto;
+}
+#tertiary:hover,
+#tertiary:focus {
+	text-decoration: underline;
+}
 
-input {
+#tertiary span {
+	text-transform: none;
+	font-weight: 400;
+}
+
+/* #advanced-section {
+	margin: auto;
+	text-align: left;
+} */
+
+.userfield {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -491,14 +797,14 @@ input {
 	border-radius: 4px 0 0 4px;
 }
 
-input:active,
-input:focus,
-input:focus-within {
+.userfield:active,
+.userfield:focus,
+.userfield:focus-within {
 	box-shadow: inset 0 0 0 3px #40bcf4;
 }
 
 @media screen and (max-width: 360px) {
-	input {
+	.userfield {
 		min-width: 0px;
 		width: 50%;
 	}
