@@ -264,8 +264,12 @@ export default {
 		console.log(queryString);
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
+		const inter = urlParams.get("i");
 		if (users.length > 0) {
 			this.users = users.toString();
+		}
+		if (inter != null) {
+			this.selectionMode = "Intersect";
 		}
 		this.submit();
 	},
@@ -293,11 +297,19 @@ export default {
 			document.body.className = "entered";
 			this.submitted = true;
 			this.loading = true;
-			window.history.replaceState(
-				null,
-				null,
-				"?u=" + userlist.join("&u=")
-			); //add url param for users being queryied for discoverbilty of this feature
+			if (this.selectionMode == "Intersect") {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=") + "&i=true"
+				); //add url param for users being queryied for discoverbilty of this feature
+			} else {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=")
+				); //add url param for users being queryied for discoverbilty of this feature
+			}
 			console.log(userlist);
 
 			//Generate proper url for request
@@ -469,13 +481,14 @@ label {
 	margin: 4px;
 }
 
-input[type="radio"]:checked+label {
+input[type="radio"]:checked + label {
 	background: #40bcf4;
 	border-color: #000;
 	color: #fff;
 }
 
-input#union, input#intersect {
+input#union,
+input#intersect {
 	opacity: 0;
 	width: 0px;
 	margin: 0;
