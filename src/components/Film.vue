@@ -590,8 +590,7 @@ a:focus {
 	margin-right: 4px;
 }
 
-label {
-	display: inline-block;
+#advanced label {
 	background: rgb(64 188 244 / 0.5);
 	padding: 10px;
 	border-radius: 4px;
@@ -602,10 +601,15 @@ label {
 	margin: 4px;
 }
 
-input[type="radio"]:checked + label {
+#advanced input[type="radio"]:checked + label {
 	background: #40bcf4;
 	border-color: #000;
 	color: #fff;
+}
+
+#advanced input[type="radio"]:focus + label {
+	box-shadow: 0 0 0 3px #fff,
+				0 0 0 5px #1caff2;
 }
 
 input#union,
