@@ -327,7 +327,7 @@
 					<div v-if="notfound">
 						<h2>Nothing Found</h2>
 						<p v-if="emptyintersect">
-							Sorry, but the intersection between those two list
+							Sorry, but the intersection between those two lists
 							is empty
 						</p>
 						<p v-else>
