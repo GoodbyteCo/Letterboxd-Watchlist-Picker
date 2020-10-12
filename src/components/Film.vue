@@ -403,7 +403,8 @@ export default {
 				window.history.replaceState(null, null, "/");
 				this.loading = false;
 				this.submitted = false;
-				document.body.className = "";
+				document.body.classList.remove("done");
+				document.body.classList.remove("entered");
 				return;
 			}
 			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
@@ -415,7 +416,8 @@ export default {
 				this.submitted = false;
 				return;
 			}
-			document.body.className = "entered";
+			document.body.classList.remove("done");
+			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
 			if (this.selectionMode == "Intersect") {
@@ -445,9 +447,11 @@ export default {
 				console.log(url);
 				fetch(url)
 					.then(function (res) {
-						document.body.className = "done";
+						document.body.classList.remove("entered");
+						document.body.classList.add("done");
 
 						if (res.status != 200) {
+
 							if (res.status == 406) {
 								vue.emptyintersect = true;
 							}
@@ -749,6 +753,10 @@ button {
 	letter-spacing: 0.04em;
 }
 
+.dark button {
+	background: #526e89;
+}
+
 button:hover,
 button:focus,
 button:focus-within {
@@ -847,6 +855,24 @@ p.you-should {
 	animation-delay: 0.1s;
 	transform: translateY(-16.3px);
 }
+
+/* @media (prefers-color-scheme: dark) { */
+.dark #logo {
+	border: 2px solid white;
+}
+.dark a {
+	color: #76a0ca;
+}
+.dark #title-link {
+	color: #76a0ca;
+}
+.dark input {
+	/* background: #647991; */
+}
+.dark .film-cover {
+	background-color: #76a0ca;
+}
+/* } */
 
 @keyframes spin {
 	0% {
