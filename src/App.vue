@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+		<DarkModeToggle />
 		<div id="main">
 			<Film />
 		</div>
@@ -10,11 +11,13 @@
 <script>
 import Film from "./components/Film.vue";
 import Footer from "./components/Footer.vue";
+import DarkModeToggle from "./components/DarkModeToggle.vue";
 export default {
 	name: "App",
 	components: {
 		Film,
 		Footer,
+		DarkModeToggle,
 	},
 	mounted() {
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
@@ -35,6 +38,12 @@ export default {
 </script>
 
 <style>
+/* #toggle {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 999;
+} */
 #app {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
