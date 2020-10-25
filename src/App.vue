@@ -45,7 +45,9 @@ export default {
 }
 
 #main {
+	min-height: calc(85vh - 15px);
 	min-height: -webkit-calc(85vh - 15px);
+	min-height: -moz-calc(85vh - 15px);
 }
 
 body.dark {
