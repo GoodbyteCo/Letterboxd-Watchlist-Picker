@@ -344,7 +344,6 @@ func removeCurrentYear(filmSlice []film) []film {
 			continue
 		}
 		filmYear, _ := strconv.Atoi(entry.Year)
-		log.Println(filmYear)
 		if filmYear < year {
 			list = append(list, entry)
 		}
