@@ -91,7 +91,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, inter := query["intersect"]
-	_, ignore := query["ignore_current_year"]
+	_, ignore := query["ignore_unreleased"]
 
 	var userFilm film
 	var err error
