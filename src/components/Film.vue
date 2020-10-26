@@ -310,6 +310,18 @@
 							</svg>
 							Intersect</label
 						>
+						<input
+							type="checkbox"
+							id="ignore"
+							v-model="ignoreChecked"
+						/>
+						<label for="ignore" class="tooltip">
+							Ignore Unrealsed Films<span
+								class="tooltiptext tooltip-bottom"
+								>due to how letterboxd work this will ignore all
+								film released in the current year</span
+							>
+						</label>
 					</div>
 				</div>
 			</div>
@@ -377,6 +389,7 @@ export default {
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
 			advancedOpen: false,
+			ignoreChecked: false,
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -420,6 +433,7 @@ export default {
 			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
+			//TODO add window handeling state for ignore current year
 			if (this.selectionMode == "Intersect") {
 				window.history.replaceState(
 					null,
@@ -442,6 +456,9 @@ export default {
 			if (this.selectionMode == "Intersect") {
 				url += "&intersect=true";
 			}
+			if (this.ignoreChecked) {
+				url += "&ignore_unreleased=true";
+			}
 			try {
 				let vue = this;
 				console.log(url);
@@ -451,7 +468,6 @@ export default {
 						document.body.classList.add("done");
 
 						if (res.status != 200) {
-
 							if (res.status == 406) {
 								vue.emptyintersect = true;
 							}
@@ -612,8 +628,7 @@ a:focus {
 }
 
 #advanced input[type="radio"]:focus + label {
-	box-shadow: 0 0 0 3px #fff,
-				0 0 0 5px #1caff2;
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
 }
 
 input#union,
@@ -621,6 +636,42 @@ input#intersect {
 	opacity: 0;
 	width: 0px;
 	margin: 0;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	position: absolute;
+	width: 250px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	padding: 5px 10px;
+	border-radius: 6px;
+	z-index: 1;
+	opacity: 0;
+	transition: opacity 0.6s;
+}
+
+.tooltip-bottom {
+	top: 155%;
+	left: 55%;
+	margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+
+.tooltip-bottom::after {
+	content: "";
+	position: absolute;
+	bottom: 100%;
+	left: 55%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: transparent transparent #555 transparent;
 }
 
 h1 {
