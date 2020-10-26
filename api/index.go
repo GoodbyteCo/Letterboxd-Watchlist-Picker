@@ -3,6 +3,7 @@ package film
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -72,11 +73,10 @@ const site = "https://letterboxd.com"
 // 	http.ListenAndServe(":"+port, nil)
 // }
 
-var year string
+var year int
 
 func init() {
-	yearI := time.Now().Year()
-	year = strconv.Itoa(yearI)
+	year := time.Now().Year()
 }
 
 //Main handler func for request
@@ -179,6 +179,7 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 			return film{}, &nothingError{reason: INTERSECT}
 		}
 		if ignore {
+			fmt.Println("ignore")
 			intersectList = removeCurrentYear(intersectList)
 		}
 		rand.Seed(time.Now().UTC().UnixNano())
@@ -191,6 +192,7 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 		rand.Seed(time.Now().UTC().UnixNano())
 		n := rand.Intn(len(totalFilms))
 		if ignore {
+			fmt.Println("ignore")
 			totalFilms = removeCurrentYear(totalFilms)
 		}
 		log.Println(len(totalFilms))
@@ -338,7 +340,12 @@ func makeBigger(url string) string {
 func removeCurrentYear(filmSlice []film) []film {
 	list := []film{}
 	for _, entry := range filmSlice {
-		if !(entry.Year >= year) || !(entry.Year == "") {
+		if entry.Year == "" {
+			continue
+		}
+		filmYear, _ := strconv.Atoi(entry.Year)
+		log.Println(filmYear)
+		if filmYear < year {
 			list = append(list, entry)
 		}
 	}
