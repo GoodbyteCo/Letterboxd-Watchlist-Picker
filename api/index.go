@@ -76,7 +76,7 @@ const site = "https://letterboxd.com"
 var year int
 
 func init() {
-	year := time.Now().Year()
+	year = time.Now().Year()
 }
 
 //Main handler func for request
