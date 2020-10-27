@@ -183,6 +183,7 @@ func scrape(userName string, ch chan filmSend) {
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
+		log.Println(*e.Response.Headers)
 		tempfilm := film{
 			Slug:  (site + slug),
 			Image: makeBigger(img),
@@ -201,6 +202,7 @@ func scrape(userName string, ch chan filmSend) {
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
+			log.Println(*ein.Response.Headers)
 			slug := ein.Attr("data-film-slug")
 			ajc.Visit(url + slug + urlEnd) //start go routine to collect all film data
 		})
