@@ -175,6 +175,9 @@ func scrape(userName string, ch chan filmSend) {
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
+	ajc.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", RandomString())
+	})
 	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
@@ -189,6 +192,9 @@ func scrape(userName string, ch chan filmSend) {
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
+	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", RandomString())
+	})
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
