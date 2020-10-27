@@ -55,6 +55,8 @@ func RandomString() string {
 	for i := range b {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
+	return string(b)
+}
 	
 
 func (e *nothingError) Error() string {
