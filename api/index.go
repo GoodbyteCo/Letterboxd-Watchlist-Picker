@@ -48,6 +48,15 @@ func (e *nothingError) ToString() string {
 
 }
 
+const letterBytes = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+func RandomString() string {
+	b := make([]byte, rand.Intn(10)+10)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
+	}
+	
+
 func (e *nothingError) Error() string {
 	return e.ToString()
 }
