@@ -180,10 +180,7 @@
 								viewBox="0 0 131 87"
 							>
 								<g stroke="#000" stroke-width="3">
-									<g
-										fill="#fff"
-										transform="translate(-796 -208)"
-									>
+									<g transform="translate(-796 -208)">
 										<circle
 											cx="839.7"
 											cy="251.7"
@@ -197,10 +194,7 @@
 											fill="none"
 										/>
 									</g>
-									<g
-										fill="#fff"
-										transform="translate(-796 -208)"
-									>
+									<g transform="translate(-796 -208)">
 										<circle
 											cx="883.3"
 											cy="251.7"
@@ -252,10 +246,7 @@
 								viewBox="0 0 131 87"
 							>
 								<g stroke="#000" stroke-width="3">
-									<g
-										fill="#fff"
-										transform="translate(-786 -52)"
-									>
+									<g transform="translate(-786 -52)">
 										<circle
 											cx="829.7"
 											cy="95.7"
@@ -269,10 +260,7 @@
 											fill="none"
 										></circle>
 									</g>
-									<g
-										fill="#fff"
-										transform="translate(-786 -52)"
-									>
+									<g transform="translate(-786 -52)">
 										<circle
 											cx="873.3"
 											cy="95.7"
@@ -319,7 +307,8 @@
 							<label for="ignore">
 								Ignore unreleased films
 								<span>
-									Removes all films released this year or in the future from results.
+									Removes all films released this year or in
+									the future from results.
 								</span>
 							</label>
 						</div>
@@ -600,9 +589,9 @@ a:focus {
 
 #ignore-box label {
 	max-width: 200px;
-    text-align: left;
-    display: inline-block;
-    margin: 10px;
+	text-align: left;
+	display: inline-block;
+	margin: 10px;
 }
 
 #ignore-box span {
@@ -611,7 +600,7 @@ a:focus {
 
 #ignore {
 	transform: translateY(-2rem);
-    display: inline-block;
+	display: inline-block;
 }
 
 .active#advanced {
@@ -634,9 +623,15 @@ a:focus {
 	width: 40px;
 	transform: translateY(8.5px);
 	margin-right: 4px;
+	fill: transparent;
+}
+
+#advanced label {
 }
 
 #advanced > label {
+	display: inline;
+	visibility: visible;
 	background: rgb(64 188 244 / 0.5);
 	padding: 10px;
 	border-radius: 4px;
@@ -647,14 +642,34 @@ a:focus {
 	margin: 4px;
 }
 
+.dark #advanced label {
+	background: #526e89;
+}
+
+.dark #ignore-box > label {
+	background: unset;
+}
+
 #advanced input[type="radio"]:checked + label {
 	background: #40bcf4;
 	border-color: #000;
 	color: #fff;
 }
 
+.dark #advanced input[type="radio"]:checked + label {
+	border-color: #fff;
+}
+
+#advanced input[type="radio"]:checked + label svg {
+	fill: #fff;
+}
+
 #advanced input[type="radio"]:focus + label {
 	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
+}
+
+.dark #advanced input[type="radio"]:focus + label {
+	box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
 }
 
 input#union,
@@ -788,7 +803,7 @@ button {
 	border-radius: 0 4px 4px 0;
 	outline: none;
 	font-size: 0.8rem;
-	transform: translateY(-0.1rem);
+	transform: translateY(-0.12rem);
 	display: inline-block;
 	font-weight: 900;
 	letter-spacing: 0.04em;
@@ -803,12 +818,18 @@ button:focus,
 button:focus-within {
 	background: #40bcf4;
 }
+
 #tertiary {
 	background: none;
 	color: #415569;
 	display: block;
 	margin: auto;
 }
+
+.dark #tertiary {
+	color: #526e89;
+}
+
 #tertiary:hover,
 #tertiary:focus {
 	text-decoration: underline;
@@ -898,21 +919,23 @@ p.you-should {
 }
 
 /* @media (prefers-color-scheme: dark) { */
+
 .dark #logo {
 	border: 2px solid white;
 }
+
 .dark a {
 	color: #76a0ca;
 }
+
 .dark #title-link {
 	color: #76a0ca;
 }
-.dark input {
-	/* background: #647991; */
-}
+
 .dark .film-cover {
 	background-color: #76a0ca;
 }
+
 /* } */
 
 @keyframes spin {
