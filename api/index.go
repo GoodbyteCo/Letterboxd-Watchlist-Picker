@@ -181,6 +181,7 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 		if ignore {
 			fmt.Println("ignore")
 			intersectList = removeCurrentYear(intersectList)
+			length = len(intersectList)
 		}
 		rand.Seed(time.Now().UTC().UnixNano())
 		n := rand.Intn(length)
@@ -190,11 +191,11 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 		finalFilm = intersectList[n]
 	} else {
 		rand.Seed(time.Now().UTC().UnixNano())
-		n := rand.Intn(len(totalFilms))
 		if ignore {
 			fmt.Println("ignore")
 			totalFilms = removeCurrentYear(totalFilms)
 		}
+		n := rand.Intn(len(totalFilms))
 		log.Println(len(totalFilms))
 		log.Println(n)
 		log.Println(totalFilms[n])
