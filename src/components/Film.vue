@@ -310,7 +310,7 @@
 							</svg>
 							Intersect</label
 						>
-						<div>
+						<div id="ignore-box">
 							<input
 								type="checkbox"
 								id="ignore"
@@ -594,6 +594,26 @@ a:focus {
 	display: block;
 }
 
+#ignore-box {
+	padding: 2rem 0.8rem;
+}
+
+#ignore-box label {
+	max-width: 200px;
+    text-align: left;
+    display: inline-block;
+    margin: 10px;
+}
+
+#ignore-box span {
+	font-size: 12px;
+}
+
+#ignore {
+	transform: translateY(-2rem);
+    display: inline-block;
+}
+
 .active#advanced {
 	opacity: 1;
 	transition: 0.3s ease;
@@ -601,12 +621,12 @@ a:focus {
 }
 
 #advanced-show {
-	transform: translateY(-30px);
+	transform: translateY(-180px);
 	transition: transform 0.3s ease;
 }
 
 #advanced-show.advanceactive {
-	transform: translateY(10px);
+	transform: translateY(-20px);
 	transition: transform 0.3s ease;
 }
 
