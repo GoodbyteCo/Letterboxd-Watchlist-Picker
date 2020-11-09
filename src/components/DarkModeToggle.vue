@@ -172,17 +172,21 @@ export default {
 			localStorage.getItem("dark-mode") == 1
 		) {
 			document.body.classList.add("dark");
+			console.log("###");
 			darkModeIcon.classList.remove("moon");
 			this.darkmodeOn = true;
 		} else {
 			document.body.classList.remove("dark");
 			darkModeIcon.classList.add("moon");
 			this.darkmodeOn = false;
+			console.log(this.darkmodeOn);
 		}
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
-			if (localStorage.getItem("dark-mode") !== null) {
+			if (localStorage.getItem("dark-mode") === null) {
+				console.log("woot");
 				if (e.matches) {
 					document.body.classList.add("dark");
+					console.log("###");
 					darkModeIcon.classList.remove("moon");
 					this.darkmodeOn = true;
 				} else {
@@ -192,12 +196,14 @@ export default {
 				}
 			}
 		});
+		console.log(localStorage.getItem("dark-mode"));
 	},
 	methods: {
 		swapdark() {
 			let darkModeIcon = document.getElementById("darkmode-icon");
 			if (this.darkmodeOn) {
 				document.body.classList.add("dark");
+				console.log("###");
 				darkModeIcon.classList.remove("moon");
 				localStorage.setItem("dark-mode", 1);
 			} else {
@@ -210,6 +216,7 @@ export default {
 		toggleDarkModeOn() {
 			this.darkmodeOn = !this.darkmodeOn;
 			this.swapdark();
+			console.log(this.darkmodeOn);
 		},
 	},
 };
