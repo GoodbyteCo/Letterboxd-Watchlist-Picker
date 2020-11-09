@@ -181,7 +181,6 @@
 							>
 								<g stroke="#000" stroke-width="3">
 									<g
-										fill="#fff"
 										transform="translate(-796 -208)"
 									>
 										<circle
@@ -198,7 +197,6 @@
 										/>
 									</g>
 									<g
-										fill="#fff"
 										transform="translate(-796 -208)"
 									>
 										<circle
@@ -253,7 +251,6 @@
 							>
 								<g stroke="#000" stroke-width="3">
 									<g
-										fill="#fff"
 										transform="translate(-786 -52)"
 									>
 										<circle
@@ -270,7 +267,6 @@
 										></circle>
 									</g>
 									<g
-										fill="#fff"
 										transform="translate(-786 -52)"
 									>
 										<circle
@@ -592,6 +588,7 @@ a:focus {
 	width: 40px;
 	transform: translateY(8.5px);
 	margin-right: 4px;
+	fill: transparent;
 }
 
 #advanced label {
@@ -609,6 +606,10 @@ a:focus {
 	background: #40bcf4;
 	border-color: #000;
 	color: #fff;
+}
+
+#advanced input[type="radio"]:checked + label svg {
+	fill: #fff;
 }
 
 #advanced input[type="radio"]:focus + label {
