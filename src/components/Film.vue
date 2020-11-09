@@ -563,11 +563,6 @@ a:focus {
 	transform: translateY(0px);
 }
 
-#advanced label {
-	display: inline;
-	visibility: visible;
-}
-
 .active#advanced {
 	opacity: 1;
 	transition: 0.3s ease;
@@ -592,6 +587,8 @@ a:focus {
 }
 
 #advanced label {
+	display: inline;
+	visibility: visible;
 	background: rgb(64 188 244 / 0.5);
 	padding: 10px;
 	border-radius: 4px;
@@ -602,10 +599,18 @@ a:focus {
 	margin: 4px;
 }
 
+.dark #advanced label {
+	background: #526e89;
+}
+
 #advanced input[type="radio"]:checked + label {
 	background: #40bcf4;
 	border-color: #000;
 	color: #fff;
+}
+
+.dark #advanced input[type="radio"]:checked + label {
+	border-color: #fff;
 }
 
 #advanced input[type="radio"]:checked + label svg {
@@ -614,6 +619,11 @@ a:focus {
 
 #advanced input[type="radio"]:focus + label {
 	box-shadow: 0 0 0 3px #fff,
+				0 0 0 5px #1caff2;
+}
+
+.dark #advanced input[type="radio"]:focus + label {
+	box-shadow: 0 0 0 3px #1d232a,
 				0 0 0 5px #1caff2;
 }
 
@@ -763,6 +773,7 @@ button:focus,
 button:focus-within {
 	background: #40bcf4;
 }
+
 #tertiary {
 	background: none;
 	color: #415569;
