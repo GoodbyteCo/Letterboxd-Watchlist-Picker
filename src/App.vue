@@ -49,7 +49,7 @@ body.dark {
 }
 
 .dark #app {
-	color: #526e89;
+	color: #778fa6;
 }
 
 ::selection {
