@@ -8,26 +8,34 @@
 			shape-rendering="geometricPrecision"
 			text-rendering="geometricPrecision"
 		>
+			<defs>
+				<mask id="moon-mask">
+					<rect 
+						width="100%" 
+						height="100%" 
+						fill="#fff"
+					></rect>
+					<circle
+						id="moon-slice"
+						r="268"
+						stroke="none"
+						stroke-width="1"
+					/>
+				</mask>
+			</defs>
+
 			<circle
-				id="eg5pwu10v573"
+				id="sun-body"
 				r="268"
 				transform="matrix(1 0 0 1 398.18936602511235 397.81063397507751)"
 				fill="rgb(139,139,139)"
 				stroke="none"
 				stroke-width="1"
+				mask="moon-mask"
 			/>
-			<g id="eg5pwu10v574_to" transform="translate(260,0)">
-				<circle
-					id="eg5pwu10v574"
-					r="268"
-					transform="translate(268,268)"
-					fill="rgb(255,255,255)"
-					stroke="none"
-					stroke-width="1"
-				/>
-			</g>
+			
 			<rect
-				id="eg5pwu10v575"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -39,7 +47,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v576"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -51,7 +59,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v577"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -63,7 +71,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v578"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -75,7 +83,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v579"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -87,7 +95,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v5710"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -99,7 +107,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v5711"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -111,7 +119,7 @@
 				stroke-width="1"
 			/>
 			<rect
-				id="eg5pwu10v5712"
+				class="sun-beam"
 				width="30"
 				height="101"
 				rx="15"
@@ -193,138 +201,35 @@ export default {
 	display: none;
 }
 
-#eg5pwu10v573 {
-	animation: eg5pwu10v573__rd 1000ms linear 1 normal forwards;
+
+/* icon animation  */
+
+#sun-body {
+	transition: all 0.3s ease;
+	r: 202px;
 }
 
-@keyframes eg5pwu10v573__rd {
-	0% {
-		r: 268px;
-	}
-	100% {
-		r: 202px;
-	}
+.moon #sun-body {
+	r: 268px;
 }
-#eg5pwu10v574_to {
-	animation: eg5pwu10v574_to__to 1000ms linear 1 normal forwards;
+
+#moon-slice {
+	transition: all 0.3s ease;
+	fill: #fff;
+	transform: translate(560.796528px, -311.186989px);
 }
-@keyframes eg5pwu10v574_to__to {
-	0% {
-		transform: translate(260px, 0px);
-	}
-	100% {
-		transform: translate(560.796528px, -311.186989px);
-	}
+
+.moon #moon-slice {
+	fill: #000;
+	transform: translate(260px, 0px);
 }
-#eg5pwu10v574 {
-	animation: eg5pwu10v574_c_o 1000ms linear 1 normal forwards;
+
+.sun-beam {
+	transition: all 0.3s ease;
+	opacity: 1;
 }
-@keyframes eg5pwu10v574_c_o {
-	0% {
-		opacity: 1;
-	}
-	50% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 0;
-	}
-}
-#eg5pwu10v575 {
-	animation: eg5pwu10v575_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v575_c_o {
-	0% {
-		opacity: 0;
-	}
-	30% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v576 {
-	animation: eg5pwu10v576_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v576_c_o {
-	0% {
-		opacity: 0;
-	}
-	30% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v577 {
-	animation: eg5pwu10v577_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v577_c_o {
-	0% {
-		opacity: 0;
-	}
-	30% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v578 {
-	animation: eg5pwu10v578_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v578_c_o {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v579 {
-	animation: eg5pwu10v579_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v579_c_o {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v5710 {
-	animation: eg5pwu10v5710_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v5710_c_o {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v5711 {
-	animation: eg5pwu10v5711_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v5711_c_o {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-#eg5pwu10v5712 {
-	animation: eg5pwu10v5712_c_o 1000ms linear 1 normal forwards;
-}
-@keyframes eg5pwu10v5712_c_o {
-	0% {
-		opacity: 0;
-	}
-	100% {
-		opacity: 1;
-	}
+
+.moon .sun-beam {
+	opacity: 0;
 }
 </style>
