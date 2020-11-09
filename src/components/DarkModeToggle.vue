@@ -164,6 +164,30 @@ export default {
 			darkmodeOn: true,
 		};
 	},
+	mounted() {
+		var pref = window.matchMedia("(prefers-color-scheme: dark)");
+		let darkModeIcon = document.getElementById("darkmode-icon");
+		if (pref.matches) {
+			document.body.classList.add("dark");
+			darkModeIcon.classList.remove("moon");
+			this.darkmodeOn = true;
+		} else {
+			document.body.classList.remove("dark");
+			darkModeIcon.classList.add("moon");
+			this.darkmodeOn = false;
+		}
+		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
+			if (e.matches) {
+				document.body.classList.add("dark");
+				darkModeIcon.classList.remove("moon");
+				this.darkmodeOn = true;
+			} else {
+				document.body.classList.remove("dark");
+				darkModeIcon.classList.add("moon");
+				this.darkmodeOn = false;
+			}
+		});
+	},
 	methods: {
 		swapdark() {
 			let darkModeIcon = document.getElementById("darkmode-icon");
