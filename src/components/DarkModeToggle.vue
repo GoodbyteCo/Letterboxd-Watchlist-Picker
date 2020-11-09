@@ -224,7 +224,7 @@ export default {
 	r: 268px;
 }
 
-#moon-slice {
+.dark #darkmode-icon #moon-slice, #darkmode-icon #moon-slice {
 	transition: all 0.3s ease;
 	fill: #000;
 	transform: translate(560.796528px, -311.186989px);
@@ -234,8 +234,9 @@ export default {
 	transform: translate(220px, -120px);
 }
 
-#moon-mask-rect {
+.dark #darkmode-icon #moon-mask-rect, #darkmode-icon #moon-mask-rect {
 	transform: translate(-268px, -268px);
+	fill: white;
 }
 
 .sun-beam {
