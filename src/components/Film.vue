@@ -310,18 +310,19 @@
 							</svg>
 							Intersect</label
 						>
-						<input
-							type="checkbox"
-							id="ignore"
-							v-model="ignoreChecked"
-						/>
-						<label for="ignore" class="tooltip">
-							Ignore Unrealsed Films<span
-								class="tooltiptext tooltip-bottom"
-								>due to how letterboxd work this will ignore all
-								film released in the current year</span
-							>
-						</label>
+						<div>
+							<input
+								type="checkbox"
+								id="ignore"
+								v-model="ignoreChecked"
+							/>
+							<label for="ignore">
+								Ignore unreleased films
+								<span>
+									Removes all films released this year or in the future from results.
+								</span>
+							</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -588,6 +589,11 @@ a:focus {
 	visibility: visible;
 }
 
+#advanced span {
+	opacity: 0.6;
+	display: block;
+}
+
 .active#advanced {
 	opacity: 1;
 	transition: 0.3s ease;
@@ -610,7 +616,7 @@ a:focus {
 	margin-right: 4px;
 }
 
-#advanced label {
+#advanced > label {
 	background: rgb(64 188 244 / 0.5);
 	padding: 10px;
 	border-radius: 4px;
@@ -636,42 +642,6 @@ input#intersect {
 	opacity: 0;
 	width: 0px;
 	margin: 0;
-}
-
-.tooltip .tooltiptext {
-	visibility: hidden;
-	position: absolute;
-	width: 250px;
-	background-color: #555;
-	color: #fff;
-	text-align: center;
-	padding: 5px 10px;
-	border-radius: 6px;
-	z-index: 1;
-	opacity: 0;
-	transition: opacity 0.6s;
-}
-
-.tooltip-bottom {
-	top: 155%;
-	left: 55%;
-	margin-left: -60px;
-}
-
-.tooltip:hover .tooltiptext {
-	visibility: visible;
-	opacity: 1;
-}
-
-.tooltip-bottom::after {
-	content: "";
-	position: absolute;
-	bottom: 100%;
-	left: 55%;
-	margin-left: -5px;
-	border-width: 5px;
-	border-style: solid;
-	border-color: transparent transparent #555 transparent;
 }
 
 h1 {
