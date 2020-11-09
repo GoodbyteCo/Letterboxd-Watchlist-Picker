@@ -747,7 +747,7 @@ button {
 	border-radius: 0 4px 4px 0;
 	outline: none;
 	font-size: 0.8rem;
-	transform: translateY(-0.1rem);
+	transform: translateY(-0.12rem);
 	display: inline-block;
 	font-weight: 900;
 	letter-spacing: 0.04em;
