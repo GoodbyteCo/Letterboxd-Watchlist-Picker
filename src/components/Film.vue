@@ -181,7 +181,6 @@
 							>
 								<g stroke="#000" stroke-width="3">
 									<g
-										fill="#fff"
 										transform="translate(-796 -208)"
 									>
 										<circle
@@ -198,7 +197,6 @@
 										/>
 									</g>
 									<g
-										fill="#fff"
 										transform="translate(-796 -208)"
 									>
 										<circle
@@ -253,7 +251,6 @@
 							>
 								<g stroke="#000" stroke-width="3">
 									<g
-										fill="#fff"
 										transform="translate(-786 -52)"
 									>
 										<circle
@@ -270,7 +267,6 @@
 										></circle>
 									</g>
 									<g
-										fill="#fff"
 										transform="translate(-786 -52)"
 									>
 										<circle
@@ -567,11 +563,6 @@ a:focus {
 	transform: translateY(0px);
 }
 
-#advanced label {
-	display: inline;
-	visibility: visible;
-}
-
 .active#advanced {
 	opacity: 1;
 	transition: 0.3s ease;
@@ -592,9 +583,12 @@ a:focus {
 	width: 40px;
 	transform: translateY(8.5px);
 	margin-right: 4px;
+	fill: transparent;
 }
 
 #advanced label {
+	display: inline;
+	visibility: visible;
 	background: rgb(64 188 244 / 0.5);
 	padding: 10px;
 	border-radius: 4px;
@@ -605,14 +599,31 @@ a:focus {
 	margin: 4px;
 }
 
+.dark #advanced label {
+	background: #526e89;
+}
+
 #advanced input[type="radio"]:checked + label {
 	background: #40bcf4;
 	border-color: #000;
 	color: #fff;
 }
 
+.dark #advanced input[type="radio"]:checked + label {
+	border-color: #fff;
+}
+
+#advanced input[type="radio"]:checked + label svg {
+	fill: #fff;
+}
+
 #advanced input[type="radio"]:focus + label {
 	box-shadow: 0 0 0 3px #fff,
+				0 0 0 5px #1caff2;
+}
+
+.dark #advanced input[type="radio"]:focus + label {
+	box-shadow: 0 0 0 3px #14181d,
 				0 0 0 5px #1caff2;
 }
 
@@ -762,12 +773,18 @@ button:focus,
 button:focus-within {
 	background: #40bcf4;
 }
+
 #tertiary {
 	background: none;
 	color: #415569;
 	display: block;
 	margin: auto;
 }
+
+.dark #tertiary {
+	color: #526e89;
+}
+
 #tertiary:hover,
 #tertiary:focus {
 	text-decoration: underline;
@@ -857,21 +874,23 @@ p.you-should {
 }
 
 /* @media (prefers-color-scheme: dark) { */
+
 .dark #logo {
 	border: 2px solid white;
 }
+
 .dark a {
 	color: #76a0ca;
 }
+
 .dark #title-link {
 	color: #76a0ca;
 }
-.dark input {
-	/* background: #647991; */
-}
+
 .dark .film-cover {
 	background-color: #76a0ca;
 }
+
 /* } */
 
 @keyframes spin {
