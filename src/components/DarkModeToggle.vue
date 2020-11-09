@@ -1,7 +1,7 @@
 <template>
-	<div>
+	<div id="darkmode-toggle-box">
 		<svg
-			id="eg5pwu10v571"
+			id="darkmode-icon"
 			xmlns="http://www.w3.org/2000/svg"
 			xmlns:xlink="http://www.w3.org/1999/xlink"
 			viewBox="0 0 796 796"
@@ -147,6 +147,18 @@ export default {
 </script>
 <style scoped>
 
+#darkmode-toggle-box {
+	position: fixed;
+    top: 5px;
+    right: 10px;
+}
+
+#darkmode-icon {
+	width: 30px;
+    transform: translateY(5px);
+    margin-right: 10px;
+}
+
 .switch {
 	position: relative;
 	display: inline-block;
@@ -154,6 +166,7 @@ export default {
 	height: 20px;
 	background-color: #eee;
 	border-radius: 20px;
+	transition: background-color 0.3s ease;
 }
 
 .switch::after {
