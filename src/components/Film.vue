@@ -623,7 +623,7 @@ a:focus {
 }
 
 .dark #advanced input[type="radio"]:focus + label {
-	box-shadow: 0 0 0 3px #1d232a,
+	box-shadow: 0 0 0 3px #14181d,
 				0 0 0 5px #1caff2;
 }
 
@@ -780,6 +780,11 @@ button:focus-within {
 	display: block;
 	margin: auto;
 }
+
+.dark #tertiary {
+	color: #526e89;
+}
+
 #tertiary:hover,
 #tertiary:focus {
 	text-decoration: underline;
@@ -869,21 +874,23 @@ p.you-should {
 }
 
 /* @media (prefers-color-scheme: dark) { */
+
 .dark #logo {
 	border: 2px solid white;
 }
+
 .dark a {
 	color: #76a0ca;
 }
+
 .dark #title-link {
 	color: #76a0ca;
 }
-.dark input {
-	/* background: #647991; */
-}
+
 .dark .film-cover {
 	background-color: #76a0ca;
 }
+
 /* } */
 
 @keyframes spin {
