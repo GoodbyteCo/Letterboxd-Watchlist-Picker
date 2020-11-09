@@ -146,6 +146,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .switch {
 	position: relative;
 	display: inline-block;
@@ -154,6 +155,7 @@ export default {
 	background-color: #eee;
 	border-radius: 20px;
 }
+
 .switch::after {
 	content: "";
 	position: absolute;
@@ -165,12 +167,15 @@ export default {
 	left: 1px;
 	transition: all 0.3s;
 }
+
 .checkbox:checked + .switch::after {
 	left: 20px;
 }
+
 .checkbox:checked + .switch {
 	background-color: #7983ff;
 }
+
 .checkbox {
 	display: none;
 }
@@ -178,6 +183,7 @@ export default {
 #eg5pwu10v573 {
 	animation: eg5pwu10v573__rd 1000ms linear 1 normal forwards;
 }
+
 @keyframes eg5pwu10v573__rd {
 	0% {
 		r: 268px;
