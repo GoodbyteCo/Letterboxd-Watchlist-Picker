@@ -51,11 +51,11 @@ export default {
 }
 
 body.dark {
-	background: #1d232a;
+	background: #14181d;
 }
 
 .dark #app {
-	color: #76a0ca;
+	color: #526e89;
 }
 
 ::selection {
