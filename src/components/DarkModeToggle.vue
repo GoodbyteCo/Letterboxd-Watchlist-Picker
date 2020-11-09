@@ -230,7 +230,7 @@ export default {
 	transform: translate(560.796528px, -311.186989px);
 }
 
-.moon #moon-slice {
+.dark #darkmode-icon.moon #moon-slice, #darkmode-icon.moon #moon-slice {
 	transform: translate(220px, -120px);
 }
 
