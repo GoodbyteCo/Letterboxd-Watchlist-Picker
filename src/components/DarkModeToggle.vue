@@ -1,6 +1,7 @@
 <template>
 	<div id="darkmode-toggle-box">
 		<svg
+			v-on:click="toggleDarkModeOn"
 			id="darkmode-icon"
 			xmlns="http://www.w3.org/2000/svg"
 			xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -10,10 +11,10 @@
 		>
 			<defs>
 				<mask id="moon-mask">
-					<rect 
+					<rect
 						id="moon-mask-rect"
-						width="100%" 
-						height="100%" 
+						width="100%"
+						height="100%"
 						fill="#fff"
 					></rect>
 					<circle
@@ -34,7 +35,7 @@
 				stroke-width="1"
 				mask="url(#moon-mask)"
 			/>
-			
+
 			<rect
 				class="sun-beam"
 				width="30"
@@ -145,29 +146,54 @@
 			</clipPath>
 		</svg>
 
-		<input type="checkbox" id="toggle" class="checkbox" />
+		<input
+			v-model="darkmodeOn"
+			type="checkbox"
+			id="toggle"
+			class="checkbox"
+			v-on:change="swapdark"
+		/>
 		<label for="toggle" class="switch"></label>
 	</div>
 </template>
 <script>
-
 export default {
 	name: "DarkModeToggle",
+	data() {
+		return {
+			darkmodeOn: true,
+		};
+	},
+	methods: {
+		swapdark() {
+			let darkModeIcon = document.getElementById("darkmode-icon");
+			if (this.darkmodeOn) {
+				document.body.classList.add("dark");
+				darkModeIcon.classList.remove("moon");
+			} else {
+				document.body.classList.remove("dark");
+				darkModeIcon.classList.add("moon");
+			}
+			console.log(this.darkmodeOn);
+		},
+		toggleDarkModeOn() {
+			this.darkmodeOn = !this.darkmodeOn;
+			this.swapdark();
+		},
+	},
 };
-
 </script>
 <style scoped>
-
 #darkmode-toggle-box {
 	position: fixed;
-    top: 5px;
-    right: 10px;
+	top: 5px;
+	right: 10px;
 }
 
 #darkmode-icon {
 	width: 30px;
-    transform: translateY(5px);
-    margin-right: 10px;
+	transform: translateY(5px);
+	margin-right: 10px;
 }
 
 #darkmode-icon * {
@@ -212,7 +238,6 @@ export default {
 	display: none;
 }
 
-
 /* icon animation  */
 
 #sun-body {
@@ -224,17 +249,20 @@ export default {
 	r: 268px;
 }
 
-.dark #darkmode-icon #moon-slice, #darkmode-icon #moon-slice {
+.dark #darkmode-icon #moon-slice,
+#darkmode-icon #moon-slice {
 	transition: all 0.3s ease;
 	fill: #000;
 	transform: translate(560.796528px, -311.186989px);
 }
 
-.dark #darkmode-icon.moon #moon-slice, #darkmode-icon.moon #moon-slice {
+.dark #darkmode-icon.moon #moon-slice,
+#darkmode-icon.moon #moon-slice {
 	transform: translate(220px, -120px);
 }
 
-.dark #darkmode-icon #moon-mask-rect, #darkmode-icon #moon-mask-rect {
+.dark #darkmode-icon #moon-mask-rect,
+#darkmode-icon #moon-mask-rect {
 	transform: translate(-268px, -268px);
 	fill: white;
 }

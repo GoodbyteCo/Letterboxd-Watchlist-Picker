@@ -21,16 +21,21 @@ export default {
 	},
 	mounted() {
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
+		let darkModeIcon = document.getElementById("darkmode-icon");
 		if (pref.matches) {
 			document.body.classList.add("dark");
+			darkModeIcon.classList.remove("moon");
 		} else {
 			document.body.classList.remove("dark");
+			darkModeIcon.classList.add("moon");
 		}
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
 			if (e.matches) {
 				document.body.classList.add("dark");
+				darkModeIcon.classList.remove("moon");
 			} else {
 				document.body.classList.remove("dark");
+				darkModeIcon.classList.add("moon");
 			}
 		});
 	},
