@@ -170,12 +170,20 @@ export default {
     margin-right: 10px;
 }
 
+#darkmode-icon * {
+	fill: #c2c2c2;
+}
+
+.dark #darkmode-icon * {
+	fill: #526e89;
+}
+
 .switch {
 	position: relative;
 	display: inline-block;
 	width: 40px;
 	height: 20px;
-	background-color: #eee;
+	background-color: #c2c2c2;
 	border-radius: 20px;
 	transition: background-color 0.3s ease;
 }
@@ -197,7 +205,7 @@ export default {
 }
 
 .checkbox:checked + .switch {
-	background-color: #7983ff;
+	background-color: #526e89;
 }
 
 .checkbox {
