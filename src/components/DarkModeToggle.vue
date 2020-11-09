@@ -11,6 +11,7 @@
 			<defs>
 				<mask id="moon-mask">
 					<rect 
+						id="moon-mask-rect"
 						width="100%" 
 						height="100%" 
 						fill="#fff"
@@ -31,7 +32,7 @@
 				fill="rgb(139,139,139)"
 				stroke="none"
 				stroke-width="1"
-				mask="moon-mask"
+				mask="url(#moon-mask)"
 			/>
 			
 			<rect
@@ -149,9 +150,11 @@
 	</div>
 </template>
 <script>
+
 export default {
 	name: "DarkModeToggle",
 };
+
 </script>
 <style scoped>
 
@@ -215,13 +218,16 @@ export default {
 
 #moon-slice {
 	transition: all 0.3s ease;
-	fill: #fff;
+	fill: #000;
 	transform: translate(560.796528px, -311.186989px);
 }
 
 .moon #moon-slice {
-	fill: #000;
-	transform: translate(260px, 0px);
+	transform: translate(220px, -120px);
+}
+
+#moon-mask-rect {
+	transform: translate(-268px, -268px);
 }
 
 .sun-beam {
