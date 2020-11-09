@@ -167,7 +167,10 @@ export default {
 	mounted() {
 		var pref = window.matchMedia("(prefers-color-scheme: dark)");
 		let darkModeIcon = document.getElementById("darkmode-icon");
-		if (pref.matches) {
+		if (
+			(pref.matches && localStorage.getItem("dark-mode") === null) ||
+			localStorage.getItem("dark-mode") == 1
+		) {
 			document.body.classList.add("dark");
 			darkModeIcon.classList.remove("moon");
 			this.darkmodeOn = true;
@@ -177,14 +180,16 @@ export default {
 			this.darkmodeOn = false;
 		}
 		window.matchMedia("(prefers-color-scheme: dark)").addListener((e) => {
-			if (e.matches) {
-				document.body.classList.add("dark");
-				darkModeIcon.classList.remove("moon");
-				this.darkmodeOn = true;
-			} else {
-				document.body.classList.remove("dark");
-				darkModeIcon.classList.add("moon");
-				this.darkmodeOn = false;
+			if (localStorage.getItem("dark-mode") !== null) {
+				if (e.matches) {
+					document.body.classList.add("dark");
+					darkModeIcon.classList.remove("moon");
+					this.darkmodeOn = true;
+				} else {
+					document.body.classList.remove("dark");
+					darkModeIcon.classList.add("moon");
+					this.darkmodeOn = false;
+				}
 			}
 		});
 	},
@@ -194,9 +199,11 @@ export default {
 			if (this.darkmodeOn) {
 				document.body.classList.add("dark");
 				darkModeIcon.classList.remove("moon");
+				localStorage.setItem("dark-mode", 1);
 			} else {
 				document.body.classList.remove("dark");
 				darkModeIcon.classList.add("moon");
+				localStorage.setItem("dark-mode", 0);
 			}
 			console.log(this.darkmodeOn);
 		},
