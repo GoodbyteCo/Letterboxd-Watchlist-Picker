@@ -1,6 +1,6 @@
 <template>
 	<div 
-		v-on:click="toggleDarkModeOn"
+		v-on:keyup.enter="toggleDarkModeOn"
 		id="darkmode-toggle-box"
 		tabindex="1"
 	>
