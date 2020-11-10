@@ -654,11 +654,9 @@ a#logo:focus-visible {
 }
 
 #app a:focus-visible {
-    opacity: 1;
     box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
     border-radius: 3px;
     outline: none;
-    transition: none;
 }
 
 .dark #app a:focus-visible {
