@@ -645,6 +645,24 @@ h1 {
 	transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
 
+a#logo:focus-visible {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #1caff2;
+}
+
+.dark a#logo:focus-visible {
+    box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
+}
+
+#app a:focus-visible {
+    box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
+    border-radius: 3px;
+    outline: none;
+}
+
+.dark #app a:focus-visible {
+    box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
+}
+
 .entered h1,
 .entered #logo,
 .entered .hello,
@@ -793,6 +811,17 @@ button:focus-within {
 #tertiary span {
 	text-transform: none;
 	font-weight: 400;
+}
+
+#tertiary:focus-visible span {
+	text-decoration: underline;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #1caff2;
+    border-radius: 3px;
+    padding: 3px 8px;
+}
+
+.dark #tertiary:focus-visible span {
+    box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
 }
 
 /* #advanced-section {

@@ -1,5 +1,9 @@
 <template>
-	<div id="darkmode-toggle-box">
+	<div 
+		v-on:keyup.enter="toggleDarkModeOn"
+		id="darkmode-toggle-box"
+		tabindex="1"
+	>
 		<svg
 			v-on:click="toggleDarkModeOn"
 			id="darkmode-icon"
@@ -219,7 +223,18 @@ export default {
 #darkmode-toggle-box {
 	position: fixed;
 	top: 5px;
-	right: 10px;
+	right: 0px;
+	outline: none;
+	padding: 0 10px 5px 10px;
+	border-radius: 3px;
+}
+
+#darkmode-toggle-box:focus-visible {
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #40bcf4;
+}
+
+.dark #darkmode-toggle-box:focus-visible {
+	box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #40bcf4;
 }
 
 #darkmode-icon {
