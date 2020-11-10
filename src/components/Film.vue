@@ -748,7 +748,6 @@ button {
 	line-height: 2.8rem;
 	border: 0;
 	background: black;
-	transition: background ease-in-out 0.25s;
 	color: white;
 	text-transform: uppercase;
 	cursor: pointer;
@@ -763,7 +762,6 @@ button {
 
 .dark button {
 	background: #526e89;
-	transition: background ease-in-out 0.25s;
 }
 
 button:hover,
