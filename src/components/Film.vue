@@ -616,12 +616,10 @@ a:focus {
 
 #advanced input[type="radio"]:focus + label {
 	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
-	transition: box-shadow ease-in-out 0.25s;
 }
 
 .dark #advanced input[type="radio"]:focus + label {
 	box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
-	transition: box-shadow ease-in-out 0.25s;
 }
 
 input#union,
