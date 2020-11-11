@@ -180,9 +180,7 @@
 								viewBox="0 0 131 87"
 							>
 								<g stroke="#000" stroke-width="3">
-									<g
-										transform="translate(-796 -208)"
-									>
+									<g transform="translate(-796 -208)">
 										<circle
 											cx="839.7"
 											cy="251.7"
@@ -196,9 +194,7 @@
 											fill="none"
 										/>
 									</g>
-									<g
-										transform="translate(-796 -208)"
-									>
+									<g transform="translate(-796 -208)">
 										<circle
 											cx="883.3"
 											cy="251.7"
@@ -250,9 +246,7 @@
 								viewBox="0 0 131 87"
 							>
 								<g stroke="#000" stroke-width="3">
-									<g
-										transform="translate(-786 -52)"
-									>
+									<g transform="translate(-786 -52)">
 										<circle
 											cx="829.7"
 											cy="95.7"
@@ -266,9 +260,7 @@
 											fill="none"
 										></circle>
 									</g>
-									<g
-										transform="translate(-786 -52)"
-									>
+									<g transform="translate(-786 -52)">
 										<circle
 											cx="873.3"
 											cy="95.7"
@@ -447,7 +439,6 @@ export default {
 						document.body.classList.add("done");
 
 						if (res.status != 200) {
-
 							if (res.status == 406) {
 								vue.emptyintersect = true;
 							}
@@ -523,6 +514,7 @@ export default {
 #title-link {
 	font-size: 1.5rem;
 	color: #415569;
+	transition: color ease-in-out 0.25s;
 }
 
 a.title {
@@ -543,6 +535,7 @@ a.title {
 
 a {
 	color: #415569;
+	transition: color ease-in-out 0.25s;
 }
 
 a:hover,
@@ -590,6 +583,7 @@ a:focus {
 	display: inline;
 	visibility: visible;
 	background: rgb(64 188 244 / 0.5);
+	transition: background ease-in-out 0.25s;
 	padding: 10px;
 	border-radius: 4px;
 	font-weight: bold;
@@ -601,16 +595,19 @@ a:focus {
 
 .dark #advanced label {
 	background: #526e89;
+	transition: background ease-in-out 0.25s;
 }
 
 #advanced input[type="radio"]:checked + label {
 	background: #40bcf4;
+	transition: border-color ease-in-out 0.25s;
 	border-color: #000;
 	color: #fff;
 }
 
 .dark #advanced input[type="radio"]:checked + label {
 	border-color: #fff;
+	transition: border-color ease-in-out 0.25s;
 }
 
 #advanced input[type="radio"]:checked + label svg {
@@ -618,13 +615,11 @@ a:focus {
 }
 
 #advanced input[type="radio"]:focus + label {
-	box-shadow: 0 0 0 3px #fff,
-				0 0 0 5px #1caff2;
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
 }
 
 .dark #advanced input[type="radio"]:focus + label {
-	box-shadow: 0 0 0 3px #14181d,
-				0 0 0 5px #1caff2;
+	box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
 }
 
 input#union,
@@ -738,6 +733,7 @@ h3 {
 	margin: auto;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
 	background-color: #ebebeb;
+	transition: background-color ease-in-out 0.25s;
 	display: block;
 	width: 230px;
 	height: 345px;
@@ -795,12 +791,14 @@ button:focus-within {
 #tertiary {
 	background: none;
 	color: #415569;
+	transition: color ease-in-out 0.25s;
 	display: block;
 	margin: auto;
 }
 
 .dark #tertiary {
 	color: #526e89;
+	transition: color ease-in-out 0.25s;
 }
 
 #tertiary:hover,
@@ -879,6 +877,7 @@ p.you-should {
 	height: 25px;
 	overflow: hidden;
 	border: 2px solid black;
+	transition: border ease-in-out 0.25s;
 	border-radius: 4px;
 	margin: auto;
 }
@@ -906,18 +905,22 @@ p.you-should {
 
 .dark #logo {
 	border: 2px solid white;
+	transition: border ease-in-out 0.25s;
 }
 
 .dark a {
 	color: #76a0ca;
+	transition: color ease-in-out 0.25s;
 }
 
 .dark #title-link {
 	color: #76a0ca;
+	transition: color ease-in-out 0.25s;
 }
 
 .dark .film-cover {
 	background-color: #76a0ca;
+	transition: background-color ease-in-out 0.25s;
 }
 
 /* } */
