@@ -23,6 +23,12 @@ export default {
 </script>
 
 <style>
+@media (prefers-reduced-motion) {
+	* {
+		animation: none !important;
+		transition: none !important;
+	}
+}
 /* #toggle {
 	position: fixed;
 	top: 0;
