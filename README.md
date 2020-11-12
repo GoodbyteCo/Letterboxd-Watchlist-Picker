@@ -65,7 +65,10 @@ If at any point you have issues using the website, please do not hesitate to con
 
 ### Building locally
 
-[ TODO ]
+The API uses vercel functions so you can use `vercel dev` to test however this requires a [vercel](https://vercel.com) account. To test with out films propgation (everything will work just the pictuer of the film will not fill in) run
+```
+npm run serve
+```
 
 ### So where are things?
 
