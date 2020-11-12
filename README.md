@@ -1,4 +1,4 @@
-<a href="https://github.com/GoodbyteCo/letterboxd-watchlist-picker">
+<a href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker">
   <img width="230" alt="Watchlist Picker Development" src="public/dev-logo.png">
 </a>
 
