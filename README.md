@@ -65,7 +65,11 @@ If at any point you have issues using the website, please do not hesitate to con
 
 ### Building locally
 
+<<<<<<< HEAD
 The API uses vercel functions so you can use `vercel dev` to test however this requires a [vercel](https://vercel.com) account. To test without the films propgating (everything will work just the picture of the film will not fill in) run
+=======
+The API uses vercel functions so you can use `vercel dev` to test however this requires a [vercel](https://vercel.com) account. To test with out films propgation (everything will work just the pictuer of the film will not fill in) run
+>>>>>>> c98613d88b955cdb3cb5d6240ffd196c9ee5825c
 ```
 npm run serve
 ```
