@@ -142,8 +142,10 @@
 				Enter your
 				<a href="https://letterboxd.com/">Letterboxd</a> username to get
 				a random film off of your watchlist. Add multiple usernames by
-				separating with a space or comma, and enter public lists in
-				"username/list-title" format.
+				separating with a space, and enter public lists in
+				"username/list-title" format. See 
+				<a href="https://github.com/GoodbyteCo/letterboxd-watchlist-picker/blob/improve_readme/README.md#frequently-asked-questions">FAQs</a> 
+				for more.
 			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
