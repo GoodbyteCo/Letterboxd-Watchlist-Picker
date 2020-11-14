@@ -1,6 +1,7 @@
 <template>
 	<div id="app">
 		<DarkModeToggle />
+		Hello
 		<div id="main">
 			<Film />
 		</div>
