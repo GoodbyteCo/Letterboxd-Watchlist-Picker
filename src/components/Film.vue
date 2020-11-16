@@ -320,17 +320,19 @@
 					<h2>Loading Film</h2>
 					<div id="loadbar"></div>
 					<p>
-						This takes a bit of time. While you're waiting, is there
-						a movie you're secretly rooting for? Choose that one! I
-						give you permission.
+						Is there a movie you're secretly rooting for? Choose that one! 
+						I give you permission.
 					</p>
 				</div>
 				<div v-else-if="submitted">
 					<div v-if="notfound">
 						<h2>Nothing Found</h2>
 						<p v-if="emptyintersect">
-							Sorry, but the intersection between those two lists
-							is empty
+							The intersection between those two lists is empty.
+						</p>
+						<p v-else-if="ignoreChecked">
+							There were no films found in that list. It may be empty, private, or only contain films
+							not-yet-released (films released in the current year are also excluded).
 						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
@@ -340,7 +342,7 @@
 							id="poe"
 							width="250"
 							src="https://watchlistpicker.com/poe.gif"
-							alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
+							alt="from the movie Kung-Fu Panda, protaganist Poe looks down at an empty scroll."
 						/>
 					</div>
 					<div v-else id="container">
