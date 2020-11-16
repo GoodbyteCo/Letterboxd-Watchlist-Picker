@@ -308,9 +308,8 @@
 					<h2>Loading Film</h2>
 					<div id="loadbar"></div>
 					<p>
-						This takes a bit of time. While you're waiting, is there
-						a movie you're secretly rooting for? Choose that one! I
-						give you permission.
+						Is there a movie you're secretly rooting for? Choose that one!
+						I give you permission.
 					</p>
 				</div>
 				<div v-else-if="submitted">
