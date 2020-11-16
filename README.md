@@ -18,7 +18,7 @@ If you have a question that isn't listed below, send us an email at [support@goo
 Enter your Letterboxd username into the search bar.
 
 #### Why does it say nothing found?
-If your account is set to private, your watchlist cannot be read. If your account is public, make sure your username us spelt correctly and that there are films in your watchlist. If you are using the Advanced Search options, make sure there are already-released movies in your list (released before the current year, and have a date).
+If your account is set to private, your watchlist cannot be read. If your account is public, make sure your username is spelt correctly and that there are films in your watchlist. If you are using the Advanced Search options, make sure there are already-released movies in your list (released before the current year, and have a date).
 
 #### Why does it give me unreleased movies?
 By default, Watchlist Picker returns any film in your Letterboxd watchlist. To only see released films, click on "Advanced Search" (located right below the search bar), and check "Ignore unreleased". Note, as we can not actually see the exact date of release, all movies released within the current year are also excluded.
