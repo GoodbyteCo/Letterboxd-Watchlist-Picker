@@ -1,0 +1,17 @@
+{
+    // Version of the setting file. Always 0.1
+    "version": "0.1",
+    "language": "en",
+    "words": [
+        "goodbyte",
+        "pollock",
+        "guinane",
+        "watchlistpicker",
+        "watchlist",
+        "letterboxd",
+        "vercel"
+    ],
+    "allowCompoundWords": true,
+    "minWordLength": 3,
+    "dictionaries": ["en_US", "html", "css", "go", "fonts", "softwareTerms", "misc"]
+}
