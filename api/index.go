@@ -3,7 +3,6 @@ package film
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -290,7 +289,6 @@ func getintersect(filmSlice []film, numOfUsers int) []film {
 			list = append(list, entry)
 		}
 	}
-	fmt.Println(keys)
 	return list
 }
 
