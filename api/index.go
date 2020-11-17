@@ -148,7 +148,7 @@ func scrapeUser(users []string, intersect bool) (film, error) {
 	}
 	log.Print("results")
 	if intersect {
-		intersectList := getintersect(totalFilms)
+		intersectList := getintersect(totalFilms,len(users))
 		length := len(intersectList)
 		if length == 0 {
 			return film{}, &nothingError{reason: INTERSECT}
@@ -278,13 +278,13 @@ func done() filmSend {
 	}
 }
 
-func getintersect(filmSlice []film) []film {
+func getintersect(filmSlice []film, numOfUsers int) []film {
 	keys := make(map[film]int)
 	list := []film{}
 	for _, entry := range filmSlice {
 		i, _ := keys[entry]
-		if i < 1 {
-			keys[entry] = 1
+		if i < (numOfUsers - 1) {
+			keys[entry] ++
 		} else {
 			list = append(list, entry)
 		}
