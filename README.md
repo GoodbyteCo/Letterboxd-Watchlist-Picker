@@ -8,7 +8,7 @@
 
 [[Frequently asked questions](#frequently-asked-questions)] [[Operational notes](#operational-notes)] [[Credits](#credits)]
 
-A simple website that gives you a random film off your watchlist (or any list). The site is built with Vue, and deployed at [watchlistpicker.com](https://watchlistpicer.com) via Vercel. See also, the [Watchlist Picker backend](https://github.com/GoodbyteCo/Watchlist-Picker-Backend) and [CLI verion](https://github.com/HoloPollock/watchlist-picker).
+A simple website that gives you a random film off your watchlist (or any list). The site is built with Vue, and deployed at [watchlistpicker.com](https://watchlistpicer.com) via Vercel. See also, the [Watchlist Picker backend](https://github.com/GoodbyteCo/Watchlist-Picker-Backend) and [CLI version](https://github.com/HoloPollock/watchlist-picker).
 
 ## Frequently asked questions
 
