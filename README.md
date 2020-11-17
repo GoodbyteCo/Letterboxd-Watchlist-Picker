@@ -15,7 +15,7 @@ A simple website that gives you a random film off your watchlist (or any list). 
 If you have a question that isn't listed below, send us an email at [support@goodbyte.ca](mailto:support@goodbyte.ca).
 
 #### How do I get a film?
-Enter your Letterboxd username into the search bar.
+Enter your Letterboxd username into the search bar and click "search".
 
 #### Why does it say nothing found?
 If your account is set to private, your watchlist cannot be read. If your account is public, make sure your username is spelt correctly and that there are films in your watchlist. If you are using the Advanced Search options, make sure there are already-released movies in your list (released before the current year, and have a date).
