@@ -27,7 +27,7 @@ By default, Watchlist Picker returns any film in your Letterboxd watchlist. To o
 Enter the username of the list creator, followed by a <kbd>/</kbd> and the list title. For example, you would search through [this list](https://letterboxd.com/jack/list/its-someones-favorite-movie/), by entering: `jack/its-someones-favorite-movie` ([see it in action on Watchlist Picker](https://watchlistpicker.com/?u=jack/its-someones-favorite-movie)). If you want to just copy the text straight out of the URL, `jack/list/its-someones-favorite-movie` will work too.
 	
 #### How do I search multiple lists at once?
-Enter all of the lists and usernames into the search bar, seperated by a space or comma.
+Enter all of the lists and usernames into the search bar, separated by a space or comma.
 
 #### How do I only show films that are on all of the lists?
 By default, the lists are combined into a giant pool of movies. To get only movies that appear on all of the lists you've entered (the intersection), click on "Advanced Search" (located right below the search bar), and change "Union" to "Intersection".
@@ -65,7 +65,7 @@ If at any point you have issues using the website, please do not hesitate to con
 
 ### Building locally
 
-The API uses vercel functions so you can use `vercel dev` to test however this requires a [vercel](https://vercel.com) account. To test without the films propgating (everything will work just the picture of the film will not fill in) run
+The API uses Vercel functions so you can use `vercel dev` to test however this requires a [Vercel](https://vercel.com) account. To test without the films propagating (everything will work, just the picture of the film will not fill in), run:
 
 ```
 npm run serve
