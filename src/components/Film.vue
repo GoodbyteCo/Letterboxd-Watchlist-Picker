@@ -391,11 +391,15 @@ export default {
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
 		const inter = urlParams.get("i");
+		const ignore = urlParams.get("ignore")
 		if (users.length > 0) {
 			this.users = users.toString();
 		}
 		if (inter != null) {
 			this.selectionMode = "Intersect";
+		}
+		if (ignore != null) {
+			this.ignoreChecked = true
 		}
 		this.submit();
 	},
@@ -426,12 +430,24 @@ export default {
 			this.submitted = true;
 			this.loading = true;
 			//TODO add window handeling state for ignore current year
-			if (this.selectionMode == "Intersect") {
+			if ((this.selectionMode == "Intersect") && (this.ignoreChecked)) {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=") + "&i=true&ignore=true"
+				); //add url param for users being queryied for discoverbilty of this feature
+			} else if (this.selectionMode == "Intersect") {
 				window.history.replaceState(
 					null,
 					null,
 					"?u=" + userlist.join("&u=") + "&i=true"
-				); //add url param for users being queryied for discoverbilty of this feature
+				);
+			} else if (this.ignoreChecked) {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=") + "&ignore=true"
+				);
 			} else {
 				window.history.replaceState(
 					null,
