@@ -145,7 +145,7 @@
 				separating with a space, and enter public lists in
 				"username/list-title" format. See
 				<a
-					href="https://github.com/GoodbyteCo/letterboxd-watchlist-picker/blob/improve_readme/README.md#frequently-asked-questions"
+					href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions"
 					>FAQs</a
 				>
 				for more.
