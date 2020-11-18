@@ -303,6 +303,20 @@
 							</svg>
 							Intersect</label
 						>
+						<div id="ignore-box">
+							<input
+								type="checkbox"
+								id="ignore"
+								v-model="ignoreChecked"
+							/>
+							<label for="ignore">
+								Ignore unreleased films
+								<span>
+									Removes all films released this year or in
+									the future from results.
+								</span>
+							</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -319,8 +333,11 @@
 					<div v-if="notfound">
 						<h2>Nothing Found</h2>
 						<p v-if="emptyintersect">
-							Sorry, but the intersection between those two lists
-							is empty
+							The intersection between those two lists is empty.
+						</p>
+						<p v-else-if="ignoreChecked">
+							There were no films found in that list. It may be empty, private, or only contain films
+							not-yet-released (films released in the current year are also excluded).
 						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
@@ -330,7 +347,7 @@
 							id="poe"
 							width="250"
 							src="https://watchlistpicker.com/poe.gif"
-							alt="from the movie Kung-Fu Panda, protaganist Poe looks down at empty scroll."
+							alt="from the movie Kung-Fu Panda, protaganist Poe looks down at an empty scroll."
 						/>
 					</div>
 					<div v-else id="container">
@@ -369,6 +386,7 @@ export default {
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
 			advancedOpen: false,
+			ignoreChecked: false,
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -378,11 +396,15 @@ export default {
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
 		const inter = urlParams.get("i");
+		const ignore = urlParams.get("ignore")
 		if (users.length > 0) {
 			this.users = users.toString();
 		}
 		if (inter != null) {
 			this.selectionMode = "Intersect";
+		}
+		if (ignore != null) {
+			this.ignoreChecked = true
 		}
 		this.submit();
 	},
@@ -412,12 +434,25 @@ export default {
 			document.body.classList.add("entered");
 			this.submitted = true;
 			this.loading = true;
-			if (this.selectionMode == "Intersect") {
+			//TODO add window handeling state for ignore current year
+			if ((this.selectionMode == "Intersect") && (this.ignoreChecked)) {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=") + "&i=true&ignore=true"
+				); //add url param for users being queryied for discoverbilty of this feature
+			} else if (this.selectionMode == "Intersect") {
 				window.history.replaceState(
 					null,
 					null,
 					"?u=" + userlist.join("&u=") + "&i=true"
-				); //add url param for users being queryied for discoverbilty of this feature
+				);
+			} else if (this.ignoreChecked) {
+				window.history.replaceState(
+					null,
+					null,
+					"?u=" + userlist.join("&u=") + "&ignore=true"
+				);
 			} else {
 				window.history.replaceState(
 					null,
@@ -433,6 +468,9 @@ export default {
 			console.log(this.selectionMode);
 			if (this.selectionMode == "Intersect") {
 				url += "&intersect=true";
+			}
+			if (this.ignoreChecked) {
+				url += "&ignore_unreleased=true";
 			}
 			try {
 				let vue = this;
@@ -560,6 +598,36 @@ a:focus {
 	transform: translateY(0px);
 }
 
+#advanced label {
+	display: inline;
+	visibility: visible;
+}
+
+#advanced span {
+	opacity: 0.6;
+	display: block;
+}
+
+#ignore-box {
+	padding: 2rem 0.8rem;
+}
+
+#ignore-box label {
+	max-width: 200px;
+	text-align: left;
+	display: inline-block;
+	margin: 10px;
+}
+
+#ignore-box span {
+	font-size: 12px;
+}
+
+#ignore {
+	transform: translateY(-2rem);
+	display: inline-block;
+}
+
 .active#advanced {
 	opacity: 1;
 	transition: 0.3s ease;
@@ -567,12 +635,12 @@ a:focus {
 }
 
 #advanced-show {
-	transform: translateY(-30px);
+	transform: translateY(-180px);
 	transition: transform 0.3s ease;
 }
 
 #advanced-show.advanceactive {
-	transform: translateY(10px);
+	transform: translateY(-20px);
 	transition: transform 0.3s ease;
 }
 
@@ -584,6 +652,9 @@ a:focus {
 }
 
 #advanced label {
+}
+
+#advanced > label {
 	display: inline;
 	visibility: visible;
 	background: rgb(64 188 244 / 0.5);
@@ -600,6 +671,10 @@ a:focus {
 .dark #advanced label {
 	background: #526e89;
 	transition: background ease-in-out 0.25s;
+}
+
+.dark #ignore-box > label {
+	background: unset;
 }
 
 #advanced input[type="radio"]:checked + label {
