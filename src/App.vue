@@ -54,6 +54,7 @@ body {
 	min-height: calc(85vh - 15px);
 	min-height: -webkit-calc(85vh - 15px);
 	min-height: -moz-calc(85vh - 15px);
+	height: 85vh;
 }
 
 body.dark {
