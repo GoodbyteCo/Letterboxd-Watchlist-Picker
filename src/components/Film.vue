@@ -389,6 +389,10 @@ export default {
 	methods: {
 		//Main function to make request for random film
 		submit() {
+			if (this.loading) {
+				console.log("waiting for inital sumbit")
+				return //if loading film dont resumbit
+			}
 			this.notfound = false;
 			if (this.users == "") {
 				//Reset state and if form submitted with empty input field
