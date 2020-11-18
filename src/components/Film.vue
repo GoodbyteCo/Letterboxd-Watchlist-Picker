@@ -143,8 +143,11 @@
 				<a href="https://letterboxd.com/">Letterboxd</a> username to get
 				a random film off of your watchlist. Add multiple usernames by
 				separating with a space, and enter public lists in
-				"username/list-title" format. See 
-				<a href="https://github.com/GoodbyteCo/letterboxd-watchlist-picker/blob/improve_readme/README.md#frequently-asked-questions">FAQs</a> 
+				"username/list-title" format. See
+				<a
+					href="https://github.com/GoodbyteCo/letterboxd-watchlist-picker/blob/improve_readme/README.md#frequently-asked-questions"
+					>FAQs</a
+				>
 				for more.
 			</p>
 			<div class="input">
@@ -308,8 +311,8 @@
 					<h2>Loading Film</h2>
 					<div id="loadbar"></div>
 					<p>
-						Is there a movie you're secretly rooting for? Choose that one!
-						I give you permission.
+						Is there a movie you're secretly rooting for? Choose
+						that one! I give you permission.
 					</p>
 				</div>
 				<div v-else-if="submitted">
@@ -646,17 +649,17 @@ a#logo:focus-visible {
 }
 
 .dark a#logo:focus-visible {
-    box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
+	box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
 }
 
 #app a:focus-visible {
-    box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
-    border-radius: 3px;
-    outline: none;
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
+	border-radius: 3px;
+	outline: none;
 }
 
 .dark #app a:focus-visible {
-    box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
+	box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
 }
 
 .entered h1,
@@ -814,13 +817,13 @@ button:focus-within {
 
 #tertiary:focus-visible span {
 	text-decoration: underline;
-    box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #1caff2;
-    border-radius: 3px;
-    padding: 3px 8px;
+	box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #1caff2;
+	border-radius: 3px;
+	padding: 3px 8px;
 }
 
 .dark #tertiary:focus-visible span {
-    box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
+	box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
 }
 
 /* #advanced-section {
