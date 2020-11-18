@@ -142,8 +142,13 @@
 				Enter your
 				<a href="https://letterboxd.com/">Letterboxd</a> username to get
 				a random film off of your watchlist. Add multiple usernames by
-				separating with a space or comma, and enter public lists in
-				"username/list-title" format.
+				separating with a space, and enter public lists in
+				"username/list-title" format. See
+				<a
+					href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions"
+					>FAQs</a
+				>
+				for more.
 			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
@@ -320,8 +325,8 @@
 					<h2>Loading Film</h2>
 					<div id="loadbar"></div>
 					<p>
-						Is there a movie you're secretly rooting for? Choose that one! 
-						I give you permission.
+						Is there a movie you're secretly rooting for? Choose
+						that one! I give you permission.
 					</p>
 				</div>
 				<div v-else-if="submitted">
@@ -551,6 +556,7 @@ export default {
 #title-link {
 	font-size: 1.5rem;
 	color: #415569;
+	transition: color ease-in-out 0.25s;
 }
 
 a.title {
@@ -571,6 +577,7 @@ a.title {
 
 a {
 	color: #415569;
+	transition: color ease-in-out 0.25s;
 }
 
 a:hover,
@@ -651,6 +658,7 @@ a:focus {
 	display: inline;
 	visibility: visible;
 	background: rgb(64 188 244 / 0.5);
+	transition: background ease-in-out 0.25s;
 	padding: 10px;
 	border-radius: 4px;
 	font-weight: bold;
@@ -662,6 +670,7 @@ a:focus {
 
 .dark #advanced label {
 	background: #526e89;
+	transition: background ease-in-out 0.25s;
 }
 
 .dark #ignore-box > label {
@@ -670,12 +679,14 @@ a:focus {
 
 #advanced input[type="radio"]:checked + label {
 	background: #40bcf4;
+	transition: border-color ease-in-out 0.25s;
 	border-color: #000;
 	color: #fff;
 }
 
 .dark #advanced input[type="radio"]:checked + label {
 	border-color: #fff;
+	transition: border-color ease-in-out 0.25s;
 }
 
 #advanced input[type="radio"]:checked + label svg {
@@ -706,6 +717,24 @@ h1 {
 #logo {
 	transform: scale(1.5) translateY(15px);
 	transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
+}
+
+a#logo:focus-visible {
+	box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #1caff2;
+}
+
+.dark a#logo:focus-visible {
+	box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
+}
+
+#app a:focus-visible {
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
+	border-radius: 3px;
+	outline: none;
+}
+
+.dark #app a:focus-visible {
+	box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
 }
 
 .entered h1,
@@ -783,6 +812,7 @@ h3 {
 	margin: auto;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
 	background-color: #ebebeb;
+	transition: background-color ease-in-out 0.25s;
 	display: block;
 	width: 230px;
 	height: 345px;
@@ -840,12 +870,14 @@ button:focus-within {
 #tertiary {
 	background: none;
 	color: #415569;
+	transition: color ease-in-out 0.25s;
 	display: block;
 	margin: auto;
 }
 
 .dark #tertiary {
 	color: #526e89;
+	transition: color ease-in-out 0.25s;
 }
 
 #tertiary:hover,
@@ -856,6 +888,17 @@ button:focus-within {
 #tertiary span {
 	text-transform: none;
 	font-weight: 400;
+}
+
+#tertiary:focus-visible span {
+	text-decoration: underline;
+	box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #1caff2;
+	border-radius: 3px;
+	padding: 3px 8px;
+}
+
+.dark #tertiary:focus-visible span {
+	box-shadow: 0 0 0 2px #14181d, 0 0 0 3.5px #1caff2;
 }
 
 /* #advanced-section {
@@ -913,6 +956,7 @@ p.you-should {
 	height: 25px;
 	overflow: hidden;
 	border: 2px solid black;
+	transition: border ease-in-out 0.25s;
 	border-radius: 4px;
 	margin: auto;
 }
@@ -940,18 +984,22 @@ p.you-should {
 
 .dark #logo {
 	border: 2px solid white;
+	transition: border ease-in-out 0.25s;
 }
 
 .dark a {
 	color: #76a0ca;
+	transition: color ease-in-out 0.25s;
 }
 
 .dark #title-link {
 	color: #76a0ca;
+	transition: color ease-in-out 0.25s;
 }
 
 .dark .film-cover {
 	background-color: #76a0ca;
+	transition: background-color ease-in-out 0.25s;
 }
 
 /* } */

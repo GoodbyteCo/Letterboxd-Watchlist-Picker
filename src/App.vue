@@ -23,18 +23,30 @@ export default {
 </script>
 
 <style>
+@media (prefers-reduced-motion) {
+	* {
+		animation: none !important;
+		transition: none !important;
+	}
+}
 /* #toggle {
 	position: fixed;
 	top: 0;
 	right: 0;
 	z-index: 999;
 } */
+
+body {
+	background: #fff;
+	transition: background ease-in-out 0.25s;
+}
 #app {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
 	color: #2c3e50;
+	transition: color ease-in-out 0.25s;
 	margin-top: 30px;
 }
 
@@ -46,10 +58,12 @@ export default {
 
 body.dark {
 	background: #14181d;
+	transition: background ease-in-out 0.25s;
 }
 
 .dark #app {
 	color: #778fa6;
+	transition: color ease-in-out 0.25s;
 }
 
 ::selection {

@@ -61,6 +61,20 @@ a.support:hover {
 	pointer-events: all;
 }
 
+a:focus-visible,
+a.support:focus-visible {
+    opacity: 1;
+    box-shadow: 0 0 0 3px #fff, 0 0 0 5px #1caff2;
+    border-radius: 3px;
+    outline: none;
+    transition: none;
+}
+
+.dark a:focus-visible,
+.dark a.support:focus-visible {
+    box-shadow: 0 0 0 3px #14181d, 0 0 0 5px #1caff2;
+}
+
 /* @media (prefers-color-scheme: dark) { */
 .dark a.support {
 	color: #76a0ca;
