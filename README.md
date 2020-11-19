@@ -79,4 +79,4 @@ npm run serve
 
 ## Credits
 
-Watchlist Picker is a [Goodbyte](https://github.com/GoodbyteCo) project. Development by [Quinn Pollock](https://github.com/HoloPollock) and [Jack Guinane](https://github.com/qjack001). Many thanks to Letterboxd for letting us scrape their website.
+Watchlist Picker is a [Goodbyte](https://github.com/GoodbyteCo) project. Development by [Quinn Pollock](https://github.com/HoloPollock) and [Jack Guinane](https://github.com/qjack001). Many thanks to Letterboxd for letting us scrape their website. 
