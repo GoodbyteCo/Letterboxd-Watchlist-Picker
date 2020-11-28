@@ -195,6 +195,8 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 			fmt.Println("ignore")
 			totalFilms = removeCurrentYear(totalFilms)
 		}
+		log.Panicln("+++++")
+		log.Println(totalFilms)
 		log.Println(len(totalFilms))
 		n := rand.Intn(len(totalFilms))
 		log.Println(len(totalFilms))
