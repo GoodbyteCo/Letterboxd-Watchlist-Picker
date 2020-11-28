@@ -343,6 +343,7 @@ func makeBigger(url string) string {
 
 func removeCurrentYear(filmSlice []film) []film {
 	list := []film{}
+	log.Println(filmSlice)
 	for _, entry := range filmSlice {
 		if entry.Year == "" {
 			continue
