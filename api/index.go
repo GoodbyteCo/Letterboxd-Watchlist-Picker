@@ -195,9 +195,6 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 			fmt.Println("ignore")
 			totalFilms = removeCurrentYear(totalFilms)
 		}
-		log.Println("+++++")
-		log.Println(totalFilms)
-		log.Println(len(totalFilms))
 		n := rand.Intn(len(totalFilms))
 		log.Println(len(totalFilms))
 		log.Println(n)
@@ -272,9 +269,11 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
+		year := e.Attr("data-film-release-year")
 		tempfilm := film{
 			Slug:  (site + slug),
 			Image: makeBigger(img),
+			Year: year,
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
@@ -343,15 +342,11 @@ func makeBigger(url string) string {
 
 func removeCurrentYear(filmSlice []film) []film {
 	list := []film{}
-	log.Println(filmSlice)
 	for _, entry := range filmSlice {
 		if entry.Year == "" {
 			continue
 		}
 		filmYear, _ := strconv.Atoi(entry.Year)
-		log.Print("++")
-		log.Print(filmYear)
-		log.Print("++")
 		if filmYear < year {
 			list = append(list, entry)
 		}
