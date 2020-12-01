@@ -324,7 +324,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 		year := e.Attr("data-film-release-year")
 		tempfilm := film{
 			Slug:  (site + slug),
-			Image: makeBigger(img),
+			Image: makeBiggerActor(img),
 			Year: year,
 			Name:  name,
 		}
@@ -376,6 +376,10 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
+func makeBiggerActor(url string) string {
+	return strings.ReplaceAll(url, "-0-150-0-225-", "-0-230-0-345-")
+
+}
 func makeBigger(url string) string {
 	return strings.ReplaceAll(url, "-0-125-0-187-", "-0-230-0-345-")
 }
