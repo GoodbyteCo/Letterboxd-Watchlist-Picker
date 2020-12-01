@@ -148,7 +148,11 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 		log.Println(a)
 		user++
 		if strings.Contains(a, "/") {
-			go scrapeList(a, ch)
+			if strings.Contains(a,"actor/") {
+				go scrapeActor(a, ch)
+			} else {
+				go scrapeList(a, ch)
+			}
 		} else {
 			go scrape(a, ch)
 		}
@@ -304,6 +308,42 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 
 }
 
+
+func scrapeActor(actor string, ch chan filmSend) {
+	siteToVisit := site + "/" + actor
+	fmt.Println(siteToVisit)
+
+	c := colly.NewCollector(
+		colly.Async(true),
+	)
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		name := e.Attr("data-film-name")
+		slug := e.Attr("data-target-link")
+		img := e.ChildAttr("img", "src")
+		year := e.Attr("data-film-release-year")
+		tempfilm := film{
+			Slug:  (site + slug),
+			Image: makeBiggerActor(img),
+			Year: year,
+			Name:  name,
+		}
+		ch <- ok(tempfilm)
+		})
+
+	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, "/page") {
+			e.Request.Visit(e.Request.AbsoluteURL(link))
+		}
+	})
+
+	c.Visit(siteToVisit)
+	c.Wait()
+	ch <- done() // users has finished so send done through channel
+
+}
+
 func ok(f film) filmSend {
 	return filmSend{
 		film: f,
@@ -336,6 +376,10 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
+func makeBiggerActor(url string) string {
+	return strings.ReplaceAll(url, "-0-150-0-225-", "-0-230-0-345-")
+
+}
 func makeBigger(url string) string {
 	return strings.ReplaceAll(url, "-0-125-0-187-", "-0-230-0-345-")
 }
