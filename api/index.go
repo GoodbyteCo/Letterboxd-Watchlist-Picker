@@ -3,9 +3,11 @@ package film
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -16,6 +18,7 @@ import (
 type film struct {
 	Slug  string `json:"slug"`      //url of film
 	Image string `json:"image_url"` //url of image
+	Year  string `json:"release_year"`
 	Name  string `json:"film_name"`
 }
 
@@ -70,9 +73,16 @@ const site = "https://letterboxd.com"
 // 	http.ListenAndServe(":"+port, nil)
 // }
 
+var year int
+
+func init() {
+	year = time.Now().Year()
+}
+
 //Main handler func for request
 func Handler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
+	log.Println(year)
 	query := r.URL.Query() //Get URL Params(type map)
 	users, ok := query["users"]
 	log.Println(len(users))
@@ -81,16 +91,30 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, inter := query["intersect"]
+	_, ignore := query["ignore_unreleased"]
+
 	var userFilm film
 	var err error
-	if inter {
-		if len(users) == 1 {
-			userFilm, err = scrapeUser(users, false)
+	if ignore {
+		if inter {
+			if len(users) == 1 {
+				userFilm, err = scrapeUser(users, false, true)
+			} else {
+				userFilm, err = scrapeUser(users, true, true)
+			}
 		} else {
-			userFilm, err = scrapeUser(users, true)
+			userFilm, err = scrapeUser(users, false, true)
 		}
 	} else {
-		userFilm, err = scrapeUser(users, false)
+		if inter {
+			if len(users) == 1 {
+				userFilm, err = scrapeUser(users, false, false)
+			} else {
+				userFilm, err = scrapeUser(users, true, false)
+			}
+		} else {
+			userFilm, err = scrapeUser(users, false, false)
+		}
 	}
 	if err != nil {
 		var e *nothingError
@@ -115,7 +139,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 //main scraping function
-func scrapeUser(users []string, intersect bool) (film, error) {
+func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
@@ -147,25 +171,37 @@ func scrapeUser(users []string, intersect bool) (film, error) {
 		return film{}, &nothingError{reason: UNION}
 	}
 	log.Print("results")
+	var finalFilm film
 	if intersect {
 		intersectList := getintersect(totalFilms,len(users))
 		length := len(intersectList)
 		if length == 0 {
 			return film{}, &nothingError{reason: INTERSECT}
 		}
+		if ignore {
+			fmt.Println("ignore")
+			intersectList = removeCurrentYear(intersectList)
+			length = len(intersectList)
+		}
 		rand.Seed(time.Now().UTC().UnixNano())
 		n := rand.Intn(length)
 		log.Println(length)
 		log.Println(n)
 		log.Println(intersectList[n])
-		return intersectList[n], nil
+		finalFilm = intersectList[n]
+	} else {
+		rand.Seed(time.Now().UTC().UnixNano())
+		if ignore {
+			fmt.Println("ignore")
+			totalFilms = removeCurrentYear(totalFilms)
+		}
+		n := rand.Intn(len(totalFilms))
+		log.Println(len(totalFilms))
+		log.Println(n)
+		log.Println(totalFilms[n])
+		finalFilm = totalFilms[n]
 	}
-	rand.Seed(time.Now().UTC().UnixNano())
-	n := rand.Intn(len(totalFilms))
-	log.Println(len(totalFilms))
-	log.Println(n)
-	log.Println(totalFilms[n])
-	return totalFilms[n], nil
+	return finalFilm, nil
 }
 
 //function to scapre an single user
@@ -179,9 +215,11 @@ func scrape(userName string, ch chan filmSend) {
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
+		year := e.Attr("data-film-release-year")
 		tempfilm := film{
 			Slug:  (site + slug),
 			Image: makeBigger(img),
+			Year: year,
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
@@ -231,9 +269,11 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
+		year := e.Attr("data-film-release-year")
 		tempfilm := film{
 			Slug:  (site + slug),
 			Image: makeBigger(img),
+			Year: year,
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
@@ -299,3 +339,18 @@ func enableCors(w *http.ResponseWriter) {
 func makeBigger(url string) string {
 	return strings.ReplaceAll(url, "-0-125-0-187-", "-0-230-0-345-")
 }
+
+func removeCurrentYear(filmSlice []film) []film {
+	list := []film{}
+	for _, entry := range filmSlice {
+		if entry.Year == "" {
+			continue
+		}
+		filmYear, _ := strconv.Atoi(entry.Year)
+		if filmYear < year {
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
