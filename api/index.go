@@ -311,11 +311,13 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 
 func scrapeActor(actor string, ch chan filmSend) {
 	siteToVisit := site + "/" + actor
+	fmt.Println(siteToVisit)
 
-	ajc := colly.NewCollector(
+	c := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
@@ -327,18 +329,8 @@ func scrapeActor(actor string, ch chan filmSend) {
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
-	})
-	c := colly.NewCollector(
-		colly.Async(true),
-	)
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-film-slug")
-			ajc.Visit(url + slug + urlEnd) //start go routine to collect all film data
 		})
 
-	})
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		if strings.Contains(link, "/page") {
@@ -348,7 +340,6 @@ func scrapeActor(actor string, ch chan filmSend) {
 
 	c.Visit(siteToVisit)
 	c.Wait()
-	ajc.Wait()
 	ch <- done() // users has finished so send done through channel
 
 }
