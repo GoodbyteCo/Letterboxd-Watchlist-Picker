@@ -336,8 +336,14 @@
 							The intersection between those two lists is empty.
 						</p>
 						<p v-else-if="ignoreChecked">
-							There were no films found in that list. It may be empty, private, or only contain films
-							not-yet-released (films released in the current year are also excluded).
+							There were no films found in that list. It may be
+							empty, private, or only contain films
+							not-yet-released (films released in the current year
+							are also excluded).
+						</p>
+						<p v-else-if="timeout">
+							Sorry your list was too powerful and we timed out.
+							Try another list
 						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
@@ -387,6 +393,7 @@ export default {
 			selectionMode: "Union",
 			advancedOpen: false,
 			ignoreChecked: false,
+			timeout: false
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -396,7 +403,7 @@ export default {
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
 		const inter = urlParams.get("i");
-		const ignore = urlParams.get("ignore")
+		const ignore = urlParams.get("ignore");
 		if (users.length > 0) {
 			this.users = users.toString();
 		}
@@ -404,7 +411,7 @@ export default {
 			this.selectionMode = "Intersect";
 		}
 		if (ignore != null) {
-			this.ignoreChecked = true
+			this.ignoreChecked = true;
 		}
 		this.submit();
 	},
@@ -422,7 +429,7 @@ export default {
 				return;
 			}
 			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
-			let userlist = inputted.filter(function (el) {
+			let userlist = inputted.filter(function(el) {
 				return el;
 			});
 			if (userlist.length < 1) {
@@ -435,7 +442,7 @@ export default {
 			this.submitted = true;
 			this.loading = true;
 			//TODO add window handeling state for ignore current year
-			if ((this.selectionMode == "Intersect") && (this.ignoreChecked)) {
+			if (this.selectionMode == "Intersect" && this.ignoreChecked) {
 				window.history.replaceState(
 					null,
 					null,
@@ -476,13 +483,16 @@ export default {
 				let vue = this;
 				console.log(url);
 				fetch(url)
-					.then(function (res) {
+					.then(function(res) {
 						document.body.classList.remove("entered");
 						document.body.classList.add("done");
 
 						if (res.status != 200) {
 							if (res.status == 406) {
 								vue.emptyintersect = true;
+							}
+							if (res.status == 502) {
+								vue.timeout = true;
 							}
 							//if request fails set state to failed stated
 							vue.notfound = true;
@@ -491,13 +501,13 @@ export default {
 						}
 
 						//wait 200ms to load text to allow for image to preload
-						setTimeout(function () {
+						setTimeout(function() {
 							vue.loading = false;
 						}, 200);
 
 						return res.json();
 					})
-					.then(function (json) {
+					.then(function(json) {
 						if (!vue.notfound) {
 							// Preload image
 							var pre_image = new Image();
@@ -533,22 +543,22 @@ export default {
 					.setAttribute("ariaexpanded", "true");
 				this.advancedOpen = true;
 			}
-		},
+		}
 	},
 	computed: {
-		filmNotFound: function () {
+		filmNotFound: function() {
 			return this.notfound;
 		},
-		url: function () {
+		url: function() {
 			return this.info.slug;
 		},
-		img_url: function () {
+		img_url: function() {
 			return this.info.image_url;
 		},
-		name: function () {
+		name: function() {
 			return this.info.film_name;
-		},
-	},
+		}
+	}
 };
 </script>
 
