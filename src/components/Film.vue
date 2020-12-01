@@ -443,7 +443,7 @@ export default {
 				vue.currentHash = hash;
 				fetch(url)
 					.then(function(res) {
-						if (vue.currentHash != vue.hashCode(url)) {
+						if (vue.currentHash != hash) {
 							return "ignoreOldRequest";
 						}
 						document.body.classList.remove("entered");
