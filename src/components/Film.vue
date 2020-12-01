@@ -369,6 +369,7 @@ export default {
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
 			advancedOpen: false,
+			currentHash: null
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -389,10 +390,6 @@ export default {
 	methods: {
 		//Main function to make request for random film
 		submit() {
-			if (this.loading) {
-				console.log("waiting for inital sumbit")
-				return //if loading film dont resumbit
-			}
 			this.notfound = false;
 			if (this.users == "") {
 				//Reset state and if form submitted with empty input field
@@ -441,8 +438,14 @@ export default {
 			try {
 				let vue = this;
 				console.log(url);
+				let hash = this.hashCode(url);
+				console.log(hash);
+				vue.currentHash = hash;
 				fetch(url)
-					.then(function (res) {
+					.then(function(res) {
+						if (vue.currentHash != vue.hashCode(url)) {
+							return "";
+						}
 						document.body.classList.remove("entered");
 						document.body.classList.add("done");
 
@@ -500,6 +503,12 @@ export default {
 				this.advancedOpen = true;
 			}
 		},
+		hashCode(s) {
+			let h;
+			for (let i = 0; i < s.length; i++)
+				h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+			return h + Date.now();
+		}
 	},
 	computed: {
 		filmNotFound: function () {
