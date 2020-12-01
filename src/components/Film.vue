@@ -444,7 +444,7 @@ export default {
 				fetch(url)
 					.then(function(res) {
 						if (vue.currentHash != vue.hashCode(url)) {
-							return "";
+							return "ignoreOldRequest";
 						}
 						document.body.classList.remove("entered");
 						document.body.classList.add("done");
@@ -466,7 +466,10 @@ export default {
 
 						return res.json();
 					})
-					.then(function (json) {
+					.then(function(json) {
+						if (json == "ignoreOldRequest") {
+							return;
+						}
 						if (!vue.notfound) {
 							// Preload image
 							var pre_image = new Image();
