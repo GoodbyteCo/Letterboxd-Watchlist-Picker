@@ -336,8 +336,14 @@
 							The intersection between those two lists is empty.
 						</p>
 						<p v-else-if="ignoreChecked">
-							There were no films found in that list. It may be empty, private, or only contain films
-							not-yet-released (films released in the current year are also excluded).
+							There were no films found in that list. It may be
+							empty, private, or only contain films
+							not-yet-released (films released in the current year
+							are also excluded).
+						</p>
+						<p v-else-if="timeout">
+							Sorry your list was too powerful and we timed out.
+							Try another list
 						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
@@ -387,6 +393,7 @@ export default {
 			selectionMode: "Union",
 			advancedOpen: false,
 			ignoreChecked: false,
+			timeout: false
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -404,7 +411,7 @@ export default {
 			this.selectionMode = "Intersect";
 		}
 		if (ignore != null) {
-			this.ignoreChecked = true
+			this.ignoreChecked = true;
 		}
 		this.submit();
 	},
@@ -422,7 +429,7 @@ export default {
 				return;
 			}
 			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
-			let userlist = inputted.filter(function (el) {
+			let userlist = inputted.filter(function(el) {
 				return el;
 			});
 			if (userlist.length < 1) {
@@ -483,6 +490,9 @@ export default {
 						if (res.status != 200) {
 							if (res.status == 406) {
 								vue.emptyintersect = true;
+							}
+							if (res.status == 502) {
+								vue.timeout = true;
 							}
 							//if request fails set state to failed stated
 							vue.notfound = true;
