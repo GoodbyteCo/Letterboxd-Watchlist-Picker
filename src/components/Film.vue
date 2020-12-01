@@ -403,7 +403,7 @@ export default {
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
 		const inter = urlParams.get("i");
-		const ignore = urlParams.get("ignore")
+		const ignore = urlParams.get("ignore");
 		if (users.length > 0) {
 			this.users = users.toString();
 		}
@@ -442,7 +442,7 @@ export default {
 			this.submitted = true;
 			this.loading = true;
 			//TODO add window handeling state for ignore current year
-			if ((this.selectionMode == "Intersect") && (this.ignoreChecked)) {
+			if (this.selectionMode == "Intersect" && this.ignoreChecked) {
 				window.history.replaceState(
 					null,
 					null,
@@ -483,7 +483,7 @@ export default {
 				let vue = this;
 				console.log(url);
 				fetch(url)
-					.then(function (res) {
+					.then(function(res) {
 						document.body.classList.remove("entered");
 						document.body.classList.add("done");
 
@@ -501,13 +501,13 @@ export default {
 						}
 
 						//wait 200ms to load text to allow for image to preload
-						setTimeout(function () {
+						setTimeout(function() {
 							vue.loading = false;
 						}, 200);
 
 						return res.json();
 					})
-					.then(function (json) {
+					.then(function(json) {
 						if (!vue.notfound) {
 							// Preload image
 							var pre_image = new Image();
@@ -543,22 +543,22 @@ export default {
 					.setAttribute("ariaexpanded", "true");
 				this.advancedOpen = true;
 			}
-		},
+		}
 	},
 	computed: {
-		filmNotFound: function () {
+		filmNotFound: function() {
 			return this.notfound;
 		},
-		url: function () {
+		url: function() {
 			return this.info.slug;
 		},
-		img_url: function () {
+		img_url: function() {
 			return this.info.image_url;
 		},
-		name: function () {
+		name: function() {
 			return this.info.film_name;
-		},
-	},
+		}
+	}
 };
 </script>
 
