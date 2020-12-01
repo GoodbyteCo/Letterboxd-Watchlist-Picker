@@ -27,7 +27,7 @@ By default, Watchlist Picker returns any film in your Letterboxd watchlist. To o
 Enter the username of the list creator, followed by a <kbd>/</kbd> and the list title. For example, you would search through [this list](https://letterboxd.com/jack/list/its-someones-favorite-movie/), by entering: `jack/its-someones-favorite-movie` ([see it in action on Watchlist Picker](https://watchlistpicker.com/?u=jack/its-someones-favorite-movie)). If you want to just copy the text straight out of the URL, `jack/list/its-someones-favorite-movie` will work too.
 
 #### Can I get an actors films?
-Yes you can if you want a random film from an actor you can enter actor followed by a <kbd>/</kbd> then the actors slug. So for example if you wanted brad pitt you would enter `actor/brad-pitt`
+Yes you can if you want a random film from an `actor` you can enter actor followed by a <kbd>/</kbd> then the actors slug. So for example if you wanted brad pitt you would enter `actor/brad-pitt`
 	
 #### How do I search multiple lists at once?
 Enter all of the lists and usernames into the search bar, separated by a space or comma.
