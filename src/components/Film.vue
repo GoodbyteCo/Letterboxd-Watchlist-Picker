@@ -336,8 +336,10 @@
 							The intersection between those two lists is empty.
 						</p>
 						<p v-else-if="ignoreChecked">
-							There were no films found in that list. It may be empty, private, or only contain films
-							not-yet-released (films released in the current year are also excluded).
+							There were no films found in that list. It may be
+							empty, private, or only contain films
+							not-yet-released (films released in the current year
+							are also excluded).
 						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
@@ -386,8 +388,8 @@ export default {
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
 			advancedOpen: false,
-			currentHash: null
-			ignoreChecked: false,
+			currentHash: null,
+			ignoreChecked: false
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -397,7 +399,7 @@ export default {
 		const urlParams = new URLSearchParams(queryString);
 		const users = urlParams.getAll("u");
 		const inter = urlParams.get("i");
-		const ignore = urlParams.get("ignore")
+		const ignore = urlParams.get("ignore");
 		if (users.length > 0) {
 			this.users = users.toString();
 		}
@@ -405,7 +407,7 @@ export default {
 			this.selectionMode = "Intersect";
 		}
 		if (ignore != null) {
-			this.ignoreChecked = true
+			this.ignoreChecked = true;
 		}
 		this.submit();
 	},
@@ -423,7 +425,7 @@ export default {
 				return;
 			}
 			let inputted = this.users.split(/(?:,| )+/); //split input field on space or comma
-			let userlist = inputted.filter(function (el) {
+			let userlist = inputted.filter(function(el) {
 				return el;
 			});
 			if (userlist.length < 1) {
@@ -436,7 +438,7 @@ export default {
 			this.submitted = true;
 			this.loading = true;
 			//TODO add window handeling state for ignore current year
-			if ((this.selectionMode == "Intersect") && (this.ignoreChecked)) {
+			if (this.selectionMode == "Intersect" && this.ignoreChecked) {
 				window.history.replaceState(
 					null,
 					null,
@@ -498,7 +500,7 @@ export default {
 						}
 
 						//wait 200ms to load text to allow for image to preload
-						setTimeout(function () {
+						setTimeout(function() {
 							vue.loading = false;
 						}, 200);
 
@@ -552,19 +554,19 @@ export default {
 		}
 	},
 	computed: {
-		filmNotFound: function () {
+		filmNotFound: function() {
 			return this.notfound;
 		},
-		url: function () {
+		url: function() {
 			return this.info.slug;
 		},
-		img_url: function () {
+		img_url: function() {
 			return this.info.image_url;
 		},
-		name: function () {
+		name: function() {
 			return this.info.film_name;
-		},
-	},
+		}
+	}
 };
 </script>
 
