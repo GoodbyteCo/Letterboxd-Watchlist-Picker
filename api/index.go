@@ -148,7 +148,11 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 		log.Println(a)
 		user++
 		if strings.Contains(a, "/") {
-			go scrapeList(a, ch)
+			if strings.Contains(a,"actor/") {
+				go scrapeActor(a, ch)
+			} else {
+				go scrapeList(a, ch)
+			}
 		} else {
 			go scrape(a, ch)
 		}
@@ -301,6 +305,51 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 	c.Wait()
 	ajc.Wait()
 	ch <- done()
+
+}
+
+
+func scrapeActor(actor string, ch chan filmSend) {
+	siteToVisit := site + "/" + actor
+
+	ajc := colly.NewCollector(
+		colly.Async(true),
+	)
+	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
+		name := e.Attr("data-film-name")
+		slug := e.Attr("data-target-link")
+		img := e.ChildAttr("img", "src")
+		year := e.Attr("data-film-release-year")
+		tempfilm := film{
+			Slug:  (site + slug),
+			Image: makeBigger(img),
+			Year: year,
+			Name:  name,
+		}
+		ch <- ok(tempfilm)
+	})
+	c := colly.NewCollector(
+		colly.Async(true),
+	)
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
+	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
+			slug := ein.Attr("data-film-slug")
+			ajc.Visit(url + slug + urlEnd) //start go routine to collect all film data
+		})
+
+	})
+	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, "/page") {
+			e.Request.Visit(e.Request.AbsoluteURL(link))
+		}
+	})
+
+	c.Visit(siteToVisit)
+	c.Wait()
+	ajc.Wait()
+	ch <- done() // users has finished so send done through channel
 
 }
 
