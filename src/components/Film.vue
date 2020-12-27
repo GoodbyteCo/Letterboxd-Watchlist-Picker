@@ -341,6 +341,10 @@
 							not-yet-released (films released in the current year
 							are also excluded).
 						</p>
+						<p v-else-if="timeout">
+							Sorry your list was too powerful and we timed out.
+							Try another list
+						</p>
 						<p v-else>
 							Sorry, that watchlist is empty, private, or doesn't
 							exist at all.
@@ -389,7 +393,7 @@ export default {
 			selectionMode: "Union",
 			advancedOpen: false,
 			currentHash: null,
-			ignoreChecked: false
+			timeout: false
 		};
 	},
 	//Query to see if users has passed url params to make quick request
@@ -492,6 +496,9 @@ export default {
 						if (res.status != 200) {
 							if (res.status == 406) {
 								vue.emptyintersect = true;
+							}
+							if (res.status == 502) {
+								vue.timeout = true;
 							}
 							//if request fails set state to failed stated
 							vue.notfound = true;

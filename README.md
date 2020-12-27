@@ -8,7 +8,7 @@
 
 [[Frequently asked questions](#frequently-asked-questions)] [[Operational notes](#operational-notes)] [[Credits](#credits)]
 
-A simple website that gives you a random film off your watchlist (or any list). The site is built with Vue, and deployed at [watchlistpicker.com](https://watchlistpicer.com) via Vercel. See also, the [Watchlist Picker backend](https://github.com/GoodbyteCo/Watchlist-Picker-Backend) and [CLI version](https://github.com/HoloPollock/watchlist-picker).
+A simple website that gives you a random film off your watchlist (or any list). The site is built with Vue, and deployed at [watchlistpicker.com](https://watchlistpicker.com) via Vercel. See also, the [Watchlist Picker backend](https://github.com/GoodbyteCo/Watchlist-Picker-Backend) and [CLI version](https://github.com/HoloPollock/watchlist-picker).
 
 ## Frequently asked questions
 
@@ -25,6 +25,9 @@ By default, Watchlist Picker returns any film in your Letterboxd watchlist. To o
 
 #### How do I get a film from a list?
 Enter the username of the list creator, followed by a <kbd>/</kbd> and the list title. For example, you would search through [this list](https://letterboxd.com/jack/list/its-someones-favorite-movie/), by entering: `jack/its-someones-favorite-movie` ([see it in action on Watchlist Picker](https://watchlistpicker.com/?u=jack/its-someones-favorite-movie)). If you want to just copy the text straight out of the URL, `jack/list/its-someones-favorite-movie` will work too.
+
+#### Can I get a film from an actor's filmography?
+Yes, enter `actor` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `actor/brad-pitt`
 	
 #### How do I search multiple lists at once?
 Enter all of the lists and usernames into the search bar, separated by a space or comma.
