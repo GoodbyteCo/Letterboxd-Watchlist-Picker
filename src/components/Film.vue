@@ -392,7 +392,7 @@ export default {
 			submitted: false, //Boolean for if the form has been submitted
 			selectionMode: "Union",
 			advancedOpen: false,
-			ignoreChecked: false,
+			currentHash: null,
 			timeout: false
 		};
 	},
@@ -482,8 +482,14 @@ export default {
 			try {
 				let vue = this;
 				console.log(url);
+				let hash = this.hashCode(url);
+				console.log(hash);
+				vue.currentHash = hash;
 				fetch(url)
 					.then(function(res) {
+						if (vue.currentHash != hash) {
+							return "ignoreOldRequest";
+						}
 						document.body.classList.remove("entered");
 						document.body.classList.add("done");
 
@@ -508,6 +514,9 @@ export default {
 						return res.json();
 					})
 					.then(function(json) {
+						if (json == "ignoreOldRequest") {
+							return;
+						}
 						if (!vue.notfound) {
 							// Preload image
 							var pre_image = new Image();
@@ -543,6 +552,12 @@ export default {
 					.setAttribute("ariaexpanded", "true");
 				this.advancedOpen = true;
 			}
+		},
+		hashCode(s) {
+			let h;
+			for (let i = 0; i < s.length; i++)
+				h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+			return h + Date.now();
 		}
 	},
 	computed: {
