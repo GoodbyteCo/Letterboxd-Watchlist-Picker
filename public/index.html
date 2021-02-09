@@ -27,10 +27,14 @@
 <body>
 	<noscript>
 		<strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-			Please enable it to continue.</strong>
+				Please enable it to continue.</strong>
 	</noscript>
 	<div id="app"></div>
 	<!-- built files will be auto injected -->
+	<script>
+		if (window.location.host !== 'watchlistpicker.com')
+			window.goatcounter = { no_onload: true }
+	</script>
 	<script data-goatcounter="https://goodbyte.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 
