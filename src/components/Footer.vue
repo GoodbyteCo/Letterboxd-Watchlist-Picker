@@ -6,7 +6,7 @@
 			href="https://ko-fi.com/goodbyte"
 			class="support"
 		>Support this site</a>
-		<a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020
+		<a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020-2021
 	</footer>
 </template>
 
