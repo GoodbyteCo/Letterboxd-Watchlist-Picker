@@ -253,7 +253,7 @@ func scrape(userName string, ch chan filmSend) {
 		colly.Async(true),
 	)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
-		name := e.ChildAttr("div.filmposter","data-film-name")
+		name := e.ChildText("span.frame-title")
 		slug := e.ChildAttr("div.filmposter","data-target-link")
 		img := e.ChildAttr("img", "src")
 		year := e.ChildAttr("div.filmposter","data-film-release-year")
@@ -311,7 +311,7 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 		colly.Async(true),
 	)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
-		name := e.ChildAttr("div.filmposter","data-film-name")
+		name := e.ChildText("span.frame-title")
 		slug := e.ChildAttr("div.filmposter","data-target-link")
 		img := e.ChildAttr("img", "src")
 		year := e.ChildAttr("div.filmposter","data-film-release-year")
