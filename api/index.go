@@ -20,6 +20,7 @@ type film struct {
 	Image string `json:"image_url"` //url of image
 	Year  string `json:"release_year"`
 	Name  string `json:"film_name"`
+	Length string `json:"film_length"`
 }
 
 //struct for channel to send film and whether is has finshed a user
@@ -79,6 +80,8 @@ func init() {
 	year = time.Now().Year()
 }
 
+
+
 //Main handler func for request
 func Handler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
@@ -92,28 +95,42 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	_, inter := query["intersect"]
 	_, ignore := query["ignore_unreleased"]
+	_, short := query["only_shorts"]
+	_, feature := query["only_features"]
 
 	var userFilm film
 	var err error
+	var scrapefunc func([]string, bool, bool) (film, error)
+	
+	if short {
+		scarpefunc = shortScrape()
+	} else if feature {
+		scarpefunc = featureScrape()
+	} else {
+		scarpefunc = allScrape()
+	}
+	
 	if ignore {
 		if inter {
 			if len(users) == 1 {
-				userFilm, err = scrapeUser(users, false, true)
+					userFilm, err = scrapefunc(users, false, true)
+
+				userFilm, err = scrapefunc(users, false, true)
 			} else {
-				userFilm, err = scrapeUser(users, true, true)
+				userFilm, err = scrapefunc(users, true, true)
 			}
 		} else {
-			userFilm, err = scrapeUser(users, false, true)
+			userFilm, err = scrapefunc(users, false, true)
 		}
 	} else {
 		if inter {
 			if len(users) == 1 {
-				userFilm, err = scrapeUser(users, false, false)
+				userFilm, err = scrapefunc(users, false, false)
 			} else {
-				userFilm, err = scrapeUser(users, true, false)
+				userFilm, err = scrapefunc(users, true, false)
 			}
 		} else {
-			userFilm, err = scrapeUser(users, false, false)
+			userFilm, err = scrapefunc(users, false, false)
 		}
 	}
 	if err != nil {
@@ -138,8 +155,27 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+
+func shortScrape() func([]string, bool, bool) (film, error){
+	return func(users []string, inter bool, ignore bool) (film, error) {
+		return scrapeUser(users, inter, ignore, true, false)
+	}
+}
+
+func featureScrape() func([]string, bool, bool) (film, error){
+	return func(users []string, inter bool, ignore bool) (film, error) {
+		return scrapeUser(users, inter, ignore, false, true)
+	}
+}
+
+func allScrape() func([]string, bool, bool) (film, error){
+	return func(users []string, inter bool, ignore bool) (film, error) {
+		return scrapeUser(users, inter, ignore, false, false)
+	}
+}
+
 //main scraping function
-func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
+func scrapeUser(users []string, intersect bool, ignore bool, short bool, feature bool) (film, error) {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
@@ -176,35 +212,33 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 	}
 	log.Print("results")
 	var finalFilm film
+	var filmList = []film
 	if intersect {
 		intersectList := getintersect(totalFilms,len(users))
 		length := len(intersectList)
 		if length == 0 {
 			return film{}, &nothingError{reason: INTERSECT}
 		}
-		if ignore {
-			fmt.Println("ignore")
-			intersectList = removeCurrentYear(intersectList)
-			length = len(intersectList)
-		}
-		rand.Seed(time.Now().UTC().UnixNano())
-		n := rand.Intn(length)
-		log.Println(length)
-		log.Println(n)
-		log.Println(intersectList[n])
-		finalFilm = intersectList[n]
+		filmList = intersectList
 	} else {
-		rand.Seed(time.Now().UTC().UnixNano())
-		if ignore {
-			fmt.Println("ignore")
-			totalFilms = removeCurrentYear(totalFilms)
-		}
-		n := rand.Intn(len(totalFilms))
-		log.Println(len(totalFilms))
-		log.Println(n)
-		log.Println(totalFilms[n])
-		finalFilm = totalFilms[n]
+		filmList = totalFilms
 	}
+	if ignore {
+		fmt.Println("ignore")
+		filmList = removeCurrentYear(filmList)
+	}
+	if short {
+		fmt.Println("only shorts")
+		filmList = onlyShorts(filmList)
+	} else if feature {
+		fmt.Println("only Feature")
+		filmList = onlyFeature(filmList)
+	}
+	n := rand.Intn(len(filmList))
+	log.Println(len(filmList))
+	log.Println(n)
+	log.Println(filmList[n])
+	finalFilm = filmList[n]
 	return finalFilm, nil
 }
 
@@ -215,19 +249,22 @@ func scrape(userName string, ch chan filmSend) {
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
-		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
+		name := e.ChildAttr("div.filmposter","data-film-name")
+		slug := e.ChildAttr("div.filmposter","data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.Attr("data-film-release-year")
+		year := e.ChildAttr("div.filmposter","data-film-release-year")
+		lenght := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:  (site + slug),
-			Image: makeBigger(img),
+			Image: img,
 			Year: year,
 			Name:  name,
+			Length: strings.TrimSpace(before(lenght,"mins")),
 		}
 		ch <- ok(tempfilm)
 	})
+
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -235,7 +272,7 @@ func scrape(userName string, ch chan filmSend) {
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-film-slug")
-			ajc.Visit(url + slug + urlEnd) //start go routine to collect all film data
+			ajc.Visit(site + slug) //start go routine to collect all film data
 		})
 
 	})
@@ -249,9 +286,10 @@ func scrape(userName string, ch chan filmSend) {
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
-	ch <- done() // users has finished so send done through channel
+	ch <- done()
 
 }
+
 
 func scrapeList(listnameIn string, ch chan filmSend) {
 	siteToVisit := ""
@@ -269,16 +307,18 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) {
-		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
+		name := e.ChildAttr("div.filmposter","data-film-name")
+		slug := e.ChildAttr("div.filmposter","data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.Attr("data-film-release-year")
+		year := e.ChildAttr("div.filmposter","data-film-release-year")
+		lenght := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:  (site + slug),
-			Image: makeBigger(img),
+			Image: img,
 			Year: year,
 			Name:  name,
+			Length: strings.TrimSpace(before(lenght,"mins")),
 		}
 		ch <- ok(tempfilm)
 	})
@@ -290,7 +330,7 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) {
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-film-slug")
-			ajc.Visit(url + slug + urlEnd)
+			ajc.Visit(site + slug)
 		})
 
 	})
@@ -308,7 +348,6 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 
 }
 
-
 func scrapeActor(actor string, ch chan filmSend) {
 	siteToVisit := site + "/" + actor
 	fmt.Println(siteToVisit)
@@ -317,19 +356,32 @@ func scrapeActor(actor string, ch chan filmSend) {
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+	ajc := colly.NewCollector(
+		colly.Async(true),
+	)
+	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
+		name := e.ChildAttr("div.filmposter","data-film-name")
+		slug := e.ChildAttr("div.filmposter","data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.Attr("data-film-release-year")
+		year := e.ChildAttr("div.filmposter","data-film-release-year")
+		lenght := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:  (site + slug),
-			Image: makeBiggerActor(img),
+			Image: img,
 			Year: year,
 			Name:  name,
+			Length: strings.TrimSpace(before(lenght,"mins")),
 		}
 		ch <- ok(tempfilm)
+	})
+
+	c.OnHTML(".poster-container", func(e *colly.HTMLElement) {
+		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
+			slug := ein.Attr("data-film-slug")
+			ajc.Visit(site + slug)
 		})
+
+	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -397,4 +449,35 @@ func removeCurrentYear(filmSlice []film) []film {
 	}
 	return list
 }
+
+
+func onlyShorts(filmSlice []film) []film {
+	list := []film{}
+	for _, entry := range filmSlice {
+		length, err := strconv.Atoi(entry.Length)
+		if err != nil {
+			continue
+		}
+		if length < 80 {
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
+func onlyFeature(filmSlice []film) []film {
+	list := []film{}
+	for _, entry := range filmSlice {
+		length, err := strconv.Atoi(entry.Length)
+		if err != nil {
+			continue
+		}
+		if length >= 80 {
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
+
 
