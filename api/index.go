@@ -236,6 +236,7 @@ func scrapeUser(users []string, intersect bool, ignore bool, short bool, feature
 		fmt.Println("only Feature")
 		filmList = onlyFeature(filmList)
 	}
+	fmt.Println(filmlist)
 	n := rand.Intn(len(filmList))
 	log.Println(len(filmList))
 	log.Println(n)
