@@ -105,11 +105,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var scrapefunc func([]string, bool, bool) (film, error)
 	
 	if short {
-		scarpefunc = shortScrape()
+		scrapefunc = shortScrape()
 	} else if feature {
-		scarpefunc = featureScrape()
+		scrapefunc = featureScrape()
 	} else {
-		scarpefunc = allScrape()
+		scrapefunc = allScrape()
 	}
 	
 	if ignore {
