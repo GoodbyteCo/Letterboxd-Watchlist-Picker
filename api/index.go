@@ -36,6 +36,8 @@ const (
 	UNION
 )
 
+const FEATURELENGTH = 80
+
 type nothingError struct {
 	reason nothingReason
 }
@@ -212,7 +214,7 @@ func scrapeUser(users []string, intersect bool, ignore bool, short bool, feature
 	}
 	log.Print("results")
 	var finalFilm film
-	var filmList = []film
+	var filmList []film
 	if intersect {
 		intersectList := getintersect(totalFilms,len(users))
 		length := len(intersectList)
@@ -451,6 +453,16 @@ func removeCurrentYear(filmSlice []film) []film {
 }
 
 
+func before(value string, a string) string {
+    // Get substring before a string.
+    pos := strings.Index(value, a)
+    if pos == -1 {
+        return ""
+    }
+    return value[0:pos]
+}
+
+
 func onlyShorts(filmSlice []film) []film {
 	list := []film{}
 	for _, entry := range filmSlice {
@@ -458,7 +470,7 @@ func onlyShorts(filmSlice []film) []film {
 		if err != nil {
 			continue
 		}
-		if length < 80 {
+		if length < FEATURELENGTH {
 			list = append(list, entry)
 		}
 	}
@@ -472,7 +484,7 @@ func onlyFeature(filmSlice []film) []film {
 		if err != nil {
 			continue
 		}
-		if length >= 80 {
+		if length >= FEATURELENGTH {
 			list = append(list, entry)
 		}
 	}
