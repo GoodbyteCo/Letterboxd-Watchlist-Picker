@@ -115,8 +115,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if ignore {
 		if inter {
 			if len(users) == 1 {
-					userFilm, err = scrapefunc(users, false, true)
-
 				userFilm, err = scrapefunc(users, false, true)
 			} else {
 				userFilm, err = scrapefunc(users, true, true)
