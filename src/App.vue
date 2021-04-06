@@ -7,6 +7,7 @@
 		<main>
 			<about-text/>
 			<search-bar v-model="users" :action="() => submit()">
+				<advanced-options v-model="advancedOptions"/>
 			</search-bar>
 			<Film />
 		</main>
@@ -21,6 +22,7 @@
 	import Logo from './components/Logo.vue';
 	import AboutText from './components/AboutText.vue';
 	import SearchBar from './components/SearchBar.vue';
+	import AdvancedOptions from './components/AdvancedOptions.vue';
 
 	export default 
 	{
@@ -33,18 +35,20 @@
 			Logo,
 			AboutText,
 			SearchBar,
+			AdvancedOptions
 		},
 		data()
 		{
 			return {
-				users: ''  
+				users: '',
+				advancedOptions: {}
 			}
 		},
 		methods:
 		{
 			submit()
 			{
-				alert(this.users)
+				alert(this.advancedOptions['selectionMode'] + ' ' + this.advancedOptions['ignoreUnreleased']) 
 			}
 		}
 	};
@@ -70,6 +74,7 @@
 		--tertiary: rgb(64 188 244 / 0.5);
 
 		--white: #fff;
+		--black: #000;
 	}
 
 	.dark
@@ -80,8 +85,6 @@
 		--primary: #1caff2;
 		--secondary: #fff;
 		--tertiary: #526e89;
-
-		--white: #fff;
 	}
 
 	body 
