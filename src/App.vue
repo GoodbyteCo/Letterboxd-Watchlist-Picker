@@ -1,5 +1,5 @@
 <template>
-	<div id="app">
+	<div>
 		<header>
 			<logo/>
 			<dark-mode-toggle/>
@@ -60,15 +60,6 @@
 </script>
 
 <style>
-	@media (prefers-reduced-motion) 
-	{
-		* 
-		{
-			animation: none !important;
-			transition: none !important;
-		}
-	}
-
 	:root
 	{
 		--background: #fff;
@@ -95,18 +86,14 @@
 	body 
 	{
 		background: var(--background);
-		transition: background ease-in-out 0.25s;
-	}
 
-	#app 
-	{
 		font-family: Avenir, Helvetica, Arial, sans-serif;
 		color: var(--foreground);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
 
-		transition: color ease-in-out 0.25s;
+		transition: color ease-in-out 0.25s, background ease-in-out 0.25s;
 		margin-top: 30px;
 	}
 
@@ -130,5 +117,14 @@
 	{
 		background: var(--primary);
 		color: var(--white);
+	}
+
+	@media (prefers-reduced-motion) 
+	{
+		* 
+		{
+			animation: none !important;
+			transition: none !important;
+		}
 	}
 </style>

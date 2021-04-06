@@ -39,7 +39,7 @@
 				this.$emit('input', value)
 			}
 		}
-	};
+	}
 </script>
 
 <style scoped>

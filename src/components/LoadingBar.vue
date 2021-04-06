@@ -11,9 +11,9 @@
 
 <script>
 export default
-{
-	name: 'LoadingBar'
-}
+	{
+		name: 'LoadingBar'
+	}
 </script>
 
 <style scoped>
