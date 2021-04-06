@@ -1,25 +1,32 @@
 <template>
 	<div id="app">
-		<DarkModeToggle />
-		<div id="main">
+		<header>
+			<logo/>
+		</header>
+		<main>
 			<Film />
-		</div>
+		</main>
 		<Footer />
 	</div>
 </template>
 
 <script>
-import Film from "./components/Film.vue";
-import Footer from "./components/Footer.vue";
-import DarkModeToggle from "./components/DarkModeToggle.vue";
-export default {
-	name: "App",
-	components: {
-		Film,
-		Footer,
-		DarkModeToggle,
-	},
-};
+	import Film from './components/Film.vue';
+	import Footer from './components/Footer.vue';
+	import DarkModeToggle from './components/DarkModeToggle.vue';
+	import Logo from './components/Logo.vue';
+
+	export default 
+	{
+		name: "App",
+		components: 
+		{
+			Film,
+			Footer,
+			DarkModeToggle,
+			Logo,
+		},
+	};
 </script>
 
 <style>
