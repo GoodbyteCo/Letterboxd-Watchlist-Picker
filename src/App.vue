@@ -24,14 +24,12 @@
 					/>
 				</div>
 			</section>
-			<Film />
 		</main>
 		<goodbyte-footer/>
 	</div>
 </template>
 
 <script>
-	import Film from './components/Film.vue';
 	import Logo from './components/Logo.vue';
 	import DarkModeToggle from './components/DarkModeToggle.vue';
 	import AboutText from './components/AboutText.vue';
@@ -40,14 +38,13 @@
 	import LoadingBar from './components/LoadingBar.vue';
 	import NotFound from './components/NotFound.vue'
 	import FilmResult from './components/FilmResult.vue'
-	import GoodbyteFooter from './components/Footer.vue';
+	import GoodbyteFooter from './components/GoodbyteFooter.vue';
 
 	export default 
 	{
 		name: "App",
 		components: 
 		{
-			Film,
 			Logo,
 			DarkModeToggle,
 			AboutText,
