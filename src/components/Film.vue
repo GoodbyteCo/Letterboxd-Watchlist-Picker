@@ -2,19 +2,6 @@
 	<div>
 			>
 					/>
-		<div class="hello">
-			<p>
-				Enter your
-				<a href="https://letterboxd.com/">Letterboxd</a> username to get
-				a random film off of your watchlist. Add multiple usernames by
-				separating with a space, and enter public lists in
-				"username/list-title" format. See
-				<a
-					href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions"
-					>FAQs</a
-				>
-				for more.
-			</p>
 			<div class="input">
 				<label for="userbox">Username(s):</label>
 				<input
@@ -236,7 +223,6 @@
 								class="title"
 								>{{ name }}</a
 							>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -474,12 +460,6 @@ a:hover,
 a:focus {
 	color: #40bcf4;
 	outline: none;
-}
-
-.hello {
-	padding-top: 1.5rem;
-	transform: translateY(40px);
-	transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 }
 
 #advanced {

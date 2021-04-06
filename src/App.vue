@@ -2,8 +2,10 @@
 	<div id="app">
 		<header>
 			<logo/>
+			<dark-mode-toggle/>
 		</header>
 		<main>
+			<about-text/>
 			<Film />
 		</main>
 		<Footer />
@@ -15,6 +17,7 @@
 	import Footer from './components/Footer.vue';
 	import DarkModeToggle from './components/DarkModeToggle.vue';
 	import Logo from './components/Logo.vue';
+	import AboutText from './components/AboutText.vue';
 
 	export default 
 	{
@@ -25,6 +28,7 @@
 			Footer,
 			DarkModeToggle,
 			Logo,
+			AboutText
 		},
 	};
 </script>
