@@ -36,7 +36,7 @@ const (
 	UNION
 )
 
-const FEATURELENGTH = 80
+const FEATURELENGTH = 60
 
 type nothingError struct {
 	reason nothingReason
