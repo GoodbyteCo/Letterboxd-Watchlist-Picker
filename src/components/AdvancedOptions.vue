@@ -126,7 +126,7 @@
 				let results = document.getElementById("film-results");
 
 				collapsable.classList.toggle("active");
-				results.classList.toggle("advanceactive");
+				results.classList.toggle("advanced-active");
 
 				if (this.advancedOpen)
 				{

@@ -14,26 +14,24 @@
 				<div v-else-if="submitted">
 					<not-found 
 						v-if="notFound"
-						:status="'possibly-ignored'"
+						:status="notFoundStatus"
 					/>
 					<film-result
 						v-else
-						:title="'place'"
-						:url="'holder'"
-						:imgUrl="'content'"
+						:title="title"
+						:url="url"
+						:imgUrl="imgUrl"
 					/>
 				</div>
 			</section>
 			<Film />
 		</main>
-		<Footer />
+		<goodbyte-footer/>
 	</div>
 </template>
 
 <script>
 	import Film from './components/Film.vue';
-	import Footer from './components/Footer.vue';
-
 	import Logo from './components/Logo.vue';
 	import DarkModeToggle from './components/DarkModeToggle.vue';
 	import AboutText from './components/AboutText.vue';
@@ -42,6 +40,7 @@
 	import LoadingBar from './components/LoadingBar.vue';
 	import NotFound from './components/NotFound.vue'
 	import FilmResult from './components/FilmResult.vue'
+	import GoodbyteFooter from './components/Footer.vue';
 
 	export default 
 	{
@@ -49,8 +48,6 @@
 		components: 
 		{
 			Film,
-			Footer,
-
 			Logo,
 			DarkModeToggle,
 			AboutText,
@@ -58,27 +55,235 @@
 			AdvancedOptions,
 			LoadingBar,
 			NotFound,
-			FilmResult
+			FilmResult,
+			GoodbyteFooter
 		},
 		data()
 		{
 			return {
-				users: '',
-				advancedOptions: {},
-				loading: false,
-				submitted: true,
-				notFound: false
+				users: '',              // list of users to search
+				advancedOptions: {},    // advanced option settings
+
+				info: "",               // json blob from AJAX request
+				currentHash: null,      // track most recent request
+
+				loading: false,         // loading statehood
+				submitted: true,        // submit statehood
+
+				notFound: false,        // not found error
+				emptyintersect: false,  // intersect error
+				timeout: false          // timeout error
 			}
 		},
 		created()
 		{
-			this.advancedOptions = {'selectionMode': 'Intersect'}
+			/**
+			 * get starting values from url params (if exist)
+			 */
+			const urlParams = new URLSearchParams(window.location.search);
+
+			const users = urlParams.getAll("u");
+			const intersect = urlParams.get("i");
+
+			if (users.length > 0)
+			{
+				this.users = users.toString();
+			}
+			
+			if (intersect != null)
+			{
+				this.advancedOptions = { 'selectionMode': 'Intersect' }
+			}
+
+			this.submit();
 		},
 		methods:
 		{
+			/**
+			 * main function, runs process to get random film
+			 */
 			submit()
 			{
-				alert(this.advancedOptions['selectionMode'] + ' ' + this.advancedOptions['ignoreUnreleased']) 
+				this.notFound = false;
+
+				if (this.users == "")
+				{
+					// reset state if form submitted with empty input field
+					this.reset();
+					return;
+				}
+
+				let userlist = this.users.split(/(?:,| )+/); //split input field on space or comma
+				// let userlist = inputted.filter(function (el) { return el });
+				
+				if (userlist.length < 1)
+				{
+					// second check for non empty input field (only whotespace or commas entered)
+					this.submitted = false;
+					return;
+				}
+
+
+				document.body.classList.remove("done");
+				document.body.classList.add("entered");
+
+				this.submitted = true;
+				this.loading = true;
+
+				let url = "/api?users=" + userlist.join("&users="); // build url for api call
+
+				if (this.advancedOptions['selectionMode'] == "Intersect")
+				{
+					url += "&intersect=true";
+
+					// update url params 
+					window.history.replaceState(null, null,
+						"?u=" + userlist.join("&u=") + "&i=true");
+				}
+				else
+				{
+					window.history.replaceState(null, null,
+						"?u=" + userlist.join("&u="));
+				}
+
+
+				if (this.advancedOptions['ignoreUnreleased'])
+				{
+					url += "&ignore_unreleased=true";
+				}
+
+
+				try 
+				{
+					let vue = this;
+					let hash = this.hashCode(url);
+					console.log('url: ' + url + '\nhash: ' + hash);
+					vue.currentHash = hash;
+					fetch(url)
+						.then(function (res)
+						{
+							// check if new request has been sent since submitting
+							if (vue.currentHash != hash)
+							{
+								return "ignoreOldRequest";
+							}
+
+							document.body.classList.remove("entered");
+							document.body.classList.add("done");
+
+							// bad response
+							if (res.status != 200)
+							{
+								if (res.status == 406)
+								{
+									vue.emptyintersect = true;
+								}
+
+								if (res.status == 502)
+								{
+									vue.timeout = true;
+								}
+								
+								vue.notfound = true;
+								vue.loading = false;
+
+								return "";
+							}
+
+							// good response
+
+							setTimeout(function()
+							{
+								vue.loading = false;
+							}, 200); // wait 200ms to load text to allow for image to preload
+
+							return res.json();
+						})
+						.then(function(json)
+						{
+							if (json == "ignoreOldRequest")
+							{
+								return;
+							}
+
+							if (!vue.notfound)
+							{
+								// preload image
+								var pre_image = new Image();
+								pre_image.src = json.image_url;
+							}
+
+							vue.info = json;
+						}
+					);
+				}
+				catch (e)
+				{
+					this.$alert(
+						"Something went wrong. Please try again in a moment. Error:" + e,
+						"An error occured"
+					);
+				}
+			},
+
+			/**
+			 * reset the state
+			 */
+			reset()
+			{
+				window.history.replaceState(null, null, "/");
+				this.loading = false;
+				this.submitted = false;
+				document.body.classList.remove("done");
+				document.body.classList.remove("entered");
+			},
+
+			/**
+			 * hashing function to help manage requests
+			 */
+			hashCode(s)
+			{
+				let h;
+				for (let i = 0; i < s.length; i++)
+					h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+				return h + Date.now();
+			}
+		},
+		computed:
+		{
+			title: function()
+			{
+				return this.info.film_name;
+			},
+
+			url: function()
+			{
+				return this.info.slug;
+			},
+
+			imgUrl: function()
+			{
+				return this.info.image_url;
+			},
+
+			notFoundStatus: function()
+			{
+				if (this.emptyintersect)
+				{
+					return 'no-intersect';
+				}
+				else if (this.timeout)
+				{
+					return 'timeout';
+				}
+				else if (this.advancedOptions['ignoreUnreleased'])
+				{
+					return 'possibly-ignored';
+				}
+				else
+				{
+					return 'other';
+				}
 			}
 		}
 	};
@@ -136,6 +341,18 @@
 	.done main
 	{
 		transform: none;
+	}
+
+	#film-results
+	{
+		transform: translateY(-180px);
+		transition: transform 0.3s ease;
+	}
+
+	#film-results.advanced-active
+	{
+		transform: translateY(-20px);
+		transition: transform 0.3s ease;
 	}
 
 	::selection 
