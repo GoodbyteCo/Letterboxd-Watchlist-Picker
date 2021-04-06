@@ -11,6 +11,12 @@
 			</search-bar>
 			<section id="film-results">
 				<loading-bar v-if="loading"/>
+				<div v-else-if="submitted">
+					<not-found 
+						v-if="notFound"
+						:status="'possibly-ignored'"
+					/>
+				</div>
 			</section>
 			<Film />
 		</main>
@@ -21,12 +27,14 @@
 <script>
 	import Film from './components/Film.vue';
 	import Footer from './components/Footer.vue';
-	import DarkModeToggle from './components/DarkModeToggle.vue';
+
 	import Logo from './components/Logo.vue';
+	import DarkModeToggle from './components/DarkModeToggle.vue';
 	import AboutText from './components/AboutText.vue';
 	import SearchBar from './components/SearchBar.vue';
 	import AdvancedOptions from './components/AdvancedOptions.vue';
 	import LoadingBar from './components/LoadingBar.vue';
+	import NotFound from './components/NotFound.vue'
 
 	export default 
 	{
@@ -35,19 +43,29 @@
 		{
 			Film,
 			Footer,
-			DarkModeToggle,
+
 			Logo,
+			DarkModeToggle,
 			AboutText,
 			SearchBar,
 			AdvancedOptions,
-			LoadingBar
+			LoadingBar,
+			NotFound,
+			FilmResult
 		},
 		data()
 		{
 			return {
 				users: '',
 				advancedOptions: {},
+				loading: false,
+				submitted: true,
+				notFound: true
 			}
+		},
+		created()
+		{
+			this.advancedOptions = {'selectionMode': 'Intersect'}
 		},
 		methods:
 		{
