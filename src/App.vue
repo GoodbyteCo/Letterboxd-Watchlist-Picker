@@ -181,7 +181,7 @@
 									vue.timeout = true;
 								}
 								
-								vue.notfound = true;
+								vue.notFound = true;
 								vue.loading = false;
 
 								return "";
