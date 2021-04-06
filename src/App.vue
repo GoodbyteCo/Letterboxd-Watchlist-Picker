@@ -16,6 +16,12 @@
 						v-if="notFound"
 						:status="'possibly-ignored'"
 					/>
+					<film-result
+						v-else
+						:title="'place'"
+						:url="'holder'"
+						:imgUrl="'content'"
+					/>
 				</div>
 			</section>
 			<Film />
@@ -35,6 +41,7 @@
 	import AdvancedOptions from './components/AdvancedOptions.vue';
 	import LoadingBar from './components/LoadingBar.vue';
 	import NotFound from './components/NotFound.vue'
+	import FilmResult from './components/FilmResult.vue'
 
 	export default 
 	{
@@ -60,7 +67,7 @@
 				advancedOptions: {},
 				loading: false,
 				submitted: true,
-				notFound: true
+				notFound: false
 			}
 		},
 		created()
