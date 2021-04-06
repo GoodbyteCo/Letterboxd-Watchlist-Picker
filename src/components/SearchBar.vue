@@ -57,7 +57,7 @@
 		-moz-osx-font-smoothing: grayscale;
 		line-height: 2.8rem;
 
-		background: #ebebeb; /* unique */
+		background: var(--off-white);
 		padding: 0 1rem;
 		min-width: 220px;
 		border: 0;

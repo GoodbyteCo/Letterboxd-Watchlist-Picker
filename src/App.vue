@@ -9,6 +9,9 @@
 			<search-bar v-model="users" :action="() => submit()">
 				<advanced-options v-model="advancedOptions"/>
 			</search-bar>
+			<section id="film-results">
+				<loading-bar v-if="loading"/>
+			</section>
 			<Film />
 		</main>
 		<Footer />
@@ -23,6 +26,7 @@
 	import AboutText from './components/AboutText.vue';
 	import SearchBar from './components/SearchBar.vue';
 	import AdvancedOptions from './components/AdvancedOptions.vue';
+	import LoadingBar from './components/LoadingBar.vue';
 
 	export default 
 	{
@@ -35,13 +39,14 @@
 			Logo,
 			AboutText,
 			SearchBar,
-			AdvancedOptions
+			AdvancedOptions,
+			LoadingBar
 		},
 		data()
 		{
 			return {
 				users: '',
-				advancedOptions: {}
+				advancedOptions: {},
 			}
 		},
 		methods:
@@ -74,6 +79,7 @@
 		--tertiary: rgb(64 188 244 / 0.5);
 
 		--white: #fff;
+		--off-white: #ebebeb;
 		--black: #000;
 	}
 
@@ -82,7 +88,6 @@
 		--background: #14181d;
 		--foreground: #76a0ca;
 
-		--primary: #1caff2;
 		--secondary: #fff;
 		--tertiary: #526e89;
 	}
