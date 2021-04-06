@@ -2,17 +2,6 @@
 	<div>
 			>
 					/>
-			<div class="input">
-				<label for="userbox">Username(s):</label>
-				<input
-					class="userfield"
-					placeholder="ex: holopollock, qjack"
-					id="userbox"
-					type="text"
-					v-on:keyup.enter="submit()"
-					v-model="users"
-				/>
-				<button v-on:click="submit()">Submit</button>
 				<div
 					id="advanced-section"
 					aria-haspopup="true"

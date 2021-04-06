@@ -6,6 +6,8 @@
 		</header>
 		<main>
 			<about-text/>
+			<search-bar v-model="users" :action="() => submit()">
+			</search-bar>
 			<Film />
 		</main>
 		<Footer />
@@ -18,6 +20,7 @@
 	import DarkModeToggle from './components/DarkModeToggle.vue';
 	import Logo from './components/Logo.vue';
 	import AboutText from './components/AboutText.vue';
+	import SearchBar from './components/SearchBar.vue';
 
 	export default 
 	{
@@ -28,8 +31,22 @@
 			Footer,
 			DarkModeToggle,
 			Logo,
-			AboutText
+			AboutText,
+			SearchBar,
 		},
+		data()
+		{
+			return {
+				users: ''  
+			}
+		},
+		methods:
+		{
+			submit()
+			{
+				alert(this.users)
+			}
+		}
 	};
 </script>
 
@@ -47,24 +64,24 @@
 	{
 		--background: #fff;
 		--foreground: #2c3e50;
-		
+
 		--primary: #1caff2;
 		--secondary: #000;
-		--tertiary: #fff;
+		--tertiary: rgb(64 188 244 / 0.5);
 
-		--subtle-blue: rgb(64 188 244 / 0.5);
+		--white: #fff;
 	}
 
 	.dark
 	{
 		--background: #14181d;
-		--foreground: #76a0ca; /* #778fa6; */
+		--foreground: #76a0ca;
 
 		--primary: #1caff2;
 		--secondary: #fff;
-		--tertiary: #fff;
+		--tertiary: #526e89;
 
-		--subtle-blue: #526e89;
+		--white: #fff;
 	}
 
 	body 
@@ -104,6 +121,6 @@
 	::selection 
 	{
 		background: var(--primary);
-		color: var(--tertiary);
+		color: var(--white);
 	}
 </style>
