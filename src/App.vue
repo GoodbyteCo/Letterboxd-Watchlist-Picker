@@ -47,18 +47,24 @@
 	{
 		--background: #fff;
 		--foreground: #2c3e50;
+		
 		--primary: #1caff2;
 		--secondary: #000;
 		--tertiary: #fff;
+
+		--subtle-blue: rgb(64 188 244 / 0.5);
 	}
 
 	.dark
 	{
 		--background: #14181d;
 		--foreground: #76a0ca; /* #778fa6; */
+
 		--primary: #1caff2;
 		--secondary: #fff;
 		--tertiary: #fff;
+
+		--subtle-blue: #526e89;
 	}
 
 	body 

@@ -49,7 +49,10 @@
 </template>
 
 <script>
-	export default {}
+	export default
+	{
+		name: "Logo"
+	}
 </script>
 
 <style scoped>

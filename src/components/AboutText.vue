@@ -5,7 +5,10 @@
 </template>
 
 <script>
-	export default {};
+	export default
+	{
+		name: "AboutText"
+	}
 </script>
 
 <style scoped>
@@ -22,7 +25,6 @@
 		transition: none;
 		outline: none;
 	}
-
 
 	a[v-focus-visible=true]:focus
 	{
