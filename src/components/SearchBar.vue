@@ -26,7 +26,7 @@
 <script>
 	export default
 	{
-		name: "SearchBar",
+		name: 'SearchBar',
 		props:
 		[
 			'value',
@@ -97,7 +97,7 @@
 		outline: none;
 
 		background: var(--secondary);
-		transition: background ease-in-out 0.2s; /* darkmode transition */
+		transition: background-color ease-in-out 0.2s; /* darkmode transition */
 		transform: translateY(-0.12rem); /* pixel-perfect adjustment */
 	}
 

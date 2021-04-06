@@ -27,8 +27,8 @@
 <script>
 	export default
 	{
-		name: "NotFound",
-		props: [ "status" ]
+		name: 'NotFound',
+		props: [ 'status' ]
 	}
 </script>
 

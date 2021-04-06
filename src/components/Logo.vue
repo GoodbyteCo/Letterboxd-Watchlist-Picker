@@ -1,5 +1,5 @@
 <template>
-	<a href="https://watchlistpicker.com/" v-focus-visible>
+	<a href="/" v-focus-visible>
 		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 			id="logo-part-one"
 			width="25"
@@ -51,7 +51,7 @@
 <script>
 	export default
 	{
-		name: "Logo"
+		name: 'Logo'
 	}
 </script>
 

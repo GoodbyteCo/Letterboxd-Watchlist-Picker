@@ -89,8 +89,8 @@
 <script>
 	export default
 	{
-		name: "AdvancedOptions",
-		props: [ "value" ],
+		name: 'AdvancedOptions',
+		props: [ 'value' ],
 		data()
 		{
 			return {
