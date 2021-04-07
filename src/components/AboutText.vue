@@ -1,6 +1,6 @@
 <template>
 	<p>
-		Enter your <a href="https://letterboxd.com/" v-focus-visible>Letterboxd</a> username to get a random film off of your watchlist. Add multiple usernames by separating with a space, and enter public lists in "username/list-title" format. See <a href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions" v-focus-visible>FAQs</a> for more.
+		Enter your <a href="https://letterboxd.com/">Letterboxd</a> username to get a random film off of your watchlist. Add multiple usernames by separating with a space, and enter public lists in "username/list-title" format. See <a href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions" v-focus-visible>FAQs</a> for more.
 	</p>
 </template>
 
@@ -19,14 +19,14 @@
 	}
 
 	a:hover,
-	a[v-focus-visible=true]:focus
+	[v-focus-visible=true] a:focus
 	{
 		color: var(--primary);
 		transition: none;
 		outline: none;
 	}
 
-	a[v-focus-visible=true]:focus
+	[v-focus-visible=true] a:focus
 	{
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
 		border-radius: 3px;

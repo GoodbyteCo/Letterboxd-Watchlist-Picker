@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div v-focus-visible>
 		<header>
 			<logo/>
 			<dark-mode-toggle/>

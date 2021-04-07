@@ -1,6 +1,6 @@
 <template>
 	<section id="advanced-section" aria-haspopup="true" aria-expanded="false">
-		<button id="show-advanced" v-on:click="activateAdvanced()" v-focus-visible>
+		<button id="show-advanced" v-on:click="activateAdvanced()">
 			Advanced Options
 		</button>
 		<div id="collapsable">
@@ -12,7 +12,6 @@
 				tabindex="-1"
 				v-model="selectionMode"
 				v-on:change="updateValues()"
-				v-focus-visible
 				selected
 			/>
 			<label for="union" class="union-intersection-label">
@@ -43,7 +42,6 @@
 				tabindex="-1"
 				v-model="selectionMode"
 				v-on:change="updateValues()"
-				v-focus-visible
 			/>
 			<label for="intersect" class="union-intersection-label">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131 87">
@@ -183,7 +181,7 @@
 	}
 
 	#show-advanced:hover,
-	#show-advanced[v-focus-visible=true]:focus
+	[v-focus-visible=true] #show-advanced:focus
 	{
 		opacity: 1;
 		color: var(--primary);
@@ -191,7 +189,7 @@
 		transition: none;
 	}
 
-	#show-advanced[v-focus-visible=true]:focus::after
+	[v-focus-visible=true] #show-advanced:focus::after
 	{
 		content: "";
 		display: block;
@@ -262,7 +260,7 @@
 		fill: var(--white);
 	}
 
-	input[v-focus-visible=true]:focus + .union-intersection-label
+	[v-focus-visible=true] input:focus + .union-intersection-label
 	{
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
 	}

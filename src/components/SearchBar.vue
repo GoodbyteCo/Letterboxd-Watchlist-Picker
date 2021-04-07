@@ -11,11 +11,9 @@
 			:value="value"
 			v-on:keyup.enter=action()
 			v-on:input="updateValue($event.target.value)"
-			v-focus-visible
 		/>
 		<button 
 			v-on:click=action()
-			v-focus-visible
 		>
 			Submit
 		</button>
@@ -66,8 +64,8 @@
 	}
 
 	.userfield:active,
-	.userfield[v-focus-visible=true]:focus,
-	.userfield[v-focus-visible=true]:focus-within
+	[v-focus-visible=true] .userfield:focus,
+	[v-focus-visible=true] .userfield:focus-within
 	{
 		box-shadow: inset 0 0 0 3px var(--primary);
 	}
@@ -107,7 +105,7 @@
 	}
 
 	button:hover,
-	button[v-focus-visible=true]:focus
+	[v-focus-visible=true] button:focus
 	{
 		background: var(--primary);
 		transition: none;

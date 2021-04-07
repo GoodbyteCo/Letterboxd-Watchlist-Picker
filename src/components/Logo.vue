@@ -1,5 +1,5 @@
 <template>
-	<a href="/" v-focus-visible>
+	<a href="/">
 		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 			id="logo-part-one"
 			width="25"
@@ -74,7 +74,7 @@
 			transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1); /* loading transition */
 	}
 
-	a[v-focus-visible=true]:focus
+	[v-focus-visible=true] a:focus
 	{
 		box-shadow: 0 0 0 2px var(--background), 0 0 0 3.5px var(--primary);
 	}

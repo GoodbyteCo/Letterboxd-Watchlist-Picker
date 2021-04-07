@@ -5,8 +5,7 @@
 			v-bind:href="url"
 			:style="{ backgroundImage: 'url(' + imgUrl + ')' }"
 			class="film-cover"
-			alt="film poster"
-			v-focus-visible>
+			alt="film poster">
 		</a>
 		<div>
 			<p>
@@ -15,7 +14,6 @@
 			<a 
 				v-bind:href="url" 
 				class="title"
-				v-focus-visible
 			>
 				{{ title }}
 			</a>
@@ -70,7 +68,7 @@
 	}
 
 	.film-cover:hover,
-	.film-cover[v-focus-visible=true]:focus
+	[v-focus-visible=true] .film-cover:focus
 	{
 		box-shadow: inset 0 0 0 3px var(--primary),
 			0 1px 3px rgba(0, 0, 0, 0.35),
@@ -93,7 +91,7 @@
 	}
 
 	.title:hover,
-	.title[v-focus-visible=true]:focus
+	[v-focus-visible=true] .title:focus
 	{
 		color: var(--primary);
 	}

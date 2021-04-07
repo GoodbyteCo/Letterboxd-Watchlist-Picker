@@ -5,11 +5,10 @@
 			data-goatcounter-title="Support Us"
 			href="https://ko-fi.com/goodbyte"
 			class="support"
-			v-focus-visible
 		>
 			Support this site
 		</a>
-		<a href="http://goodbyte.ca/" v-focus-visible>Goodbyte</a> &copy; 2020–2021
+		<a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020–2021
 	</footer>
 </template>
 
@@ -71,8 +70,8 @@
 		color: var(--background);
 	}
 
-	a[v-focus-visible=true]:focus,
-	a.support[v-focus-visible=true]:focus
+	[v-focus-visible=true] a:focus,
+	[v-focus-visible=true] a.support:focus
 	{
 		opacity: 1;
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
