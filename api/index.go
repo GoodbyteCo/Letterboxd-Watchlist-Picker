@@ -234,7 +234,6 @@ func scrapeUser(users []string, intersect bool, ignore bool, short bool, feature
 		fmt.Println("only Feature")
 		filmList = onlyFeature(filmList)
 	}
-	log.Println(filmList)
 	n := rand.Intn(len(filmList))
 	log.Println(len(filmList))
 	log.Println(n)
@@ -303,8 +302,6 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 		siteToVisit = site + "/" + strslice[0] + "/list/" + strslice[1]
 
 	}
-	log.Println(siteToVisit)
-
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
