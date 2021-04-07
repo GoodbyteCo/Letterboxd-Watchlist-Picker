@@ -2,7 +2,7 @@
 	<div v-focus-visible>
 		<header>
 			<logo/>
-			<darkmode-toggle/>
+			<darkmode-switch/>
 		</header>
 		<main>
 			<about-text/>
@@ -31,7 +31,7 @@
 
 <script>
 	import Logo from './components/Logo.vue';
-	import DarkmodeToggle from './components/DarkmodeToggle.vue';
+	import DarkmodeSwitch from './components/DarkmodeSwitch.vue';
 	import AboutText from './components/AboutText.vue';
 	import SearchBar from './components/SearchBar.vue';
 	import AdvancedOptions from './components/AdvancedOptions.vue';
@@ -46,7 +46,7 @@
 		components: 
 		{
 			Logo,
-			DarkmodeToggle,
+			DarkmodeSwitch,
 			AboutText,
 			SearchBar,
 			AdvancedOptions,

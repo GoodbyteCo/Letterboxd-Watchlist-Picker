@@ -39,7 +39,7 @@
 <script>
 	export default
 	{
-		name: 'DarkmodeToggle',
+		name: 'DarkmodeSwitch',
 		data()
 		{
 			return {
