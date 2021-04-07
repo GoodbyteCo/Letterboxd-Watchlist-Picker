@@ -43,10 +43,9 @@
 		text-align: center;
 		max-width: 400px;
 		width: 90%;
-		margin: 60px auto;
-		margin-top: 30px;
+		margin: 30px auto -40px;
 	}
-
+	
 	.film-cover
 	{
 		display: block;

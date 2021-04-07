@@ -320,16 +320,13 @@
 		-moz-osx-font-smoothing: grayscale;
 		text-align: center;
 
-		transition: color ease-in-out 0.25s, background ease-in-out 0.25s;
+		transition: color ease-in-out 0.25s, background-color ease-in-out 0.25s;
 		margin-top: 30px;
 	}
 
 	main 
 	{
-		min-height: calc(85vh - 15px);
-		min-height: -webkit-calc(85vh - 15px);
-		min-height: -moz-calc(85vh - 15px);
-
+		min-height: calc(100vh - 100px);
 		transform: translateY(40px);
 		transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 	}
@@ -342,13 +339,18 @@
 
 	#film-results
 	{
-		transform: translateY(-180px);
+		margin: -20px 0;
+		transform: translateY(-160px);
 		transition: transform 0.3s ease;
 	}
 
 	#film-results.advanced-active
 	{
-		transform: translateY(-20px);
+		background-color: var(--background);
+		position: relative;
+		z-index: 99;
+
+		transform: translateY(0px);
 		transition: transform 0.3s ease;
 	}
 
