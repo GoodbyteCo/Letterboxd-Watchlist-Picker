@@ -1,6 +1,6 @@
 <template>
 	<a href="/">
-		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="presentation" aria-label="logo"
 			id="logo-part-one"
 			width="25"
 			height="103"

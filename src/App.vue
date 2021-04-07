@@ -9,7 +9,7 @@
 			<search-bar v-model="users" :action="() => submit()">
 				<advanced-options v-model="advancedOptions"/>
 			</search-bar>
-			<section id="film-results">
+			<section id="film-results" aria-live="polite" :aria-busy="loading">
 				<loading-bar v-if="loading"/>
 				<div v-else-if="submitted">
 					<not-found 
