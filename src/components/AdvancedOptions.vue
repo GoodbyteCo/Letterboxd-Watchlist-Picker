@@ -305,29 +305,48 @@
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
 	}
 
-	#ignore-unreleased-container
+	.checkbox-container
 	{
-		padding: 2rem 0.8rem;
+		padding: 1rem 0.8rem;
 	}
 
-	#ignore-unreleased-container label
+	.dark .checkbox-container
+	{
+		opacity: 0.6;
+	}
+
+	.checkbox-container h4
+	{
+		margin-bottom: 0.5rem;
+	}
+
+	.checkbox-container div
+	{
+		display: inline-block;
+		background-color: var(--off-white);
+		color: var(--black);
+		margin: 5px 5px;
+		padding: 5px 10px;
+		border-radius: 6px;
+	}
+
+	.checkbox-container input
+	{
+		margin-right: 10px;
+		cursor: pointer;
+	}
+
+	.checkbox-container label
 	{
 		display: inline-block;
 		background: none;
-		margin: 10px;
-		max-width: 200px;
 		text-align: left;
+		cursor: pointer;
 	}
 
-	#ignore-unreleased-container span
+	.checkbox-container span
 	{
 		font-size: 12px;
-		display: inline-block;
-	}
-
-	#ignore-unreleased
-	{
-		transform: translateY(-2rem);
 		display: inline-block;
 	}
 </style>
