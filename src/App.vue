@@ -30,15 +30,15 @@
 </template>
 
 <script>
-	import Logo from './components/Logo';
-	import DarkmodeToggle from './components/DarkmodeToggle';
+	import Logo from './components/Logo.vue';
+	import DarkmodeToggle from './components/DarkmodeToggle.vue';
 	import AboutText from './components/AboutText.vue';
 	import SearchBar from './components/SearchBar.vue';
-	import AdvancedOptions from './components/AdvancedOptions';
-	import LoadingBar from './components/LoadingBar';
-	import NotFound from './components/NotFound'
-	import FilmResult from './components/FilmResult'
-	import GoodbyteFooter from './components/GoodbyteFooter';
+	import AdvancedOptions from './components/AdvancedOptions.vue';
+	import LoadingBar from './components/LoadingBar.vue';
+	import NotFound from './components/NotFound.vue'
+	import FilmResult from './components/FilmResult.vue'
+	import GoodbyteFooter from './components/GoodbyteFooter.vue';
 
 	export default 
 	{
