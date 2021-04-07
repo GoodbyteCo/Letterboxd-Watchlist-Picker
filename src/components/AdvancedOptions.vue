@@ -71,8 +71,11 @@
 					<input
 						type="checkbox"
 						id="ignore-unreleased"
+						tabindex="-1"
 						v-model="unreleased"
 						v-on:change="updateValues()"
+						v-on:keyup.enter="unreleased = !unreleased; updateValues()"
+						selected
 					/>
 					<label for="ignore-unreleased">
 						Unreleased films
@@ -82,8 +85,10 @@
 					<input
 						type="checkbox"
 						id="ignore-short"
+						tabindex="-1"
 						v-model="shortFilms"
 						v-on:change="updateValues()"
+						v-on:keyup.enter="shortFilms = !shortFilms; updateValues()"
 						selected
 					/>
 					<label for="ignore-short">
@@ -94,8 +99,10 @@
 					<input
 						type="checkbox"
 						id="ignore-feature"
+						tabindex="-1"
 						v-model="featureLength"
 						v-on:change="updateValues()"
+						v-on:keyup.enter="featureLength = !featureLength; updateValues()"
 						selected
 					/>
 					<label for="ignore-feature">
@@ -164,6 +171,9 @@
 				{
 					document.getElementById("union").tabIndex = -1;
 					document.getElementById("intersect").tabIndex = -1;
+					document.getElementById("ignore-unreleased").tabIndex = -1;
+					document.getElementById("ignore-short").tabIndex = -1;
+					document.getElementById("ignore-feature").tabIndex = -1;
 					document.getElementById("advanced-section").setAttribute("ariaexpanded", "false");
 					this.advancedOpen = false;
 				}
@@ -171,6 +181,9 @@
 				{
 					document.getElementById("union").tabIndex = 0; // allow tab-to-focus
 					document.getElementById("intersect").tabIndex = 0;
+					document.getElementById("ignore-unreleased").tabIndex = 0;
+					document.getElementById("ignore-short").tabIndex = 0;
+					document.getElementById("ignore-feature").tabIndex = 0;
 					document.getElementById("advanced-section").setAttribute("ariaexpanded", "true");
 					this.advancedOpen = true;
 				}
@@ -330,6 +343,11 @@
 		border-radius: 6px;
 	}
 
+	[v-focus-visible=true] .checkbox-container div:focus-within
+	{
+		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
+		opacity: 1;
+	}
 	.checkbox-container input
 	{
 		margin-right: 10px;
