@@ -89,9 +89,17 @@
 		margin: 0;
 	}
 
-	.title:hover,
+	.title:hover
+	{
+		color: var(--primary);
+	}
+
 	[v-focus-visible=true] .title:focus
 	{
 		color: var(--primary);
+		outline: none;
+		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
+		border-radius: 3px;
+		padding: 0 1rem;
 	}
 </style>
