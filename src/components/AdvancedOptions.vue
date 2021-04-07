@@ -323,11 +323,6 @@
 		padding: 1rem 0.8rem;
 	}
 
-	.dark .checkbox-container
-	{
-		opacity: 0.6;
-	}
-
 	.checkbox-container h4
 	{
 		margin-bottom: 0.5rem;
@@ -343,11 +338,17 @@
 		border-radius: 6px;
 	}
 
+	.dark .checkbox-container div
+	{
+		opacity: 0.6;
+	}
+
 	[v-focus-visible=true] .checkbox-container div:focus-within
 	{
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
 		opacity: 1;
 	}
+
 	.checkbox-container input
 	{
 		margin-right: 10px;
