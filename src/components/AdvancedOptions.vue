@@ -63,21 +63,45 @@
 				</svg>
 				Intersect
 			</label>
-			<div id="ignore-unreleased-container">
-				<input
-					type="checkbox"
-					id="ignore-unreleased"
-					v-model="ignoreUnreleased"
-					v-on:change="updateValues()"
-					selected
-				/>
-				<label for="ignore-unreleased">
-					Ignore unreleased films
-					<span>
-						Removes all films released this year or in
-						the future from results.
-					</span>
-				</label>
+
+			<div class="checkbox-container">
+				<h4>Include in results:</h4>
+				
+				<div>
+					<input
+						type="checkbox"
+						id="ignore-unreleased"
+						v-model="unreleased"
+						v-on:change="updateValues()"
+					/>
+					<label for="ignore-unreleased">
+						Unreleased films
+					</label>
+				</div>
+				<div>
+					<input
+						type="checkbox"
+						id="ignore-short"
+						v-model="shortFilms"
+						v-on:change="updateValues()"
+						selected
+					/>
+					<label for="ignore-short">
+						Short films
+					</label>
+				</div>
+				<div>
+					<input
+						type="checkbox"
+						id="ignore-feature"
+						v-model="featureLength"
+						v-on:change="updateValues()"
+						selected
+					/>
+					<label for="ignore-feature">
+						Feature-length films
+					</label>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -93,14 +117,14 @@
 		{
 			return {
 				selectionMode: "Union",
-				ignoreUnreleased: true,
+				unreleased: true,
+				shortFilms: true,
+				featureLength: true,
 				advancedOpen: false,
 			};
 		},
 		created()
 		{
-			console.log(this.value)
-
 			if (this.value)
 			{
 				if ('selectionMode' in this.value)
@@ -108,9 +132,19 @@
 					this.selectionMode = this.value['selectionMode'];
 				}
 
-				if ('ignoreUnreleased' in this.value)
+				if ('unreleased' in this.value)
 				{
-					this.selectionMode = this.value['ignoreUnreleased'];
+					this.unreleased = this.value['unreleased'];
+				}
+
+				if ('shortFilms' in this.value)
+				{
+					this.shortFilms = this.value['shortFilms'];
+				}
+
+				if ('featureLength' in this.value)
+				{
+					this.featureLength = this.value['featureLength'];
 				}
 			}
 
@@ -146,7 +180,9 @@
 			{
 				this.$emit('input', {
 					'selectionMode': this.selectionMode,
-					'ignoreUnreleased': this.ignoreUnreleased
+					'unreleased': this.unreleased,
+					'shortFilms': this.shortFilms,
+					'featureLength': this.featureLength
 				});
 			}
 		}
