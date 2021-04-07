@@ -45,7 +45,12 @@
 		width: 90%;
 		margin: 30px auto -40px;
 	}
-	
+
+	.advanced-active .result
+	{
+		margin-bottom: 100px;
+	}
+
 	.film-cover
 	{
 		display: block;
