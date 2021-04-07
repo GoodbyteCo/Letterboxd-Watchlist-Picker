@@ -175,6 +175,10 @@
 		letter-spacing: 0.04em;
 		line-height: 2.8rem;
 
+		background-size: calc(100% - 2rem) 1px;
+		background-position: 1rem 2.3em;
+		background-repeat: no-repeat;
+
 		opacity: 0.6;
 		transform: translateY(-0.12rem); /* adjustment */
 		transition: color ease-in-out 0.25s;
@@ -185,7 +189,7 @@
 	{
 		opacity: 1;
 		color: var(--primary);
-		text-decoration: underline;
+		background-image: linear-gradient(var(--primary), var(--primary));
 		transition: none;
 	}
 

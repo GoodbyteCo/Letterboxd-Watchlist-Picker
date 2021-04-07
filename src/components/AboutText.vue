@@ -15,6 +15,13 @@
 	a
 	{
 		color: var(--foreground);
+
+		text-decoration: none;
+		background-image: linear-gradient(var(--foreground), var(--foreground));
+		background-size: 100% 1px;
+		background-position: 0 1.2em;
+		background-repeat: no-repeat;
+
 		transition: color ease-in-out 0.25s; /* darkmode transition */
 	}
 
@@ -22,6 +29,7 @@
 	[v-focus-visible=true] a:focus
 	{
 		color: var(--primary);
+		background-image: linear-gradient(var(--primary), var(--primary));
 		transition: none;
 		outline: none;
 	}
