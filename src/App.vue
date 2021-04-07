@@ -148,36 +148,46 @@
 				this.submitted = true;
 				this.loading = true;
 
-				let url = "/api?users=" + userlist.join("&users="); // build url for api call
+				let ignoreList = [];
+				if (this.advancedOptions['unreleased'] == false)
+				{
+					ignoreList.push('unreleased')
+				}
+				if (this.advancedOptions['shortFilms'] == false)
+				{
+					ignoreList.push('shorts')
+				}
+				if (this.advancedOptions['featureLength'] == false)
+				{
+					ignoreList.push('feature')
+				}
+
+
+				let apiUrl = "/api?users=" + userlist.join("&users=");
+				let clientUrl = "?u=" + userlist.join("&u=");
+
+				if (ignoreList.length > 0)
+				{
+					apiUrl += "&ignore=" + ignoreList.join(",");
+					clientUrl += "&ignore=" + ignoreList.join(",");
+				}
 
 				if (this.advancedOptions['selectionMode'] == "Intersect")
 				{
-					url += "&intersect=true";
-
-					// update url params 
-					window.history.replaceState(null, null,
-						"?u=" + userlist.join("&u=") + "&i=true");
-				}
-				else
-				{
-					window.history.replaceState(null, null,
-						"?u=" + userlist.join("&u="));
+					apiUrl += "&intersect=true";
+					clientUrl += "&i=true";
 				}
 
 
-				if (this.advancedOptions['ignoreUnreleased'])
-				{
-					url += "&ignore_unreleased=true";
-				}
-
+				window.history.replaceState(null, null, clientUrl);
 
 				try 
 				{
 					let vue = this;
-					let hash = this.hashCode(url);
-					console.log('url: ' + url + '\nhash: ' + hash);
+					let hash = this.hashCode(apiUrl);
+					console.log('url: ' + apiUrl + '\nhash: ' + hash);
 					vue.currentHash = hash;
-					fetch(url)
+					fetch(apiUrl)
 						.then(function (res)
 						{
 							// check if new request has been sent since submitting
@@ -237,7 +247,7 @@
 				}
 				catch (e)
 				{
-					this.$alert(
+					alert(
 						"Something went wrong. Please try again in a moment. Error:" + e,
 						"An error occured"
 					);
@@ -294,7 +304,7 @@
 				{
 					return 'timeout';
 				}
-				else if (this.advancedOptions['ignoreUnreleased'])
+				else if (!(this.advancedOptions['unreleased'] && this.advancedOptions['shortFilms'] && this.advancedOptions['featureLength']))
 				{
 					return 'possibly-ignored';
 				}
