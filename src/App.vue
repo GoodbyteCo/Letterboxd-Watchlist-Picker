@@ -81,6 +81,7 @@
 
 			const users = urlParams.getAll("u");
 			const intersect = urlParams.get("i");
+			const ignore = urlParams.get("ignore");
 
 			if (users.length > 0)
 			{
@@ -89,7 +90,27 @@
 			
 			if (intersect != null)
 			{
-				this.advancedOptions = { 'selectionMode': 'Intersect' }
+				this.advancedOptions = { 'selectionMode': 'Intersect' };
+			}
+
+			if (ignore != null)
+			{
+				let ignoreList = ignore.split(',');
+
+				if (ignoreList.includes('unreleased'))
+				{
+					this.advancedOptions['unreleased'] = false;
+				}
+
+				if (ignoreList.includes('shorts'))
+				{
+					this.advancedOptions['shortFilms'] = false;
+				}
+
+				if (ignoreList.includes('feature'))
+				{
+					this.advancedOptions['featureLength'] = false;
+				}
 			}
 
 			this.submit();
