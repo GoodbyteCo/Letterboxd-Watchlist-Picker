@@ -103,7 +103,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	_, inter := query["intersect"]
 	ignore, _ := query["ignore"]
 
-	ignoreing := whatToIgnore(ignore[0])
+	var ignoreing = toIgnore{}
+
+	if len(ignore) > 0 {  
+		ignoreing = whatToIgnore(ignore[0])
+	}
 	log.Println(ignoreing)
 
 	var userFilm film
