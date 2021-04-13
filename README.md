@@ -30,7 +30,7 @@ Enter the username of the list creator, followed by a <kbd>/</kbd> and the list 
 Yes, enter `actor` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `actor/brad-pitt`
 
 #### Can I get a film from an directors's filmography?
-Yes, enter `director` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `actor/shaka-king`
+Yes, enter `director` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `director/shaka-king`
 	
 #### How do I search multiple lists at once?
 Enter all of the lists and usernames into the search bar, separated by a space or comma.
