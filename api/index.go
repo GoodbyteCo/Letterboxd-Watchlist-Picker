@@ -220,9 +220,9 @@ func scrape(userName string, ch chan filmSend) {
 	)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.filmposter","data-target-link")
+		slug := e.ChildAttr("div.film-poster","data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.filmposter","data-film-release-year")
+		year := e.ChildAttr("div.film-poster","data-film-release-year")
 		lenght := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:  (site + slug),
@@ -276,9 +276,9 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 	)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.filmposter","data-target-link")
+		slug := e.ChildAttr("div.film-poster","data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.filmposter","data-film-release-year")
+		year := e.ChildAttr("div.film-poster","data-film-release-year")
 		lenght := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:  (site + slug),
@@ -317,6 +317,7 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 
 func scrapeActor(actor string, ch chan filmSend) {
 	siteToVisit := site + "/" + actor
+	log.Println(siteToVisit)
 
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -326,10 +327,10 @@ func scrapeActor(actor string, ch chan filmSend) {
 		colly.Async(true),
 	)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
-		name := e.ChildAttr("div.filmposter","data-film-name")
-		slug := e.ChildAttr("div.filmposter","data-target-link")
+		name := e.ChildText("span.frame-title")
+		slug := e.ChildAttr("div.film-poster","data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.filmposter","data-film-release-year")
+		year := e.ChildAttr("div.film-poster","data-film-release-year")
 		lenght := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:  (site + slug),
@@ -358,6 +359,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 
 	c.Visit(siteToVisit)
 	c.Wait()
+	ajc.Wait()
 	ch <- done() // users has finished so send done through channel
 
 }
