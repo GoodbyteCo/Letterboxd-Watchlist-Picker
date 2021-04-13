@@ -148,7 +148,7 @@ func scrapeUser(users []string, intersect bool, ignore bool) (film, error) {
 		log.Println(a)
 		user++
 		if strings.Contains(a, "/") {
-			if strings.Contains(a,"actor/") {
+			if (strings.Contains(a,"actor/") || strings.Contains(a,"director/"){
 				go scrapeActor(a, ch)
 			} else {
 				go scrapeList(a, ch)
