@@ -3,10 +3,10 @@ package film
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -28,6 +28,12 @@ type filmSend struct {
 	film film //film to be sent over channel
 	done bool //if user is done
 }
+
+type toIgnore struct {
+	unreleased bool
+	short bool
+	feature bool
+} 
 
 type nothingReason int
 
@@ -63,7 +69,7 @@ const urlEnd = "menu/linked/125x187/"            // second part of url for getti
 const site = "https://letterboxd.com"
 
 // func main() {
-// 	getFilmHandler := http.HandlerFunc(getFilm)
+// 	getFilmHandler := http.HandlerFunc(Handler)
 // 	http.Handle("/film", getFilmHandler)
 // 	log.Println("serving at :8080")
 // 	port := os.Getenv("PORT")
@@ -96,42 +102,22 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, inter := query["intersect"]
-	_, ignore := query["ignore_unreleased"]
-	_, short := query["only_shorts"]
-	_, feature := query["only_features"]
+	ignore, _ := query["ignore"]
+
+	ignoreing := whatToIgnore(ignore[0])
+	log.Println(ignoreing)
 
 	var userFilm film
 	var err error
-	var scrapefunc func([]string, bool, bool) (film, error)
 	
-	if short {
-		scrapefunc = shortScrape()
-	} else if feature {
-		scrapefunc = featureScrape()
-	} else {
-		scrapefunc = allScrape()
-	}
-	
-	if ignore {
-		if inter {
-			if len(users) == 1 {
-				userFilm, err = scrapefunc(users, false, true)
-			} else {
-				userFilm, err = scrapefunc(users, true, true)
-			}
+	if inter {
+		if len(users) == 1 {
+			userFilm, err = scrapeUser(users, false, ignoreing) 
 		} else {
-			userFilm, err = scrapefunc(users, false, true)
+			userFilm, err = scrapeUser(users, true, ignoreing) 
 		}
 	} else {
-		if inter {
-			if len(users) == 1 {
-				userFilm, err = scrapefunc(users, false, false)
-			} else {
-				userFilm, err = scrapefunc(users, true, false)
-			}
-		} else {
-			userFilm, err = scrapefunc(users, false, false)
-		}
+		userFilm, err = scrapeUser(users, false, ignoreing) 
 	}
 	if err != nil {
 		var e *nothingError
@@ -156,26 +142,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func shortScrape() func([]string, bool, bool) (film, error){
-	return func(users []string, inter bool, ignore bool) (film, error) {
-		return scrapeUser(users, inter, ignore, true, false)
-	}
-}
-
-func featureScrape() func([]string, bool, bool) (film, error){
-	return func(users []string, inter bool, ignore bool) (film, error) {
-		return scrapeUser(users, inter, ignore, false, true)
-	}
-}
-
-func allScrape() func([]string, bool, bool) (film, error){
-	return func(users []string, inter bool, ignore bool) (film, error) {
-		return scrapeUser(users, inter, ignore, false, false)
-	}
-}
-
 //main scraping function
-func scrapeUser(users []string, intersect bool, ignore bool, short bool, feature bool) (film, error) {
+func scrapeUser(users []string, intersect bool, ignoreList toIgnore) (film, error) {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
@@ -223,16 +191,14 @@ func scrapeUser(users []string, intersect bool, ignore bool, short bool, feature
 	} else {
 		filmList = totalFilms
 	}
-	if ignore {
-		fmt.Println("ignore")
-		filmList = removeCurrentYear(filmList)
+	if ignoreList.unreleased {
+		filmList = ignoreUnrelased(filmList)
 	}
-	if short {
-		fmt.Println("only shorts")
-		filmList = onlyShorts(filmList)
-	} else if feature {
-		fmt.Println("only Feature")
-		filmList = onlyFeature(filmList)
+	if ignoreList.short {
+		filmList = ignoreShorts(filmList)
+	}
+	if ignoreList.feature {
+		filmList = ignoreFeature(filmList)
 	}
 	n := rand.Intn(len(filmList))
 	log.Println(len(filmList))
@@ -348,7 +314,6 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 
 func scrapeActor(actor string, ch chan filmSend) {
 	siteToVisit := site + "/" + actor
-	fmt.Println(siteToVisit)
 
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -375,7 +340,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) {
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-film-slug")
+			slug := ein.Attr("data-film-link")
 			ajc.Visit(site + slug)
 		})
 
@@ -434,7 +399,7 @@ func makeBigger(url string) string {
 	return strings.ReplaceAll(url, "-0-125-0-187-", "-0-230-0-345-")
 }
 
-func removeCurrentYear(filmSlice []film) []film {
+func ignoreUnrelased(filmSlice []film) []film {
 	list := []film{}
 	for _, entry := range filmSlice {
 		if entry.Year == "" {
@@ -448,18 +413,21 @@ func removeCurrentYear(filmSlice []film) []film {
 	return list
 }
 
-
-func before(value string, a string) string {
-    // Get substring before a string.
-    pos := strings.Index(value, a)
-    if pos == -1 {
-        return ""
-    }
-    return value[0:pos]
+func ignoreShorts(filmSlice []film) []film {
+	list := []film{}
+	for _, entry := range filmSlice {
+		length, err := strconv.Atoi(entry.Length)
+		if err != nil {
+			continue
+		}
+		if length >= FEATURELENGTH {
+			list = append(list, entry)
+		}
+	}
+	return list
 }
 
-
-func onlyShorts(filmSlice []film) []film {
+func ignoreFeature(filmSlice []film) []film {
 	list := []film{}
 	for _, entry := range filmSlice {
 		length, err := strconv.Atoi(entry.Length)
@@ -473,18 +441,31 @@ func onlyShorts(filmSlice []film) []film {
 	return list
 }
 
-func onlyFeature(filmSlice []film) []film {
-	list := []film{}
-	for _, entry := range filmSlice {
-		length, err := strconv.Atoi(entry.Length)
-		if err != nil {
-			continue
-		}
-		if length >= FEATURELENGTH {
-			list = append(list, entry)
-		}
+func before(value string, a string) string {
+    // Get substring before a string.
+    pos := strings.Index(value, a)
+    if pos == -1 {
+        return ""
+    }
+    return value[0:pos]
+}
+
+func contains(s []string, e string) bool {
+    for _, a := range s {
+        if a == e {
+            return true
+        }
+    }
+    return false
+}
+
+func whatToIgnore(ignoreString string) toIgnore {
+	ignoreList := strings.Split(ignoreString, ",")
+	return toIgnore{
+		unreleased: contains(ignoreList,"unreleased"),
+		short: contains(ignoreList, "shorts"),
+		feature: contains(ignoreList, "feature"),
 	}
-	return list
 }
 
 
