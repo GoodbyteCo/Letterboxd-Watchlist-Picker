@@ -65,9 +65,10 @@ func (e *nothingError) Error() string {
 	return e.ToString()
 }
 
-const url = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
+const urlscrape = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
 const urlEnd = "menu/linked/125x187/"            // second part of url for getting full info on film
 const site = "https://letterboxd.com"
+
 
 // func main() {
 // 	getFilmHandler := http.HandlerFunc(Handler)
@@ -267,6 +268,7 @@ func scrapeList(listNameIn string, ch chan filmSend) {
 
 func scrape(url string, ch chan filmSend) {
 	siteToVisit := url
+
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -290,7 +292,7 @@ func scrape(url string, ch chan filmSend) {
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-film-slug")
-			ajc.Visit(url + slug + urlEnd) //start go routine to collect all film data
+			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
 		})
 
 	})
@@ -307,6 +309,7 @@ func scrape(url string, ch chan filmSend) {
 	ch <- done() // users has finished so send done through channel
 
 }
+
 
 func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
 	siteToVisit := url
