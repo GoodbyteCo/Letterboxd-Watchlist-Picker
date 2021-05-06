@@ -164,16 +164,16 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 				}
 			} else {
 				if ignoreList.short || ignoreList.feature {
-					go scrapeWithLength(a, ch)
+					go scrapeListWithLength(a, ch)
 				} else {
-					go scrape(a, ch)
+					go scrapeList(a, ch)
 				}
 			}
 		} else {
 			if ignoreList.short || ignoreList.feature {
-				go scrapeWithLength(a, ch)
+				go scrapeUserWithLength(a, ch)
 			} else {
-				go scrape(a, ch)
+				go scrapeUser(a, ch)
 			}
 		}
 	}
@@ -265,9 +265,8 @@ func scrapeList(listNameIn string, ch chan filmSend) {
 }
 
 
-func scrape(userName string, ch chan filmSend) {
-	siteToVisit := site + "/" + userName + "/watchlist"
-
+func scrape(url string, ch chan filmSend) {
+	siteToVisit := url
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -311,7 +310,6 @@ func scrape(userName string, ch chan filmSend) {
 
 func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
 	siteToVisit := url
-
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
