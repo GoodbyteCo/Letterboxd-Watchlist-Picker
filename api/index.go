@@ -3,6 +3,7 @@ package film
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
@@ -235,9 +236,9 @@ func scrapeUser(userName string, ch chan filmSend) {
 	scrape(url, ch)
 }
 
-func scrapeListWithLength(listNameIn string ch chan filmSend) {
+func scrapeListWithLength(listNameIn string, ch chan filmSend) {
 	url := ""
-	listname := strings.ToLower(listnameIn)
+	listname := strings.ToLower(listNameIn)
 
 	if strings.Contains(listname, "/list/") {
 		url = site + "/" + listname
@@ -249,9 +250,9 @@ func scrapeListWithLength(listNameIn string ch chan filmSend) {
 	scrapeWithLength(url, ch)
 }
 
-func scrapeList(listNameIn string ch chan filmSend) {
+func scrapeList(listNameIn string, ch chan filmSend) {
 	url := ""
-	listname := strings.ToLower(listnameIn)
+	listname := strings.ToLower(listNameIn)
 
 	if strings.Contains(listname, "/list/") {
 		url = site + "/" + listname
