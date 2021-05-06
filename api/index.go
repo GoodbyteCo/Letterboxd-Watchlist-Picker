@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gocolly/colly/v2"
+	"github.com/gocolly/colly/v2/extensions"
 )
 
 //Film struct for http response
@@ -102,7 +103,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	_, inter := query["intersect"]
 	ignore, _ := query["ignore"]
-
 	var ignoreing = toIgnore{}
 
 	if len(ignore) > 0 {  
@@ -115,12 +115,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	
 	if inter {
 		if len(users) == 1 {
-			userFilm, err = scrapeUser(users, false, ignoreing) 
+			userFilm, err = scrapeMain(users, false, ignoreing) 
 		} else {
-			userFilm, err = scrapeUser(users, true, ignoreing) 
+			userFilm, err = scrapeMain(users, true, ignoreing) 
 		}
 	} else {
-		userFilm, err = scrapeUser(users, false, ignoreing) 
+		userFilm, err = scrapeMain(users, false, ignoreing) 
 	}
 	if err != nil {
 		var e *nothingError
@@ -146,7 +146,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 
 //main scraping function
-func scrapeUser(users []string, intersect bool, ignoreList toIgnore) (film, error) {
+func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, error) {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
@@ -155,13 +155,25 @@ func scrapeUser(users []string, intersect bool, ignoreList toIgnore) (film, erro
 		log.Println(a)
 		user++
 		if strings.Contains(a, "/") {
-			if strings.Contains(a,"actor/") {
-				go scrapeActor(a, ch)
+			if (strings.Contains(a,"actor/") || strings.Contains(a,"director/")) {
+				if ignoreList.short || ignoreList.feature {
+					go scrapeActorWithLength(a, ch)
+				} else {
+					go scrapeActor(a, ch)
+				}
 			} else {
-				go scrapeList(a, ch)
+				if ignoreList.short || ignoreList.feature {
+					go scrapeWithLength(a, ch)
+				} else {
+					go scrape(a, ch)
+				}
 			}
 		} else {
-			go scrape(a, ch)
+			if ignoreList.short || ignoreList.feature {
+				go scrapeWithLength(a, ch)
+			} else {
+				go scrape(a, ch)
+			}
 		}
 	}
 	for {
@@ -211,29 +223,66 @@ func scrapeUser(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	return finalFilm, nil
 }
 
-//function to scapre an single user
+
+
+func scrapeUserWithLength(userName string, ch chan filmSend) {
+	url := site + "/" + userName + "/watchlist"
+	scrapeWithLength(url, ch)
+}
+
+func scrapeUser(userName string, ch chan filmSend) {
+	url := site + "/" + userName + "/watchlist"
+	scrape(url, ch)
+}
+
+func scrapeListWithLength(listNameIn string ch chan filmSend) {
+	url := ""
+	listname := strings.ToLower(listnameIn)
+
+	if strings.Contains(listname, "/list/") {
+		url = site + "/" + listname
+	} else {
+		strslice := strings.Split(listname, "/") //strslice[0] is user name strslice[1] is listname
+		url = site + "/" + strslice[0] + "/list/" + strslice[1]
+
+	}
+	scrapeWithLength(url, ch)
+}
+
+func scrapeList(listNameIn string ch chan filmSend) {
+	url := ""
+	listname := strings.ToLower(listnameIn)
+
+	if strings.Contains(listname, "/list/") {
+		url = site + "/" + listname
+	} else {
+		strslice := strings.Split(listname, "/") //strslice[0] is user name strslice[1] is listname
+		url = site + "/" + strslice[0] + "/list/" + strslice[1]
+
+	}
+	scrape(url, ch)
+}
+
+
 func scrape(userName string, ch chan filmSend) {
 	siteToVisit := site + "/" + userName + "/watchlist"
 
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
-		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-target-link")
+	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
+		name := e.Attr("data-film-name")
+		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.film-poster","data-film-release-year")
-		lenght := e.ChildText("p.text-footer")
+		year := e.Attr("data-film-release-year")
 		tempfilm := film{
 			Slug:  (site + slug),
-			Image: img,
+			Image: makeBigger(img),
 			Year: year,
 			Name:  name,
-			Length: strings.TrimSpace(before(lenght,"mins")),
 		}
 		ch <- ok(tempfilm)
 	})
-
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -241,13 +290,13 @@ func scrape(userName string, ch chan filmSend) {
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-film-slug")
-			ajc.Visit(site + slug) //start go routine to collect all film data
+			ajc.Visit(url + slug + urlEnd) //start go routine to collect all film data
 		})
 
 	})
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
-		if strings.Contains(link, "watchlist/page") {
+		if strings.Contains(link, "/page") {
 			e.Request.Visit(e.Request.AbsoluteURL(link))
 		}
 	})
@@ -255,25 +304,17 @@ func scrape(userName string, ch chan filmSend) {
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
-	ch <- done()
+	ch <- done() // users has finished so send done through channel
 
 }
 
+func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
+	siteToVisit := url
 
-func scrapeList(listnameIn string, ch chan filmSend) {
-	siteToVisit := ""
-	listname := strings.ToLower(listnameIn)
-
-	if strings.Contains(listname, "/list/") {
-		siteToVisit = site + "/" + listname
-	} else {
-		strslice := strings.Split(listname, "/") //strslice[0] is user name strslice[1] is listname
-		siteToVisit = site + "/" + strslice[0] + "/list/" + strslice[1]
-
-	}
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
+	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
 		slug := e.ChildAttr("div.film-poster","data-target-link")
@@ -289,15 +330,16 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 		}
 		ch <- ok(tempfilm)
 	})
+
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
-
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) {
+	extensions.RandomUserAgent(c)
+	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-film-slug")
-			ajc.Visit(site + slug)
+			slug := ein.Attr("data-target-link")
+			ajc.Visit(site + slug) //start go routine to collect all film data
 		})
 
 	})
@@ -317,15 +359,52 @@ func scrapeList(listnameIn string, ch chan filmSend) {
 
 func scrapeActor(actor string, ch chan filmSend) {
 	siteToVisit := site + "/" + actor
+	fmt.Println(siteToVisit)
+
+	c := colly.NewCollector(
+		colly.Async(true),
+	)
+	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		name := e.Attr("data-film-name")
+		slug := e.Attr("data-target-link")
+		img := e.ChildAttr("img", "src")
+		year := e.Attr("data-film-release-year")
+		tempfilm := film{
+			Slug:  (site + slug),
+			Image: makeBiggerActor(img),
+			Year: year,
+			Name:  name,
+		}
+		ch <- ok(tempfilm)
+		})
+
+	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
+		link := e.Attr("href")
+		if strings.Contains(link, "/page") {
+			e.Request.Visit(e.Request.AbsoluteURL(link))
+		}
+	})
+
+	c.Visit(siteToVisit)
+	c.Wait()
+	ch <- done() // users has finished so send done through channel
+
+}
+
+func scrapeActorWithLength(actor string, ch chan filmSend) {
+	siteToVisit := site + "/" + actor
 	log.Println(siteToVisit)
 
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
+	extensions.RandomUserAgent(c)
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
+	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
 		slug := e.ChildAttr("div.film-poster","data-target-link")
