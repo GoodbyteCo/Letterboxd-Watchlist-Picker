@@ -63,21 +63,52 @@
 				</svg>
 				Intersect
 			</label>
-			<div id="ignore-unreleased-container">
-				<input
-					type="checkbox"
-					id="ignore-unreleased"
-					v-model="ignoreUnreleased"
-					v-on:change="updateValues()"
-					selected
-				/>
-				<label for="ignore-unreleased">
-					Ignore unreleased films
-					<span>
-						Removes all films released this year or in
-						the future from results.
-					</span>
-				</label>
+
+			<div class="checkbox-container">
+				<h4>Include in results:</h4>
+				
+				<div>
+					<input
+						type="checkbox"
+						id="ignore-unreleased"
+						tabindex="-1"
+						v-model="unreleased"
+						v-on:change="updateValues()"
+						v-on:keyup.enter="unreleased = !unreleased; updateValues()"
+						selected
+					/>
+					<label for="ignore-unreleased">
+						Unreleased films
+					</label>
+				</div>
+				<div>
+					<input
+						type="checkbox"
+						id="ignore-short"
+						tabindex="-1"
+						v-model="shortFilms"
+						v-on:change="updateValues()"
+						v-on:keyup.enter="shortFilms = !shortFilms; updateValues()"
+						selected
+					/>
+					<label for="ignore-short">
+						Short films
+					</label>
+				</div>
+				<div>
+					<input
+						type="checkbox"
+						id="ignore-feature"
+						tabindex="-1"
+						v-model="featureLength"
+						v-on:change="updateValues()"
+						v-on:keyup.enter="featureLength = !featureLength; updateValues()"
+						selected
+					/>
+					<label for="ignore-feature">
+						Feature-length films
+					</label>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -93,14 +124,14 @@
 		{
 			return {
 				selectionMode: "Union",
-				ignoreUnreleased: true,
+				unreleased: true,
+				shortFilms: true,
+				featureLength: true,
 				advancedOpen: false,
 			};
 		},
 		created()
 		{
-			console.log(this.value)
-
 			if (this.value)
 			{
 				if ('selectionMode' in this.value)
@@ -108,9 +139,19 @@
 					this.selectionMode = this.value['selectionMode'];
 				}
 
-				if ('ignoreUnreleased' in this.value)
+				if ('unreleased' in this.value)
 				{
-					this.selectionMode = this.value['ignoreUnreleased'];
+					this.unreleased = this.value['unreleased'];
+				}
+
+				if ('shortFilms' in this.value)
+				{
+					this.shortFilms = this.value['shortFilms'];
+				}
+
+				if ('featureLength' in this.value)
+				{
+					this.featureLength = this.value['featureLength'];
 				}
 			}
 
@@ -130,6 +171,9 @@
 				{
 					document.getElementById("union").tabIndex = -1;
 					document.getElementById("intersect").tabIndex = -1;
+					document.getElementById("ignore-unreleased").tabIndex = -1;
+					document.getElementById("ignore-short").tabIndex = -1;
+					document.getElementById("ignore-feature").tabIndex = -1;
 					document.getElementById("advanced-section").setAttribute("ariaexpanded", "false");
 					this.advancedOpen = false;
 				}
@@ -137,6 +181,9 @@
 				{
 					document.getElementById("union").tabIndex = 0; // allow tab-to-focus
 					document.getElementById("intersect").tabIndex = 0;
+					document.getElementById("ignore-unreleased").tabIndex = 0;
+					document.getElementById("ignore-short").tabIndex = 0;
+					document.getElementById("ignore-feature").tabIndex = 0;
 					document.getElementById("advanced-section").setAttribute("ariaexpanded", "true");
 					this.advancedOpen = true;
 				}
@@ -146,7 +193,9 @@
 			{
 				this.$emit('input', {
 					'selectionMode': this.selectionMode,
-					'ignoreUnreleased': this.ignoreUnreleased
+					'unreleased': this.unreleased,
+					'shortFilms': this.shortFilms,
+					'featureLength': this.featureLength
 				});
 			}
 		}
@@ -269,29 +318,54 @@
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
 	}
 
-	#ignore-unreleased-container
+	.checkbox-container
 	{
-		padding: 2rem 0.8rem;
+		padding: 1rem 0.8rem;
 	}
 
-	#ignore-unreleased-container label
+	.checkbox-container h4
+	{
+		margin-bottom: 0.5rem;
+	}
+
+	.checkbox-container div
+	{
+		display: inline-block;
+		background-color: var(--off-white);
+		color: var(--black);
+		margin: 5px 5px;
+		padding: 5px 10px;
+		border-radius: 6px;
+	}
+
+	.dark .checkbox-container div
+	{
+		opacity: 0.6;
+	}
+
+	[v-focus-visible=true] .checkbox-container div:focus-within
+	{
+		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
+		opacity: 1;
+	}
+
+	.checkbox-container input
+	{
+		margin-right: 10px;
+		cursor: pointer;
+	}
+
+	.checkbox-container label
 	{
 		display: inline-block;
 		background: none;
-		margin: 10px;
-		max-width: 200px;
 		text-align: left;
+		cursor: pointer;
 	}
 
-	#ignore-unreleased-container span
+	.checkbox-container span
 	{
 		font-size: 12px;
-		display: inline-block;
-	}
-
-	#ignore-unreleased
-	{
-		transform: translateY(-2rem);
 		display: inline-block;
 	}
 </style>
