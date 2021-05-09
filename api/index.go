@@ -222,6 +222,9 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	log.Println(n)
 	log.Println(filmList[n])
 	finalFilm = filmList[n]
+	if strings.Contains(finalFilm.Image, "https://s.ltrbxd.com/static/img/empty-poster") {
+		finalFilm.Image = "https://watchlistpicker.com/noimagefound.jpg"
+	}
 	return finalFilm, nil
 }
 
