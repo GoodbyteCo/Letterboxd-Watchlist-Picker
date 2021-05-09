@@ -18,10 +18,10 @@ If you have a question that isn't listed below, send us an email at [support@goo
 Enter your Letterboxd username into the search bar and click "search".
 
 #### Why does it say nothing found?
-If your account is set to private, your watchlist cannot be read. If your account is public, make sure your username is spelt correctly and that there are films in your watchlist. If you are using the Advanced Search options, make sure there are already-released movies in your list (released before the current year, and have a date).
+If your account is set to private, your watchlist cannot be read. If your account is public, make sure your username is spelt correctly and that there are films in your watchlist. If you are using the Advanced Options, make sure there are already-released movies in your list (released before the current year, and have a date).
 
 #### Why does it give me unreleased movies?
-By default, Watchlist Picker returns any film in your Letterboxd watchlist. To only see released films, click on "Advanced Search" (located right below the search bar), and check "Ignore unreleased". Note, as we can not actually see the exact date of release, all movies released within the current year are also excluded.
+By default, Watchlist Picker returns any film in your Letterboxd watchlist. To only see released films, click on "Advanced Options" (located right below the search bar), and uncheck "unreleased films" from the included results. Note, as we can not actually see the exact date of release, all movies released within the current year are also excluded.
 
 #### How do I get a film from a list?
 Enter the username of the list creator, followed by a <kbd>/</kbd> and the list title. For example, you would search through [this list](https://letterboxd.com/jack/list/its-someones-favorite-movie/), by entering: `jack/its-someones-favorite-movie` ([see it in action on Watchlist Picker](https://watchlistpicker.com/?u=jack/its-someones-favorite-movie)). If you want to just copy the text straight out of the URL, `jack/list/its-someones-favorite-movie` will work too.
@@ -36,10 +36,16 @@ Yes, enter `director` followed by a <kbd>/</kbd> then the actor's slug. So for e
 Enter all of the lists and usernames into the search bar, separated by a space or comma.
 
 #### How do I only show films that are on all of the lists?
-By default, the lists are combined into a giant pool of movies. To get only movies that appear on all of the lists you've entered (the intersection), click on "Advanced Search" (located right below the search bar), and change "Union" to "Intersection".
+By default, the lists are combined into a giant pool of movies. To get only movies that appear on all of the lists you've entered (the intersection), click on "Advanced Options" (located right below the search bar), and change "Union" to "Intersection".
 
 #### Why does it say the intersection between the lists is empty?
 There was not a single movie that appeared on every single one of the lists you entered. If you are certain there should be, make sure all of the lists and usernames are spelt correctly.
+
+#### Can I only search for short films?
+Yes, uncheck "feature-length films" from the included results in "Advanced Options".
+
+#### Can I exclude short films from results?
+Yes, uncheck "short films" from the included results in "Advanced Options".
 
 #### Why does it keep loading a new movie when I refresh the page?
 The URL of the page contains your search criteria, so you can easily bookmark your searches or share with friends. To reset it, simply click on the logo.
