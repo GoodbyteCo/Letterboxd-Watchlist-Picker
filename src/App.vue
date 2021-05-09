@@ -97,7 +97,7 @@
 			{
 				let ignoreList = ignore.split(',');
 
-				if (ignoreList.includes('unreleased'))
+				if (ignoreList.includes('unreleased') || ignoreList.includes('true'))
 				{
 					this.advancedOptions['unreleased'] = false;
 				}
