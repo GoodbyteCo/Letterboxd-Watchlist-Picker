@@ -81,7 +81,6 @@
 
 			const users = urlParams.getAll("u");
 			const intersect = urlParams.get("i");
-			const ignore = urlParams.get("ignore");
 
 			if (users.length > 0)
 			{
@@ -90,27 +89,7 @@
 			
 			if (intersect != null)
 			{
-				this.advancedOptions = { 'selectionMode': 'Intersect' };
-			}
-
-			if (ignore != null)
-			{
-				let ignoreList = ignore.split(',');
-
-				if (ignoreList.includes('unreleased'))
-				{
-					this.advancedOptions['unreleased'] = false;
-				}
-
-				if (ignoreList.includes('shorts'))
-				{
-					this.advancedOptions['shortFilms'] = false;
-				}
-
-				if (ignoreList.includes('feature'))
-				{
-					this.advancedOptions['featureLength'] = false;
-				}
+				this.advancedOptions = { 'selectionMode': 'Intersect' }
 			}
 
 			this.submit();
@@ -148,46 +127,36 @@
 				this.submitted = true;
 				this.loading = true;
 
-				let ignoreList = [];
-				if (this.advancedOptions['unreleased'] == false)
-				{
-					ignoreList.push('unreleased')
-				}
-				if (this.advancedOptions['shortFilms'] == false)
-				{
-					ignoreList.push('shorts')
-				}
-				if (this.advancedOptions['featureLength'] == false)
-				{
-					ignoreList.push('feature')
-				}
-
-
-				let apiUrl = "/api?users=" + userlist.join("&users=");
-				let clientUrl = "?u=" + userlist.join("&u=");
-
-				if (ignoreList.length > 0)
-				{
-					apiUrl += "&ignore=" + ignoreList.join(",");
-					clientUrl += "&ignore=" + ignoreList.join(",");
-				}
+				let url = "/api?users=" + userlist.join("&users="); // build url for api call
 
 				if (this.advancedOptions['selectionMode'] == "Intersect")
 				{
-					apiUrl += "&intersect=true";
-					clientUrl += "&i=true";
+					url += "&intersect=true";
+
+					// update url params 
+					window.history.replaceState(null, null,
+						"?u=" + userlist.join("&u=") + "&i=true");
+				}
+				else
+				{
+					window.history.replaceState(null, null,
+						"?u=" + userlist.join("&u="));
 				}
 
 
-				window.history.replaceState(null, null, clientUrl);
+				if (this.advancedOptions['ignoreUnreleased'])
+				{
+					url += "&ignore_unreleased=true";
+				}
+
 
 				try 
 				{
 					let vue = this;
-					let hash = this.hashCode(apiUrl);
-					console.log('url: ' + apiUrl + '\nhash: ' + hash);
+					let hash = this.hashCode(url);
+					console.log('url: ' + url + '\nhash: ' + hash);
 					vue.currentHash = hash;
-					fetch(apiUrl)
+					fetch(url)
 						.then(function (res)
 						{
 							// check if new request has been sent since submitting
@@ -247,7 +216,7 @@
 				}
 				catch (e)
 				{
-					alert(
+					this.$alert(
 						"Something went wrong. Please try again in a moment. Error:" + e,
 						"An error occured"
 					);
@@ -304,7 +273,7 @@
 				{
 					return 'timeout';
 				}
-				else if (!(this.advancedOptions['unreleased'] && this.advancedOptions['shortFilms'] && this.advancedOptions['featureLength']))
+				else if (this.advancedOptions['ignoreUnreleased'])
 				{
 					return 'possibly-ignored';
 				}
