@@ -62,8 +62,7 @@
 			margin 0.8s ease-in;
 	}
 	
-	.done a.support,
-	[v-focus-visible=true] a.support:focus
+	.done a.support
 	{
 		width: 150px;
 		opacity: 1;
@@ -116,5 +115,6 @@
 		opacity: 1;
 		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
 		outline: none;
+		transition: none;
 	}
 </style>
