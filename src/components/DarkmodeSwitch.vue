@@ -59,7 +59,9 @@
 				darkModeIcon.classList.remove("moon");
 				this.darkmodeOn = true;
 				document.querySelector("meta[name=theme-color]").setAttribute("content", "#14181d");
-			} else {
+			} 
+			else 
+			{
 				document.body.classList.remove("dark");
 				darkModeIcon.classList.add("moon");
 				this.darkmodeOn = false;
@@ -67,13 +69,17 @@
 			}
 
 			window.matchMedia("(prefers-color-scheme: dark)").addListener(e => {
-				if (localStorage.getItem("dark-mode") === null) {
-					if (e.matches) {
+				if (localStorage.getItem("dark-mode") === null) 
+				{
+					if (e.matches) 
+					{
 						document.body.classList.add("dark");
 						darkModeIcon.classList.remove("moon");
 						this.darkmodeOn = true;
 						document.querySelector("meta[name=theme-color]").setAttribute("content", "#14181d");
-					} else {
+					} 
+					else 
+					{
 						document.body.classList.remove("dark");
 						darkModeIcon.classList.add("moon");
 						this.darkmodeOn = false;
@@ -88,12 +94,15 @@
 			{
 				let darkModeIcon = document.getElementById("darkmode-icon");
 
-				if (this.darkmodeOn) {
+				if (this.darkmodeOn) 
+				{
 					document.body.classList.add("dark");
 					darkModeIcon.classList.remove("moon");
 					document.querySelector("meta[name=theme-color]").setAttribute("content", "#14181d");
 					localStorage.setItem("dark-mode", 1);
-				} else {
+				} 
+				else 
+				{
 					document.body.classList.remove("dark");
 					darkModeIcon.classList.add("moon");
 					document.querySelector("meta[name=theme-color]").setAttribute("content", "#fff");
