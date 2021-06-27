@@ -51,10 +51,9 @@
 			let pref = window.matchMedia("(prefers-color-scheme: dark)");
 			let darkModeIcon = document.getElementById("darkmode-icon");
 
-			if (
-				(pref.matches && localStorage.getItem("dark-mode") === null) ||
-				localStorage.getItem("dark-mode") == 1
-			) {
+			if ((pref.matches && localStorage.getItem("dark-mode") === null) ||
+				localStorage.getItem("dark-mode") == 1) 
+			{
 				document.body.classList.add("dark");
 				darkModeIcon.classList.remove("moon");
 				this.darkmodeOn = true;
@@ -109,7 +108,8 @@
 					localStorage.setItem("dark-mode", 0);
 				}
 			},
-			toggleDarkModeOn() {
+			toggleDarkModeOn() 
+			{
 				this.darkmodeOn = !this.darkmodeOn;
 				this.swapdark();
 			},
