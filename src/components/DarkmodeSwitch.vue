@@ -84,7 +84,8 @@
 		},
 		methods: 
 		{
-			swapdark() {
+			swapdark() 
+			{
 				let darkModeIcon = document.getElementById("darkmode-icon");
 
 				if (this.darkmodeOn) {
@@ -102,8 +103,8 @@
 			toggleDarkModeOn() {
 				this.darkmodeOn = !this.darkmodeOn;
 				this.swapdark();
-			}
-		}
+			},
+		},
 	};
 </script>
 
