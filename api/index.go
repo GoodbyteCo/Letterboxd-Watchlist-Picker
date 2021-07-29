@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -271,6 +272,8 @@ func scrapeList(listNameIn string, ch chan filmSend) {
 
 func scrape(url string, ch chan filmSend) {
 	siteToVisit := url
+	log.Println(siteToVisit)
+	wg := sync.WaitGroup{}
 
 	ajc := colly.NewCollector(
 		colly.Async(true),
@@ -287,17 +290,19 @@ func scrape(url string, ch chan filmSend) {
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
+		wg.Done()
 	})
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-film-slug")
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		wg.Add(1)
+		run := func() {
+			slug := e.Attr("data-film-slug")
 			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
-		})
-
+		}
+		go run()
 	})
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -309,6 +314,7 @@ func scrape(url string, ch chan filmSend) {
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
+	wg.Wait()
 	ch <- done() // users has finished so send done through channel
 
 }
@@ -316,6 +322,7 @@ func scrape(url string, ch chan filmSend) {
 
 func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
 	siteToVisit := url
+	wg := sync.WaitGroup{}
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -334,6 +341,7 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 			Length: strings.TrimSpace(before(lenght,"mins")),
 		}
 		ch <- ok(tempfilm)
+		wg.Done()
 	})
 
 	c := colly.NewCollector(
@@ -341,12 +349,13 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	extensions.RandomUserAgent(c)
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		wg.Add(1)
+		run := func() {
+			slug := e.Attr("data-target-link")
 			ajc.Visit(site + slug) //start go routine to collect all film data
-		})
-
+		}
+		go run()
 	})
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -358,6 +367,7 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
+	wg.Wait()
 	ch <- done()
 
 }
@@ -556,6 +566,3 @@ func whatToIgnore(ignoreString string) toIgnore {
 		feature: contains(ignoreList, "feature"),
 	}
 }
-
-
-
