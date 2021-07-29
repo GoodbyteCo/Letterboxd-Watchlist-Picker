@@ -156,6 +156,7 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	ch := make(chan filmSend) //channel to send films over
 	go func() {
 		time.Sleep(55 * time.Second)
+		log.Println("timeout")
 		ch <- timeout()
 	}()
 	// start go routine to scrape each user
