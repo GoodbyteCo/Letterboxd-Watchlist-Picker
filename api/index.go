@@ -66,7 +66,7 @@ func (e *nothingError) Error() string {
 }
 
 const urlscrape = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
-const urlEnd = "menu/linked/125x187/"            // second part of url for getting full info on film
+const urlEnd = "std/125x187/"            // second part of url for getting full info on film
 const site = "https://letterboxd.com"
 
 
