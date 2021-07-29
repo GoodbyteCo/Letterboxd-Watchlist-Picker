@@ -26,8 +26,9 @@ type film struct {
 
 //struct for channel to send film and whether is has finshed a user
 type filmSend struct {
-	film film //film to be sent over channel
-	done bool //if user is done
+	film    film //film to be sent over channel
+	done    bool //if user is done
+	timeout bool //if timeout
 }
 
 type toIgnore struct {
@@ -149,9 +150,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 //main scraping function
 func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, error) {
+
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
+	go func() {
+		time.Sleep(55 * time.Second)
+		ch <- timeout()
+	}()
 	// start go routine to scrape each user
 	for _, a := range users {
 		log.Println(a)
@@ -180,7 +186,9 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	}
 	for {
 		userFilm := <-ch
-		if userFilm.done { //if users channel is don't then the scapre for that user has finished so decrease the user count
+		if userFilm.timeout {
+			break
+		} else if userFilm.done { //if users channel is don't then the scapre for that user has finished so decrease the user count
 			user--
 			if user == 0 {
 				break
@@ -450,15 +458,25 @@ func scrapeActorWithLength(actor string, ch chan filmSend) {
 
 func ok(f film) filmSend {
 	return filmSend{
-		film: f,
-		done: false,
+		film:    f,
+		done:    false,
+		timeout: false,
 	}
 }
 
 func done() filmSend {
 	return filmSend{
-		film: film{},
-		done: true,
+		film:    film{},
+		done:    true,
+		timeout: false,
+	}
+}
+
+func timeout() filmSend {
+	return filmSend{
+		film:    film{},
+		done:    false,
+		timeout: true,
 	}
 }
 
