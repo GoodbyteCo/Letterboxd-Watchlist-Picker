@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gocolly/colly/v2"
@@ -278,8 +277,6 @@ func scrapeList(listNameIn string, ch chan filmSend, sugarLogger *zap.SugaredLog
 
 func scrape(url string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	siteToVisit := url
-	wg := sync.WaitGroup{}
-
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -295,14 +292,12 @@ func scrape(url string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
-		wg.Done()
 	})
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		wg.Add(1)
 		run := func() {
 			slug := e.Attr("data-film-slug")
 			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
@@ -319,14 +314,12 @@ func scrape(url string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
-	wg.Wait()
 	ch <- done() // users has finished so send done through channel
 
 }
 
 func scrapeWithLength(url string, ch chan filmSend, sugarLogger *zap.SugaredLogger) { //is slower so is own function
 	siteToVisit := url
-	wg := sync.WaitGroup{}
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
@@ -345,7 +338,6 @@ func scrapeWithLength(url string, ch chan filmSend, sugarLogger *zap.SugaredLogg
 			Length: strings.TrimSpace(before(length, "mins")),
 		}
 		ch <- ok(tempfilm)
-		wg.Done()
 	})
 
 	c := colly.NewCollector(
@@ -354,7 +346,6 @@ func scrapeWithLength(url string, ch chan filmSend, sugarLogger *zap.SugaredLogg
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	extensions.RandomUserAgent(c)
 	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		wg.Add(1)
 		run := func() {
 			slug := e.Attr("data-target-link")
 			ajc.Visit(site + slug) //start go routine to collect all film data
@@ -371,7 +362,6 @@ func scrapeWithLength(url string, ch chan filmSend, sugarLogger *zap.SugaredLogg
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
-	wg.Wait()
 	ch <- done()
 
 }
