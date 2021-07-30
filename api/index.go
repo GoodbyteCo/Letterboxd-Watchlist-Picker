@@ -1,41 +1,41 @@
-package film
+package filmSlice
 
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
-	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/extensions"
+	"go.uber.org/zap"
 )
 
 //Film struct for http response
 type film struct {
-	Slug  string `json:"slug"`      //url of film
-	Image string `json:"image_url"` //url of image
-	Year  string `json:"release_year"`
-	Name  string `json:"film_name"`
+	Slug   string `json:"slug"`      //url of film
+	Image  string `json:"image_url"` //url of image
+	Year   string `json:"release_year"`
+	Name   string `json:"film_name"`
 	Length string `json:"film_length"`
 }
 
 //struct for channel to send film and whether is has finshed a user
 type filmSend struct {
 	film    film //film to be sent over channel
-	done    bool //if user is done
-	timeout bool //if timeout
+	done    bool //Channel signal to indicate whether user has finished
+	timeout bool //Channel signal to indicate whether lambda has timed out
 }
 
 type toIgnore struct {
 	unreleased bool
-	short bool
-	feature bool
-} 
+	short      bool
+	feature    bool
+}
 
 type nothingReason int
 
@@ -67,9 +67,8 @@ func (e *nothingError) Error() string {
 }
 
 const urlscrape = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
-const urlEnd = "std/125x187/"            // second part of url for getting full info on film
+const urlEnd = "std/125x187/"                          // second part of url for getting full info on film
 const site = "https://letterboxd.com"
-
 
 // func main() {
 // 	getFilmHandler := http.HandlerFunc(Handler)
@@ -91,49 +90,50 @@ func init() {
 	year = time.Now().Year()
 }
 
-
-
 //Main handler func for request
 func Handler(w http.ResponseWriter, r *http.Request) {
+	// Logger not global as not suggested by developers https://github.com/uber-go/zap/issues/717#issuecomment-496640441
+	logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+	sugarLogger := logger.Sugar()
 	enableCors(&w)
-	log.Println(year)
 	query := r.URL.Query() //Get URL Params(type map)
 	users, ok := query["users"]
-	log.Println(len(users))
+	sugarLogger.Infof("Number of Users %d", len(users))
 	if !ok || len(users) == 0 {
 		http.Error(w, "no users", 400)
 		return
 	}
 	_, inter := query["intersect"]
-	ignore, _ := query["ignore"]
+	ignore := query["ignore"]
 	var ignoreing = toIgnore{}
 
-	if len(ignore) > 0 {  
+	if len(ignore) > 0 {
 		ignoreing = whatToIgnore(ignore[0])
 	}
-	log.Println(ignoreing)
+	sugarLogger.Infof("Things being ignored { unreleased: %v, shorts: %v, features: %v }", ignoreing.unreleased, ignoreing.short, ignoreing.feature)
 
 	var userFilm film
 	var err error
-	
+
 	if inter {
 		if len(users) == 1 {
-			userFilm, err = scrapeMain(users, false, ignoreing) 
+			userFilm, err = scrapeMain(users, false, ignoreing, sugarLogger)
 		} else {
-			userFilm, err = scrapeMain(users, true, ignoreing) 
+			userFilm, err = scrapeMain(users, true, ignoreing, sugarLogger)
 		}
 	} else {
-		userFilm, err = scrapeMain(users, false, ignoreing) 
+		userFilm, err = scrapeMain(users, false, ignoreing, sugarLogger)
 	}
 	if err != nil {
 		var e *nothingError
 		if errors.As(err, &e) {
 			switch e.reason {
 			case INTERSECT:
-				http.Error(w, "Intersect error", 406)
+				http.Error(w, "Intersect error", http.StatusNotAcceptable)
 				return
 			case UNION:
-				http.Error(w, "Union error", 404)
+				http.Error(w, "Union error", http.StatusNotFound)
 				return
 			}
 		}
@@ -141,61 +141,60 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	js, err := json.Marshal(userFilm)
 	if err != nil {
-		http.Error(w, "internal error", 500)
+		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
 	w.Write(js)
 }
 
-
 //main scraping function
-func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, error) {
+func scrapeMain(users []string, intersect bool, ignoreList toIgnore, sugarLogger *zap.SugaredLogger) (film, error) {
 
-	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
+	var user int = 0          //counter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
 	go func() {
 		time.Sleep(55 * time.Second)
-		log.Println("timeout")
 		ch <- timeout()
 	}()
 	// start go routine to scrape each user
 	for _, a := range users {
-		log.Println(a)
+		sugarLogger.Infof("scraping user: %v", a)
 		user++
 		if strings.Contains(a, "/") {
-			if (strings.Contains(a,"actor/") || strings.Contains(a,"director/")) {
+			if strings.Contains(a, "actor/") || strings.Contains(a, "director/") {
 				if ignoreList.short || ignoreList.feature {
-					go scrapeActorWithLength(a, ch)
+					go scrapeActorWithLength(a, ch, sugarLogger)
 				} else {
-					go scrapeActor(a, ch)
+					go scrapeActor(a, ch, sugarLogger)
 				}
 			} else {
 				if ignoreList.short || ignoreList.feature {
-					go scrapeListWithLength(a, ch)
+					go scrapeListWithLength(a, ch, sugarLogger)
 				} else {
-					go scrapeList(a, ch)
+					go scrapeList(a, ch, sugarLogger)
 				}
 			}
 		} else {
 			if ignoreList.short || ignoreList.feature {
-				go scrapeUserWithLength(a, ch)
+				go scrapeUserWithLength(a, ch, sugarLogger)
 			} else {
-				go scrapeUser(a, ch)
+				go scrapeUser(a, ch, sugarLogger)
 			}
 		}
 	}
 	for {
 		userFilm := <-ch
 		if userFilm.timeout {
+			sugarLogger.Warn("Lambda Timeout picking film from what available")
 			break
-		} else if userFilm.done { //if users channel is don't then the scapre for that user has finished so decrease the user count
+		} else if userFilm.done { //if users channel is don't then the scape for that user has finished so decrease the user count
 			user--
 			if user == 0 {
 				break
 			}
 		} else {
-			totalFilms = append(totalFilms, userFilm.film) //append feilm recieved over channel to list
+			totalFilms = append(totalFilms, userFilm.film) //append film received over channel to list
 		}
 
 	}
@@ -204,11 +203,11 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	if len(totalFilms) == 0 {
 		return film{}, &nothingError{reason: UNION}
 	}
-	log.Print("results")
+
 	var finalFilm film
 	var filmList []film
 	if intersect {
-		intersectList := getintersect(totalFilms,len(users))
+		intersectList := getintersect(totalFilms, len(users))
 		length := len(intersectList)
 		if length == 0 {
 			return film{}, &nothingError{reason: INTERSECT}
@@ -218,7 +217,7 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 		filmList = totalFilms
 	}
 	if ignoreList.unreleased {
-		filmList = ignoreUnrelased(filmList)
+		filmList = ignoreUnreleased(filmList)
 	}
 	if ignoreList.short {
 		filmList = ignoreShorts(filmList)
@@ -227,9 +226,11 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 		filmList = ignoreFeature(filmList)
 	}
 	n := rand.Intn(len(filmList))
-	log.Println(len(filmList))
-	log.Println(n)
-	log.Println(filmList[n])
+	sugarLogger.Infow("results",
+		"Number of films gotten", len(filmList),
+		"Number Chosen", n,
+		"Film Chosen", filmList[n],
+	)
 	finalFilm = filmList[n]
 	if strings.Contains(finalFilm.Image, "https://s.ltrbxd.com/static/img/empty-poster") {
 		finalFilm.Image = "https://watchlistpicker.com/noimagefound.jpg"
@@ -237,19 +238,17 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	return finalFilm, nil
 }
 
-
-
-func scrapeUserWithLength(userName string, ch chan filmSend) {
+func scrapeUserWithLength(userName string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	url := site + "/" + userName + "/watchlist"
-	scrapeWithLength(url, ch)
+	scrapeWithLength(url, ch, sugarLogger)
 }
 
-func scrapeUser(userName string, ch chan filmSend) {
+func scrapeUser(userName string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	url := site + "/" + userName + "/watchlist"
-	scrape(url, ch)
+	scrape(url, ch, sugarLogger)
 }
 
-func scrapeListWithLength(listNameIn string, ch chan filmSend) {
+func scrapeListWithLength(listNameIn string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	url := ""
 	listname := strings.ToLower(listNameIn)
 
@@ -260,10 +259,10 @@ func scrapeListWithLength(listNameIn string, ch chan filmSend) {
 		url = site + "/" + strslice[0] + "/list/" + strslice[1]
 
 	}
-	scrapeWithLength(url, ch)
+	scrapeWithLength(url, ch, sugarLogger)
 }
 
-func scrapeList(listNameIn string, ch chan filmSend) {
+func scrapeList(listNameIn string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	url := ""
 	listname := strings.ToLower(listNameIn)
 
@@ -274,17 +273,17 @@ func scrapeList(listNameIn string, ch chan filmSend) {
 		url = site + "/" + strslice[0] + "/list/" + strslice[1]
 
 	}
-	scrape(url, ch)
+	scrape(url, ch, sugarLogger)
 }
 
-
-func scrape(url string, ch chan filmSend) {
+func scrape(url string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	siteToVisit := url
+	wg := sync.WaitGroup{}
 
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
+	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondary collector to get main data for film
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
@@ -292,21 +291,23 @@ func scrape(url string, ch chan filmSend) {
 		tempfilm := film{
 			Slug:  (site + slug),
 			Image: makeBigger(img),
-			Year: year,
+			Year:  year,
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
+		wg.Done()
 	})
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-film-slug")
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		wg.Add(1)
+		run := func() {
+			slug := e.Attr("data-film-slug")
 			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
-		})
-
+		}
+		go run()
 	})
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -318,31 +319,33 @@ func scrape(url string, ch chan filmSend) {
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
+	wg.Wait()
 	ch <- done() // users has finished so send done through channel
 
 }
 
-
-func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
+func scrapeWithLength(url string, ch chan filmSend, sugarLogger *zap.SugaredLogger) { //is slower so is own function
 	siteToVisit := url
+	wg := sync.WaitGroup{}
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
 	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-target-link")
+		slug := e.ChildAttr("div.film-poster", "data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.film-poster","data-film-release-year")
-		lenght := e.ChildText("p.text-footer")
+		year := e.ChildAttr("div.film-poster", "data-film-release-year")
+		length := e.ChildText("p.text-footer")
 		tempfilm := film{
-			Slug:  (site + slug),
-			Image: img,
-			Year: year,
-			Name:  name,
-			Length: strings.TrimSpace(before(lenght,"mins")),
+			Slug:   (site + slug),
+			Image:  img,
+			Year:   year,
+			Name:   name,
+			Length: strings.TrimSpace(before(length, "mins")),
 		}
 		ch <- ok(tempfilm)
+		wg.Done()
 	})
 
 	c := colly.NewCollector(
@@ -350,12 +353,13 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	extensions.RandomUserAgent(c)
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
+	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+		wg.Add(1)
+		run := func() {
+			slug := e.Attr("data-target-link")
 			ajc.Visit(site + slug) //start go routine to collect all film data
-		})
-
+		}
+		go run()
 	})
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -367,13 +371,14 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	c.Visit(siteToVisit)
 	c.Wait()
 	ajc.Wait()
+	wg.Wait()
 	ch <- done()
 
 }
 
-func scrapeActor(actor string, ch chan filmSend) {
+func scrapeActor(actor string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	siteToVisit := site + "/" + actor
-	fmt.Println(siteToVisit)
+	sugarLogger.Infof("Link Visiting %v", siteToVisit)
 
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -387,11 +392,11 @@ func scrapeActor(actor string, ch chan filmSend) {
 		tempfilm := film{
 			Slug:  (site + slug),
 			Image: makeBiggerActor(img),
-			Year: year,
+			Year:  year,
 			Name:  name,
 		}
 		ch <- ok(tempfilm)
-		})
+	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
@@ -406,9 +411,8 @@ func scrapeActor(actor string, ch chan filmSend) {
 
 }
 
-func scrapeActorWithLength(actor string, ch chan filmSend) {
+func scrapeActorWithLength(actor string, ch chan filmSend, sugarLogger *zap.SugaredLogger) {
 	siteToVisit := site + "/" + actor
-	log.Println(siteToVisit)
 
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -421,16 +425,16 @@ func scrapeActorWithLength(actor string, ch chan filmSend) {
 	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-target-link")
+		slug := e.ChildAttr("div.film-poster", "data-target-link")
 		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.film-poster","data-film-release-year")
-		lenght := e.ChildText("p.text-footer")
+		year := e.ChildAttr("div.film-poster", "data-film-release-year")
+		length := e.ChildText("p.text-footer")
 		tempfilm := film{
-			Slug:  (site + slug),
-			Image: img,
-			Year: year,
-			Name:  name,
-			Length: strings.TrimSpace(before(lenght,"mins")),
+			Slug:   (site + slug),
+			Image:  img,
+			Year:   year,
+			Name:   name,
+			Length: strings.TrimSpace(before(length, "mins")),
 		}
 		ch <- ok(tempfilm)
 	})
@@ -485,9 +489,9 @@ func getintersect(filmSlice []film, numOfUsers int) []film {
 	keys := make(map[film]int)
 	list := []film{}
 	for _, entry := range filmSlice {
-		i, _ := keys[entry]
+		i := keys[entry]
 		if i < (numOfUsers - 1) {
-			keys[entry] ++
+			keys[entry]++
 		} else {
 			list = append(list, entry)
 		}
@@ -507,7 +511,7 @@ func makeBigger(url string) string {
 	return strings.ReplaceAll(url, "-0-125-0-187-", "-0-230-0-345-")
 }
 
-func ignoreUnrelased(filmSlice []film) []film {
+func ignoreUnreleased(filmSlice []film) []film {
 	list := []film{}
 	for _, entry := range filmSlice {
 		if entry.Year == "" {
@@ -550,31 +554,28 @@ func ignoreFeature(filmSlice []film) []film {
 }
 
 func before(value string, a string) string {
-    // Get substring before a string.
-    pos := strings.Index(value, a)
-    if pos == -1 {
-        return ""
-    }
-    return value[0:pos]
+	// Get substring before a string.
+	pos := strings.Index(value, a)
+	if pos == -1 {
+		return ""
+	}
+	return value[0:pos]
 }
 
 func contains(s []string, e string) bool {
-    for _, a := range s {
-        if a == e {
-            return true
-        }
-    }
-    return false
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
 
 func whatToIgnore(ignoreString string) toIgnore {
 	ignoreList := strings.Split(ignoreString, ",")
 	return toIgnore{
-		unreleased: contains(ignoreList,"unreleased"),
-		short: contains(ignoreList, "shorts"),
-		feature: contains(ignoreList, "feature"),
+		unreleased: contains(ignoreList, "unreleased"),
+		short:      contains(ignoreList, "shorts"),
+		feature:    contains(ignoreList, "feature"),
 	}
 }
-
-
-
