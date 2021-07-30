@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -113,7 +112,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if len(ignore) > 0 {
 		ignoreing = whatToIgnore(ignore[0])
 	}
-	log.Println(ignoreing)
+	sugarLogger.Infof("Things to be ignored {Unreleased: %t, Shorts: %t, Features: %t}", ignoring.unreleased, ignoring.short, ignoring.feature)
 
 	var userFilm film
 	var err error
@@ -152,7 +151,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 //main scraping function
 func scrapeMain(users []string, intersect bool, ignoreList toIgnore, sugarLogger *zap.SugaredLogger) (film, error) {
 
-	var user int = 0          //counter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
+	var user int = 0          //counter for number of users increses by one when a users page starts being scraped decreases when user has finished think kinda like a semaphore
 	var totalFilms []film     //final list to hold all film
 	ch := make(chan filmSend) //channel to send films over
 	go func() {
@@ -283,7 +282,7 @@ func scrape(url string, ch chan filmSend) {
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
+	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondary collector to get main data for film
 		name := e.Attr("data-film-name")
 		slug := e.Attr("data-target-link")
 		img := e.ChildAttr("img", "src")
@@ -332,13 +331,13 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 		slug := e.ChildAttr("div.film-poster", "data-target-link")
 		img := e.ChildAttr("img", "src")
 		year := e.ChildAttr("div.film-poster", "data-film-release-year")
-		lenght := e.ChildText("p.text-footer")
+		length := e.ChildText("p.text-footer")
 		tempfilm := film{
 			Slug:   (site + slug),
 			Image:  img,
 			Year:   year,
 			Name:   name,
-			Length: strings.TrimSpace(before(lenght, "mins")),
+			Length: strings.TrimSpace(before(length, "mins")),
 		}
 		ch <- ok(tempfilm)
 	})
