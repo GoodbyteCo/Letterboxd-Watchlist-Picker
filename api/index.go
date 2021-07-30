@@ -189,7 +189,6 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore, sugarLogger
 		userFilm := <-ch
 		if userFilm.timeout {
 			sugarLogger.Warn("Timeout occurred returning with what is available")
-			close(ch)
 			break
 		} else if userFilm.done { //if users channel is don't then the scape for that user has finished so decrease the user count
 			user--
@@ -295,9 +294,7 @@ func scrape(url string, ch chan filmSend) {
 			Year:  year,
 			Name:  name,
 		}
-		if !IsClosed(ch) {
-			ch <- ok(tempfilm)
-		}
+		ch <- ok(tempfilm)
 	})
 	c := colly.NewCollector(
 		colly.Async(true),
@@ -391,9 +388,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 			Year:  year,
 			Name:  name,
 		}
-		if !IsClosed(ch) {
-			ch <- ok(tempfilm)
-		}
+		ch <- ok(tempfilm)
 	})
 
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
@@ -405,9 +400,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 
 	c.Visit(siteToVisit)
 	c.Wait()
-	if !IsClosed(ch) {
-		ch <- done() // users has finished so send done through channel
-	}
+	ch <- done() // users has finished so send done through channel
 
 }
 
@@ -578,14 +571,4 @@ func whatToIgnore(ignoreString string) toIgnore {
 		short:      contains(ignoreList, "shorts"),
 		feature:    contains(ignoreList, "feature"),
 	}
-}
-
-func IsClosed(ch <-chan filmSend) bool {
-	select {
-	case <-ch:
-		return true
-	default:
-	}
-
-	return false
 }
