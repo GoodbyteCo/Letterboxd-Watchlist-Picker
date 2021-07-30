@@ -112,7 +112,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if len(ignore) > 0 {
 		ignoreing = whatToIgnore(ignore[0])
 	}
-	sugarLogger.Infof("Things to be ignored {Unreleased: %t, Shorts: %t, Features: %t}", ignoring.unreleased, ignoring.short, ignoring.feature)
+	sugarLogger.Infof("Things to be ignored {Unreleased: %t, Shorts: %t, Features: %t}", ignoreing.unreleased, ignoreing.short, ignoreing.feature)
 
 	var userFilm film
 	var err error
