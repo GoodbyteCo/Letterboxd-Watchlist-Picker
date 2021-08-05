@@ -412,7 +412,7 @@ func scrapeActorWithLength(actor string, ch chan filmSend) {
 	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-target-link")
+		slug := e.ChildAttr("div.film-poster","data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.ChildAttr("div.film-poster","data-film-release-year")
 		lenght := e.ChildText("p.text-footer")
