@@ -277,7 +277,7 @@ func scrape(url string, ch chan filmSend) {
 	)
 	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
 		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+		slug := e.Attr("data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.Attr("data-film-release-year")
 		tempfilm := film{
@@ -372,7 +372,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+		slug := e.Attr("data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.Attr("data-film-release-year")
 		tempfilm := film{
