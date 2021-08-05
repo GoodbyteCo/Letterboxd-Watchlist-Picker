@@ -277,7 +277,7 @@ func scrape(url string, ch chan filmSend) {
 	)
 	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
 		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+		slug := e.Attr("data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.Attr("data-film-release-year")
 		tempfilm := film{
@@ -322,7 +322,7 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-target-link")
+		slug := e.ChildAttr("div.film-poster","data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.ChildAttr("div.film-poster","data-film-release-year")
 		lenght := e.ChildText("p.text-footer")
@@ -343,7 +343,7 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	extensions.RandomUserAgent(c)
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
+			slug := ein.Attr("data-film-slug")
 			ajc.Visit(site + slug) //start go routine to collect all film data
 		})
 
@@ -372,7 +372,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		name := e.Attr("data-film-name")
-		slug := e.Attr("data-target-link")
+		slug := e.Attr("data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.Attr("data-film-release-year")
 		tempfilm := film{
@@ -412,7 +412,7 @@ func scrapeActorWithLength(actor string, ch chan filmSend) {
 	extensions.RandomUserAgent(ajc)
 	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
 		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-target-link")
+		slug := e.ChildAttr("div.film-poster","data-film-link")
 		img := e.ChildAttr("img", "src")
 		year := e.ChildAttr("div.film-poster","data-film-release-year")
 		lenght := e.ChildText("p.text-footer")
