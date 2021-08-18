@@ -27,10 +27,10 @@ By default, Watchlist Picker returns any film in your Letterboxd watchlist. To o
 Enter the username of the list creator, followed by a <kbd>/</kbd> and the list title. For example, you would search through [this list](https://letterboxd.com/jack/list/its-someones-favorite-movie/), by entering: `jack/its-someones-favorite-movie` ([see it in action on Watchlist Picker](https://watchlistpicker.com/?u=jack/its-someones-favorite-movie)). If you want to just copy the text straight out of the URL, `jack/list/its-someones-favorite-movie` will work too.
 
 #### Can I get a film from an actor's filmography?
-Yes, enter `actor` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `actor/brad-pitt`
+Yes, enter `actor` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `actor/brad-pitt`.
 
 #### Can I get a film from an directors's filmography?
-Yes, enter `director` followed by a <kbd>/</kbd> then the actor's slug. So for example, if you wanted a Brad Pitt film, you would enter `director/shaka-king`
+Yes, enter `director` followed by a <kbd>/</kbd> then the director's slug. So for example, if you wanted a Miranda July film, you would enter `director/miranda-july`.
 	
 #### How do I search multiple lists at once?
 Enter all of the lists and usernames into the search bar, separated by a space or comma.
@@ -73,11 +73,13 @@ If at any point you have issues using the website, please do not hesitate to con
 
 [[Building locally](#building-locally)] [[So where are things?](#so-where-are-things)]
 
-> Note: please do **not** push any commits to the `main` branch. Instead, create a new branch, build it locally, and then create a pull request. Once the PR has been tested in Preview (and approved by another member) you can merge it into `main`.
+The status of the site can be checked on [the public dashboard](https://watchlistpicker.checklyhq.com/).
 
 ### Building locally
 
-The API uses Vercel functions so you can use `vercel dev` to test however this requires a [Vercel](https://vercel.com) account. To test without the films propagating (everything will work, just the picture of the film will not fill in), run:
+Clone the project and run `npm install`.
+
+The API uses Vercel functions, so use `vercel dev` to test. However, this requires a [Vercel](https://vercel.com) account. To test without the films propagating (everything will work, just the picture of the film will not fill in), run:
 
 ```
 npm run serve
@@ -85,10 +87,10 @@ npm run serve
 
 ### So where are things?
 
-- **Backend:** the actual backend the site communicates with is located in the `api/` directory, and deployed alongside the rest of the app.
-- **Frontend:** while the footer and dark-mode toggle have there own components, most of the action happens in the `src/components/Film.vue` file (the logo, the search bar, the advanced search controls, the loading bar, and the film response). Note that the CSS is divided up between the `Film.vue`, `Footer.vue`, `DarkmodeToggle.vue`, and `App.vue` files, stored at the bottom of each file (with the `scoped` attribute turned on).
-- **Assets:** the favicons and occasional image are located in the `Public/` directory, while the actual on-site logo is located in `Film.vue` as an svg. Watchlist Picker does not import any custom typefaces.
+- **Backend:** the backend the site communicates with is located in the `api/` directory, and deployed alongside the rest of the app.
+- **Frontend:** the frontend is written in Vue and located in the `src/` folder.
+- **Assets:** the favicons and occasional image are located in the `public/` directory, while the actual on-site logo is located in `Film.vue` as an svg. Watchlist Picker does not import any custom typefaces.
 
 ## Credits
 
-Watchlist Picker is a [Goodbyte](https://github.com/GoodbyteCo) project. Development by [Quinn Pollock](https://github.com/HoloPollock) and [Jack Guinane](https://github.com/qjack001). Many thanks to Letterboxd for letting us scrape their website. 
+Watchlist Picker is a [Goodbyte](https://goodbyte.ca) project. Development by [Quinn Pollock](https://github.com/HoloPollock) and [Jack Guinane](https://github.com/qjack001). Many thanks to Letterboxd for letting us scrape their website. 
