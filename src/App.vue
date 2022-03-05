@@ -74,9 +74,7 @@
 		},
 		created()
 		{
-			/**
-			 * get starting values from url params (if exist)
-			 */
+			// get starting values from url params (if exist)
 			const urlParams = new URLSearchParams(window.location.search);
 
 			const users = urlParams.getAll("u");
@@ -131,8 +129,7 @@
 					return;
 				}
 
-				let userlist = this.users.split(/(?:,| )+/); //split input field on space or comma
-				// let userlist = inputted.filter(function (el) { return el });
+				let userlist = this.users.split(/(?:,| )+/); // split input field on space or comma
 				
 				if (userlist.length < 1)
 				{
@@ -345,7 +342,7 @@
 	{
 		background: var(--background);
 
-		font-family: Avenir, Helvetica, Arial, sans-serif;
+		font-family: Avenir, -apple-system, Helvetica, Arial, sans-serif;
 		color: var(--foreground);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;

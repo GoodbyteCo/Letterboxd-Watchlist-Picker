@@ -89,7 +89,7 @@
 		},
 		methods: 
 		{
-			swapdark() 
+			swapDark() 
 			{
 				let darkModeIcon = document.getElementById("darkmode-icon");
 
@@ -111,7 +111,7 @@
 			toggleDarkModeOn() 
 			{
 				this.darkmodeOn = !this.darkmodeOn;
-				this.swapdark();
+				this.swapDark();
 			},
 		},
 	};
@@ -182,7 +182,10 @@
 		height: 0px;
 	}
 
-	/* icon & animation  */
+
+	/*==========================================================================
+		icon & animation
+	==========================================================================*/
 
 	svg
 	{

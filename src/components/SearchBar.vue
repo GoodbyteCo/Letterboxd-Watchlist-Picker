@@ -13,7 +13,7 @@
 			v-on:input="updateValue($event.target.value)"
 		/>
 		<button 
-			v-on:click=action()
+			v-on:click="action()"
 		>
 			Submit
 		</button>
