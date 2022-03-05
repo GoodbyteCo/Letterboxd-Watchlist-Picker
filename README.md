@@ -105,14 +105,14 @@ The status of the site can be checked on [the public dashboard](https://watchlis
 
 ### Building locally
 
-Clone the project and run `npm install`.
+Clone the project and run `pnpm install`.
 
 The API uses Vercel functions, so use `vercel dev` to test. However, this requires
 a [Vercel](https://vercel.com) account. To test without the films propagating (everything
 will work, just the picture of the film will not fill in), run:
 
 ```
-npm run serve
+pnpm run dev
 ```
 
 ### So where are things?
