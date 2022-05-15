@@ -19,7 +19,7 @@
 		</p>
 		<img id="not-found-gif" width="250"
 			src="https://watchlistpicker.com/poe.gif"
-			alt="from the movie Kung-Fu Panda, protaganist Poe looks down at an empty scroll."
+			alt="from the movie Kung-Fu Panda, protagonist Poe looks down at an empty scroll."
 		/>
 	</div>
 </template>

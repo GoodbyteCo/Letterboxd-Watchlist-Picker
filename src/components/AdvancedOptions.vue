@@ -216,7 +216,7 @@
 		cursor: pointer;
 
 		color: var(--foreground);
-		font-family: Avenir, Helvetica, Arial, sans-serif;
+		font-family: Avenir, -apple-system, Helvetica, Arial, sans-serif;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 		font-size: 0.8rem;
@@ -269,7 +269,10 @@
 		transform: translateY(5px);
 	}
 
-	/* options */
+
+	/*==========================================================================
+		options
+	==========================================================================*/
 
 	.union-intersection-label
 	{

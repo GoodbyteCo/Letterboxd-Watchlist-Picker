@@ -1,6 +1,11 @@
 <template>
 	<footer>
-		<a data-goatcounter-click="support-us" data-goatcounter-title="Support Us" href="https://ko-fi.com/goodbyte" class="support">
+		<a
+			href="https://ko-fi.com/goodbyte"
+			class="support"
+			data-goatcounter-click="support-us"
+			data-goatcounter-title="Support Us"
+		>
 			Support this site
 		</a>
 		<p>

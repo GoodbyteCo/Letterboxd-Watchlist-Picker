@@ -27,22 +27,22 @@
 <body>
 	<noscript>
 		<strong>
-			We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+			We're sorry but Watchlist Picker doesn't work properly without JavaScript enabled.
 			Please enable it to continue.
 		</strong>
 	</noscript>
 	<!--
 	╭───────╮
-	│ ◯ ◯ ◯ │   Watchlist Picker -- Goodbyte (c) 2020-2021
+	│ ◯ ◯ ◯ │   Watchlist Picker -- Goodbyte (c) 2020-2022
 	╰───────╯
 	-->
 	<div id="app"></div>
 	<script>
-		if (window.location.host !== 'watchlistpicker.com')
+		if (window.location.host !== 'watchlistpicker.com') {
 			window.goatcounter = {
 				no_onload: true
 			}
-
+		}
 	</script>
 	<script data-goatcounter="https://goodbyte.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

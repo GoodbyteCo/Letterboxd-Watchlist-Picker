@@ -27,7 +27,7 @@
 			class="checkbox"
 			type="checkbox"
 			v-model="darkmodeOn"
-			v-on:change="swapdark"
+			v-on:change="flipSwitch"
 			v-on:keyup.enter="toggleDarkModeOn"
 		/>
 		<label for="toggle" class="switch">
@@ -89,7 +89,7 @@
 		},
 		methods: 
 		{
-			swapdark() 
+			flipSwitch() 
 			{
 				let darkModeIcon = document.getElementById("darkmode-icon");
 
@@ -111,7 +111,7 @@
 			toggleDarkModeOn() 
 			{
 				this.darkmodeOn = !this.darkmodeOn;
-				this.swapdark();
+				this.flipSwitch();
 			},
 		},
 	};
@@ -182,7 +182,10 @@
 		height: 0px;
 	}
 
-	/* icon & animation  */
+
+	/*==========================================================================
+		icon & animation
+	==========================================================================*/
 
 	svg
 	{
