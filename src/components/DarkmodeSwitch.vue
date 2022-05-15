@@ -149,6 +149,8 @@
 
 		background-color: var(--off-white);
 		transition: background-color 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
 	}
 
 	input:checked + label
