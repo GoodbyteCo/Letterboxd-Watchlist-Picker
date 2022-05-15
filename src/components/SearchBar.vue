@@ -3,6 +3,7 @@
 		<label for="userbox">
 			Username(s):
 		</label>
+		<div class="form-container">
 		<input
 			id="userbox"
 			class="userfield"
@@ -17,6 +18,7 @@
 		>
 			Submit
 		</button>
+		</div>
 		<slot/>
 	</section>
 </template>
@@ -46,6 +48,13 @@
 		visibility: hidden;
 		display: block;
 	}
+
+	.form-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 
 	.userfield
 	{
@@ -96,7 +105,6 @@
 
 		background: var(--secondary);
 		transition: background-color ease-in-out 0.2s; /* darkmode transition */
-		transform: translateY(-0.12rem); /* pixel-perfect adjustment */
 	}
 
 	.dark button 
