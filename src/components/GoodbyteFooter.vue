@@ -70,7 +70,7 @@
 	.done a.support,
 	[v-focus-visible=true] a.support:focus
 	{
-		width: 150px;
+		width: auto;
 		opacity: 1;
 		margin-right: 28px;
 		pointer-events: all;
