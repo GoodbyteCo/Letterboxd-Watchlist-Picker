@@ -149,6 +149,8 @@
 
 		background-color: var(--off-white);
 		transition: background-color 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
 	}
 
 	input:checked + label
@@ -205,7 +207,7 @@
 
 	#sun-body
 	{
-		transition: all 0.3s ease;
+		transition: r 0.3s ease;
 		r: 202px;
 	}
 
@@ -216,7 +218,7 @@
 
 	.sun-beam 
 	{
-		transition: all 0.3s ease;
+		transition: opacity 0.3s ease;
 		opacity: 1;
 	}
 
@@ -227,7 +229,7 @@
 
 	#moon-slice
 	{
-		transition: all 0.3s ease;
+		transition: fill 0.3s ease, transform 0.3s;
 		fill: #000000; /* color for svg clipping */
 		transform: translate(560.796528px, -311.186989px);
 	}

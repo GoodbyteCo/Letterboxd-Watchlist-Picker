@@ -3,21 +3,23 @@
 		<label for="userbox">
 			Username(s):
 		</label>
-		<input
-			id="userbox"
-			class="userfield"
-			type="text"
-			placeholder="ex: holopollock, qjack"
-			:value="value"
-			v-on:keyup.enter=action()
-			v-on:input="updateValue($event.target.value)"
-		/>
-		<button 
-			v-on:click="action()"
-		>
-			Submit
-		</button>
-		<slot/>
+    <div class="form-container">
+      <input
+        id="userbox"
+        class="userfield"
+        type="text"
+        placeholder="ex: holopollock, qjack"
+        :value="value"
+        v-on:keyup.enter=action()
+        v-on:input="updateValue($event.target.value)"
+      />
+      <button 
+        v-on:click="action()"
+      >
+        Submit
+      </button>
+    </div>
+    <slot/>
 	</section>
 </template>
 
@@ -46,6 +48,13 @@
 		visibility: hidden;
 		display: block;
 	}
+
+  .form-container 
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
 	.userfield
 	{
@@ -96,7 +105,6 @@
 
 		background: var(--secondary);
 		transition: background-color ease-in-out 0.2s; /* darkmode transition */
-		transform: translateY(-0.12rem); /* pixel-perfect adjustment */
 	}
 
 	.dark button 
