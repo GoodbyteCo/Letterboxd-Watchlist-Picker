@@ -96,14 +96,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		filmFilter = generateFilmFilter(ignore[0])
 	}
 
-	var userFilm film
-	var err error
-
-	if inter && len(users) > 1 {
-		userFilm, err = scrapeMain(users, true, filmFilter)
-	} else {
-		userFilm, err = scrapeMain(users, false, filmFilter)
-	}
+	useIntersect := inter && len(users) > 1
+	userFilm, err := scrapeMain(users, useIntersect, filmFilter)
 	if err != nil {
 		var e *nothingError
 		if errors.As(err, &e) {
@@ -203,26 +197,6 @@ func getListURL(listString string) string {
 	}
 }
 
-func getFilmDetails(chosenFilm string) film {
-	var filmDetails film
-	ajc := colly.NewCollector(
-		colly.Async(true),
-	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) {
-		name := e.Attr("data-film-name")
-		img := e.ChildAttr("img", "src")
-		filmDetails = film{
-			Slug:  (site + chosenFilm),
-			Image: makeBigger(img),
-			Name:  name,
-		}
-	})
-
-	ajc.Visit(urlscrape + chosenFilm + urlEnd) //start go routine to collect film data)
-	ajc.Wait()
-	return filmDetails
-}
-
 func scrape(url string, filmFilter string, ch chan filmSend) {
 	siteToVisit := url
 
@@ -251,7 +225,26 @@ func scrape(url string, filmFilter string, ch chan filmSend) {
 	c.Visit(siteToVisit)
 	c.Wait()
 	ch <- done() // users has finished so send done through channel
+}
 
+func getFilmDetails(chosenFilm string) film {
+	var filmDetails film
+	ajc := colly.NewCollector(
+		colly.Async(true),
+	)
+	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) {
+		name := e.Attr("data-film-name")
+		img := e.ChildAttr("img", "src")
+		filmDetails = film{
+			Slug:  (site + chosenFilm),
+			Image: makeBigger(img),
+			Name:  name,
+		}
+	})
+
+	ajc.Visit(urlscrape + chosenFilm + urlEnd) //start go routine to collect film data)
+	ajc.Wait()
+	return filmDetails
 }
 
 func ok(f string) filmSend {
