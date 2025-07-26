@@ -130,6 +130,25 @@
 				advancedOpen: false,
 			};
 		},
+		watch:
+		{
+			shortFilms(showShortFilms)
+			{
+				if (!showShortFilms && !this.featureLength)
+				{
+					this.featureLength = true;
+					this.updateValues();
+				}
+			},
+			featureLength(showFeatureLength)
+			{
+				if (!showFeatureLength && !this.shortFilms)
+				{
+					this.shortFilms = true;
+					this.updateValues();
+				}
+			}
+		},
 		created()
 		{
 			if (this.value)
