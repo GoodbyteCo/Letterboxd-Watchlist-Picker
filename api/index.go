@@ -3,38 +3,27 @@ package film
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gocolly/colly/v2"
-	"github.com/gocolly/colly/v2/extensions"
 )
 
-//Film struct for http response
+// Film struct for http response
 type film struct {
 	Slug  string `json:"slug"`      //url of film
 	Image string `json:"image_url"` //url of image
-	Year  string `json:"release_year"`
 	Name  string `json:"film_name"`
-	Length string `json:"film_length"`
 }
 
-//struct for channel to send film and whether is has finshed a user
+// struct for channel to send film and whether it has finished a user
 type filmSend struct {
-	film film //film to be sent over channel
-	done bool //if user is done
+	film string //film to be sent over channel
+	done bool   //if user is done
 }
-
-type toIgnore struct {
-	unreleased bool
-	short bool
-	feature bool
-} 
 
 type nothingReason int
 
@@ -66,9 +55,8 @@ func (e *nothingError) Error() string {
 }
 
 const urlscrape = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
-const urlEnd = "std/125x187/"            // second part of url for getting full info on film
+const urlEnd = "std/125x187/"                          // second part of url for getting full info on film
 const site = "https://letterboxd.com"
-
 
 // func main() {
 // 	getFilmHandler := http.HandlerFunc(Handler)
@@ -90,9 +78,7 @@ func init() {
 	year = time.Now().Year()
 }
 
-
-
-//Main handler func for request
+// Main handler func for request
 func Handler(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	log.Println(year)
@@ -105,24 +91,18 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	_, inter := query["intersect"]
 	ignore, _ := query["ignore"]
-	var ignoreing = toIgnore{}
-
-	if len(ignore) > 0 {  
-		ignoreing = whatToIgnore(ignore[0])
+	filmFilter := ""
+	if len(ignore) > 0 {
+		filmFilter = generateFilmFilter(ignore[0])
 	}
-	log.Println(ignoreing)
 
 	var userFilm film
 	var err error
-	
-	if inter {
-		if len(users) == 1 {
-			userFilm, err = scrapeMain(users, false, ignoreing) 
-		} else {
-			userFilm, err = scrapeMain(users, true, ignoreing) 
-		}
+
+	if inter && len(users) > 1 {
+		userFilm, err = scrapeMain(users, true, filmFilter)
 	} else {
-		userFilm, err = scrapeMain(users, false, ignoreing) 
+		userFilm, err = scrapeMain(users, false, filmFilter)
 	}
 	if err != nil {
 		var e *nothingError
@@ -146,47 +126,26 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
-
-//main scraping function
-func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, error) {
+// main scraping function
+func scrapeMain(users []string, intersect bool, filmFilter string) (film, error) {
 	var user int = 0          //conuter for number of users increses by one when a users page starts being scraped decreses when user has finished think kinda like a semaphore
-	var totalFilms []film     //final list to hold all film
+	var totalFilms []string   //final list to hold all films
 	ch := make(chan filmSend) //channel to send films over
 	// start go routine to scrape each user
 	for _, a := range users {
-		log.Println(a)
 		user++
-		if strings.Contains(a, "/") {
-			if (strings.Contains(a,"actor/") || strings.Contains(a,"director/")) {
-				if ignoreList.short || ignoreList.feature {
-					go scrapeActorWithLength(a, ch)
-				} else {
-					go scrapeActor(a, ch)
-				}
-			} else {
-				if ignoreList.short || ignoreList.feature {
-					go scrapeListWithLength(a, ch)
-				} else {
-					go scrapeList(a, ch)
-				}
-			}
-		} else {
-			if ignoreList.short || ignoreList.feature {
-				go scrapeUserWithLength(a, ch)
-			} else {
-				go scrapeUser(a, ch)
-			}
-		}
+		url := getListURL(a)
+		go scrape(url, filmFilter, ch)
 	}
 	for {
 		userFilm := <-ch
-		if userFilm.done { //if users channel is don't then the scapre for that user has finished so decrease the user count
+		if userFilm.done { //if channel is done then the scrape for that user has finished so decrease the user count
 			user--
 			if user == 0 {
 				break
 			}
 		} else {
-			totalFilms = append(totalFilms, userFilm.film) //append feilm recieved over channel to list
+			totalFilms = append(totalFilms, userFilm.film) //append film received over channel to list
 		}
 
 	}
@@ -196,10 +155,9 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 		return film{}, &nothingError{reason: UNION}
 	}
 	log.Print("results")
-	var finalFilm film
-	var filmList []film
+	var filmList []string
 	if intersect {
-		intersectList := getintersect(totalFilms,len(users))
+		intersectList := getIntersect(totalFilms, len(users))
 		length := len(intersectList)
 		if length == 0 {
 			return film{}, &nothingError{reason: INTERSECT}
@@ -208,182 +166,81 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 	} else {
 		filmList = totalFilms
 	}
-	if ignoreList.unreleased {
-		filmList = ignoreUnrelased(filmList)
-	}
-	if ignoreList.short {
-		filmList = ignoreShorts(filmList)
-	}
-	if ignoreList.feature {
-		filmList = ignoreFeature(filmList)
-	}
+
 	n := rand.Intn(len(filmList))
-	log.Println(len(filmList))
-	log.Println(n)
-	log.Println(filmList[n])
-	finalFilm = filmList[n]
+	log.Println("total: ", len(filmList))
+	log.Println("random index: ", n)
+	chosenFilm := filmList[n]
+	log.Println("chosen film: ", chosenFilm)
+
+	finalFilm := getFilmDetails(chosenFilm)
 	if strings.Contains(finalFilm.Image, "https://s.ltrbxd.com/static/img/empty-poster") {
 		finalFilm.Image = "https://watchlistpicker.com/noimagefound.jpg"
 	}
 	return finalFilm, nil
 }
 
-
-
-func scrapeUserWithLength(userName string, ch chan filmSend) {
-	url := site + "/" + userName + "/watchlist"
-	scrapeWithLength(url, ch)
-}
-
-func scrapeUser(userName string, ch chan filmSend) {
-	url := site + "/" + userName + "/watchlist"
-	scrape(url, ch)
-}
-
-func scrapeListWithLength(listNameIn string, ch chan filmSend) {
-	url := ""
-	listname := strings.ToLower(listNameIn)
-
-	if strings.Contains(listname, "/list/") {
-		url = site + "/" + listname
+func getListURL(listString string) string {
+	listString = strings.ToLower(listString)
+	log.Println(listString)
+	if strings.Contains(listString, "/") {
+		if strings.Contains(listString, "actor/") || strings.Contains(listString, "director/") {
+			url := site + "/" + listString
+			return url
+		} else {
+			url := ""
+			if strings.Contains(listString, "/list/") {
+				url = site + "/" + listString
+			} else {
+				strslice := strings.Split(listString, "/") //strslice[0] is user name strslice[1] is listname
+				url = site + "/" + strslice[0] + "/list/" + strslice[1]
+			}
+			return url
+		}
 	} else {
-		strslice := strings.Split(listname, "/") //strslice[0] is user name strslice[1] is listname
-		url = site + "/" + strslice[0] + "/list/" + strslice[1]
-
+		url := site + "/" + listString + "/watchlist"
+		return url
 	}
-	scrapeWithLength(url, ch)
 }
 
-func scrapeList(listNameIn string, ch chan filmSend) {
-	url := ""
-	listname := strings.ToLower(listNameIn)
-
-	if strings.Contains(listname, "/list/") {
-		url = site + "/" + listname
-	} else {
-		strslice := strings.Split(listname, "/") //strslice[0] is user name strslice[1] is listname
-		url = site + "/" + strslice[0] + "/list/" + strslice[1]
-
-	}
-	scrape(url, ch)
-}
-
-
-func scrape(url string, ch chan filmSend) {
-	siteToVisit := url
-
+func getFilmDetails(chosenFilm string) film {
+	var filmDetails film
 	ajc := colly.NewCollector(
 		colly.Async(true),
 	)
-	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //secondard cleector to get main data for film
+	ajc.OnHTML("div.film-poster", func(e *colly.HTMLElement) {
 		name := e.Attr("data-film-name")
-		slug := e.Attr("data-film-link")
 		img := e.ChildAttr("img", "src")
-		year := e.Attr("data-film-release-year")
-		tempfilm := film{
-			Slug:  (site + slug),
+		filmDetails = film{
+			Slug:  (site + chosenFilm),
 			Image: makeBigger(img),
-			Year: year,
 			Name:  name,
 		}
-		ch <- ok(tempfilm)
-	})
-	c := colly.NewCollector(
-		colly.Async(true),
-	)
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
-			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
-		})
-
-	})
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, "/page") {
-			e.Request.Visit(e.Request.AbsoluteURL(link))
-		}
 	})
 
-	c.Visit(siteToVisit)
-	c.Wait()
+	ajc.Visit(urlscrape + chosenFilm + urlEnd) //start go routine to collect film data)
 	ajc.Wait()
-	ch <- done() // users has finished so send done through channel
-
+	return filmDetails
 }
 
-
-func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
+func scrape(url string, filmFilter string, ch chan filmSend) {
 	siteToVisit := url
-	ajc := colly.NewCollector(
-		colly.Async(true),
-	)
-	extensions.RandomUserAgent(ajc)
-	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
-		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-film-link")
-		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.film-poster","data-film-release-year")
-		lenght := e.ChildText("p.text-footer")
-		tempfilm := film{
-			Slug:  (site + slug),
-			Image: img,
-			Year: year,
-			Name:  name,
-			Length: strings.TrimSpace(before(lenght,"mins")),
-		}
-		ch <- ok(tempfilm)
-	})
 
 	c := colly.NewCollector(
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	extensions.RandomUserAgent(c)
+	if len(filmFilter) > 0 {
+		log.Println("adding cookie for filter: ", filmFilter)
+		c.SetCookies(siteToVisit, []*http.Cookie{{Name: "filmFilter", Value: filmFilter, Domain: "letterboxd.com", Path: "/"}})
+	}
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
-			ajc.Visit(site + slug) //start go routine to collect all film data
+			filmLink := ein.Attr("data-target-link")
+			ch <- ok(filmLink)
 		})
 
 	})
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, "/page") {
-			e.Request.Visit(e.Request.AbsoluteURL(link))
-		}
-	})
-
-	c.Visit(siteToVisit)
-	c.Wait()
-	ajc.Wait()
-	ch <- done()
-
-}
-
-func scrapeActor(actor string, ch chan filmSend) {
-	siteToVisit := site + "/" + actor
-	fmt.Println(siteToVisit)
-
-	c := colly.NewCollector(
-		colly.Async(true),
-	)
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML("div.film-poster", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
-		name := e.Attr("data-film-name")
-		slug := e.Attr("data-film-link")
-		img := e.ChildAttr("img", "src")
-		year := e.Attr("data-film-release-year")
-		tempfilm := film{
-			Slug:  (site + slug),
-			Image: makeBiggerActor(img),
-			Year: year,
-			Name:  name,
-		}
-		ch <- ok(tempfilm)
-		})
-
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Attr("href")
 		if strings.Contains(link, "/page") {
@@ -397,58 +254,7 @@ func scrapeActor(actor string, ch chan filmSend) {
 
 }
 
-func scrapeActorWithLength(actor string, ch chan filmSend) {
-	siteToVisit := site + "/" + actor
-	log.Println(siteToVisit)
-
-	c := colly.NewCollector(
-		colly.Async(true),
-	)
-	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	extensions.RandomUserAgent(c)
-	ajc := colly.NewCollector(
-		colly.Async(true),
-	)
-	extensions.RandomUserAgent(ajc)
-	ajc.OnHTML("div#film-page-wrapper", func(e *colly.HTMLElement) {
-		name := e.ChildText("span.frame-title")
-		slug := e.ChildAttr("div.film-poster","data-film-link")
-		img := e.ChildAttr("img", "src")
-		year := e.ChildAttr("div.film-poster","data-film-release-year")
-		lenght := e.ChildText("p.text-footer")
-		tempfilm := film{
-			Slug:  (site + slug),
-			Image: img,
-			Year: year,
-			Name:  name,
-			Length: strings.TrimSpace(before(lenght,"mins")),
-		}
-		ch <- ok(tempfilm)
-	})
-
-	c.OnHTML(".poster-container", func(e *colly.HTMLElement) {
-		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-film-link")
-			ajc.Visit(site + slug)
-		})
-
-	})
-
-	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
-		link := e.Attr("href")
-		if strings.Contains(link, "/page") {
-			e.Request.Visit(e.Request.AbsoluteURL(link))
-		}
-	})
-
-	c.Visit(siteToVisit)
-	c.Wait()
-	ajc.Wait()
-	ch <- done() // users has finished so send done through channel
-
-}
-
-func ok(f film) filmSend {
+func ok(f string) filmSend {
 	return filmSend{
 		film: f,
 		done: false,
@@ -457,18 +263,18 @@ func ok(f film) filmSend {
 
 func done() filmSend {
 	return filmSend{
-		film: film{},
+		film: "",
 		done: true,
 	}
 }
 
-func getintersect(filmSlice []film, numOfUsers int) []film {
-	keys := make(map[film]int)
-	list := []film{}
+func getIntersect(filmSlice []string, numOfUsers int) []string {
+	keys := make(map[string]int)
+	list := []string{}
 	for _, entry := range filmSlice {
 		i, _ := keys[entry]
 		if i < (numOfUsers - 1) {
-			keys[entry] ++
+			keys[entry]++
 		} else {
 			list = append(list, entry)
 		}
@@ -480,82 +286,21 @@ func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }
 
-func makeBiggerActor(url string) string {
-	return strings.ReplaceAll(url, "-0-150-0-225-", "-0-230-0-345-")
-
-}
 func makeBigger(url string) string {
 	return strings.ReplaceAll(url, "-0-125-0-187-", "-0-230-0-345-")
 }
 
-func ignoreUnrelased(filmSlice []film) []film {
-	list := []film{}
-	for _, entry := range filmSlice {
-		if entry.Year == "" {
-			continue
-		}
-		filmYear, _ := strconv.Atoi(entry.Year)
-		if filmYear < year {
-			list = append(list, entry)
-		}
+func generateFilmFilter(ignoreString string) string {
+	var filmFilters []string
+	if strings.Contains(ignoreString, "unreleased") {
+		filmFilters = append(filmFilters, "hide-unreleased")
 	}
-	return list
-}
-
-func ignoreShorts(filmSlice []film) []film {
-	list := []film{}
-	for _, entry := range filmSlice {
-		length, err := strconv.Atoi(entry.Length)
-		if err != nil {
-			continue
-		}
-		if length >= FEATURELENGTH {
-			list = append(list, entry)
-		}
+	if strings.Contains(ignoreString, "shorts") {
+		filmFilters = append(filmFilters, "hide-shorts")
 	}
-	return list
-}
-
-func ignoreFeature(filmSlice []film) []film {
-	list := []film{}
-	for _, entry := range filmSlice {
-		length, err := strconv.Atoi(entry.Length)
-		if err != nil {
-			continue
-		}
-		if length < FEATURELENGTH {
-			list = append(list, entry)
-		}
+	if strings.Contains(ignoreString, "feature") {
+		filmFilters = append(filmFilters, "show-shorts")
 	}
-	return list
+	var filmFilter = strings.Join(filmFilters, "%20")
+	return filmFilter
 }
-
-func before(value string, a string) string {
-    // Get substring before a string.
-    pos := strings.Index(value, a)
-    if pos == -1 {
-        return ""
-    }
-    return value[0:pos]
-}
-
-func contains(s []string, e string) bool {
-    for _, a := range s {
-        if a == e {
-            return true
-        }
-    }
-    return false
-}
-
-func whatToIgnore(ignoreString string) toIgnore {
-	ignoreList := strings.Split(ignoreString, ",")
-	return toIgnore{
-		unreleased: contains(ignoreList,"unreleased"),
-		short: contains(ignoreList, "shorts"),
-		feature: contains(ignoreList, "feature"),
-	}
-}
-
-
-
