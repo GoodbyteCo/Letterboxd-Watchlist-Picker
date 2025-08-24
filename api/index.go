@@ -286,6 +286,8 @@ func scrape(url string, ch chan filmSend) {
 			Year: year,
 			Name:  name,
 		}
+		log.Print("LOGGER: film ")
+		log.Println(tempfilm)
 		ch <- ok(tempfilm)
 	})
 	c := colly.NewCollector(
@@ -295,6 +297,8 @@ func scrape(url string, ch chan filmSend) {
 	c.OnHTML(".poster-grid", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.react-component", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-item-link")
+			log.Print("LOGGER- slug: ")
+			log.Println(slug)
 			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
 		})
 
