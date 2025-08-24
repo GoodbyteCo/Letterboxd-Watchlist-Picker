@@ -564,8 +564,10 @@ func contains(s []string, e string) bool {
 }
 
 func getYear(name string) string {
+	log.Print("Logger: name")
+	log.Println(name)
 	year := after(name, "(")
-	return year[:len(year) - 1]
+	return year[:len(year)]
 
 }
 
