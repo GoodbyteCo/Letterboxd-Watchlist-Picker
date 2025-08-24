@@ -294,7 +294,7 @@ func scrape(url string, ch chan filmSend) {
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
+			slug := ein.Attr("data-item-link")
 			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
 		})
 
@@ -343,7 +343,7 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	extensions.RandomUserAgent(c)
 	c.OnHTML(".poster-container", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.film-poster", func(i int, ein *colly.HTMLElement) {
-			slug := ein.Attr("data-target-link")
+			slug := ein.Attr("data-item-link")
 			ajc.Visit(site + slug) //start go routine to collect all film data
 		})
 
