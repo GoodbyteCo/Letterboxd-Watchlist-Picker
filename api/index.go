@@ -561,7 +561,7 @@ func contains(s []string, e string) bool {
 
 func getYear(name string) string {
 	year := after(name, "(")
-	return year[year:len(year) - 1]
+	return year[:len(year) - 1]
 
 }
 
