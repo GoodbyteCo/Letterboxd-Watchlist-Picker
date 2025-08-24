@@ -68,6 +68,8 @@ func (e *nothingError) Error() string {
 const urlscrape = "https://letterboxd.com/ajax/poster" //first part of url for getting full info on film
 const urlEnd = "std/125x187/"            // second part of url for getting full info on film
 const site = "https://letterboxd.com"
+const watchlistGridClass = ".poster-grid"
+const regularListGridClass = ".poster-list"
 
 
 // func main() {
@@ -232,12 +234,12 @@ func scrapeMain(users []string, intersect bool, ignoreList toIgnore) (film, erro
 
 func scrapeUserWithLength(userName string, ch chan filmSend) {
 	url := site + "/" + userName + "/watchlist"
-	scrapeWithLength(url, ch)
+	scrapeWithLength(url, watchlistGridClass, ch)
 }
 
 func scrapeUser(userName string, ch chan filmSend) {
 	url := site + "/" + userName + "/watchlist"
-	scrape(url, ch)
+	scrape(url, watchlistGridClass, ch)
 }
 
 func scrapeListWithLength(listNameIn string, ch chan filmSend) {
@@ -251,7 +253,7 @@ func scrapeListWithLength(listNameIn string, ch chan filmSend) {
 		url = site + "/" + strslice[0] + "/list/" + strslice[1]
 
 	}
-	scrapeWithLength(url, ch)
+	scrapeWithLength(url, regularListGridClass, ch)
 }
 
 func scrapeList(listNameIn string, ch chan filmSend) {
@@ -265,11 +267,11 @@ func scrapeList(listNameIn string, ch chan filmSend) {
 		url = site + "/" + strslice[0] + "/list/" + strslice[1]
 
 	}
-	scrape(url, ch)
+	scrape(url, regularListGridClass, ch)
 }
 
 
-func scrape(url string, ch chan filmSend) {
+func scrape(url string, posterGridClass string, ch chan filmSend) {
 	siteToVisit := url
 
 	ajc := colly.NewCollector(
@@ -294,7 +296,7 @@ func scrape(url string, ch chan filmSend) {
 		colly.Async(true),
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
-	c.OnHTML(".poster-grid", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+	c.OnHTML(posterGridClass, func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.react-component", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-item-link")
 			log.Print("LOGGER- slug: ")
@@ -318,7 +320,7 @@ func scrape(url string, ch chan filmSend) {
 }
 
 
-func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own function
+func scrapeWithLength(url string, posterGridClass string, ch chan filmSend) { //is slower so is own function
 	siteToVisit := url
 	ajc := colly.NewCollector(
 		colly.Async(true),
@@ -345,7 +347,7 @@ func scrapeWithLength(url string, ch chan filmSend) { //is slower so is own func
 	)
 	c.Limit(&colly.LimitRule{DomainGlob: "*", Parallelism: 100})
 	extensions.RandomUserAgent(c)
-	c.OnHTML(".poster-grid", func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
+	c.OnHTML(posterGridClass, func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.react-component", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-item-link")
 			ajc.Visit(site + slug) //start go routine to collect all film data
