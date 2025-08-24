@@ -572,7 +572,7 @@ func getYear(name string) string {
 	if year != "" {
 		log.Print("Logger: year")
 		log.Println(year[1:len(year)-1])
-		return string(year[year[1:len(year)-1])
+		return string(year[1:len(year)-1])
 	} else {
 		return "0"
 	}
