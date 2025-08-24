@@ -288,8 +288,6 @@ func scrape(url string, posterGridClass string, ch chan filmSend) {
 			Year: year,
 			Name:  name,
 		}
-		log.Print("LOGGER: film ")
-		log.Println(tempfilm)
 		ch <- ok(tempfilm)
 	})
 	c := colly.NewCollector(
@@ -299,8 +297,6 @@ func scrape(url string, posterGridClass string, ch chan filmSend) {
 	c.OnHTML(posterGridClass, func(e *colly.HTMLElement) { //primary scarer to get url of each film that contian full information
 		e.ForEach("div.react-component", func(i int, ein *colly.HTMLElement) {
 			slug := ein.Attr("data-item-link")
-			log.Print("LOGGER- slug: ")
-			log.Println(slug)
 			ajc.Visit(urlscrape + slug + urlEnd) //start go routine to collect all film data
 		})
 
@@ -566,12 +562,8 @@ func contains(s []string, e string) bool {
 }
 
 func getYear(name string) string {
-	log.Print("Logger: name")
-	log.Println(name)
 	year := after(name, "(")
 	if year != "" {
-		log.Print("Logger: year")
-		log.Println(year[1:len(year)-1])
 		return string(year[1:len(year)-1])
 	} else {
 		return "0"
