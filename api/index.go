@@ -569,9 +569,13 @@ func getYear(name string) string {
 	log.Print("Logger: name")
 	log.Println(name)
 	year := after(name, "(")
-	log.Print("Logger: year")
-	log.Println(year[1:len(year)-1])
-	return year[:len(year)]
+	if year != "" {
+		log.Print("Logger: year")
+		log.Println(year[1:len(year)-1])
+		return year[year[1:len(year)-1]]
+	} else {
+		return "0"
+	}
 
 }
 
