@@ -1,4 +1,5 @@
 <template>
+	<Analytics/>
 	<div v-focus-visible>
 		<header>
 			<logo/>
@@ -39,6 +40,7 @@
 	import NotFound from './components/NotFound.vue'
 	import FilmResult from './components/FilmResult.vue'
 	import GoodbyteFooter from './components/GoodbyteFooter.vue';
+	import { Analytics } from '@vercel/analytics/vue';
 
 	export default 
 	{
