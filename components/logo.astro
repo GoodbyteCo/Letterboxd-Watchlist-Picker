@@ -55,8 +55,8 @@ import ScreenreaderOnly from './screenreader-only.astro'
 		border: 2px solid var(--secondary);
 		border-radius: 4px;
 		
-		/* in the default state (nothing searched, nothing loaded), the logo
-		 * enlarges to take up more screen real estate.
+		/* in the default state (not yet loaded), the logo enlarges.
+		 * todo: make default?
 		 */
 		transform: scale(1.5) translateY(15px);
 		transition:
@@ -64,16 +64,15 @@ import ScreenreaderOnly from './screenreader-only.astro'
 			transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1); /* loading transition */
 	}
 
-	.entered a,
-	.done a
-	{
-		/* shrink back down when searched */
-		transform: none;
-	}
-
-	.entered svg 
+	:global(body.loading) svg 
 	{
 		animation: spin 0.2s linear infinite;
+	}
+
+	:global(body.loaded) a
+	{
+		/* shrink back down once done */
+		transform: none;
 	}
 
 	svg 

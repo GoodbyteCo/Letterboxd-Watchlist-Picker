@@ -32,8 +32,7 @@ const query = parseRequest(Astro.url)
 		transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
 	}
 
-	.entered main,
-	.done main
+	:global(body.loaded) main
 	{
 		/* resume regular position once searching/loaded */
 		transform: none;
