@@ -3,7 +3,7 @@ import Base from '../components/base.astro'
 import Logo from '../components/logo.astro'
 // import DarkmodeSwitch from './components/DarkmodeSwitch.vue'
 import AboutText from '../components/about.astro'
-import SearchForm from '../components/search-form.astro'
+import SearchForm from '../components/form/search-form.astro'
 import Footer from '../components/footer.astro'
 import {parseRequest} from '../api/query'
 
@@ -16,25 +16,7 @@ const query = parseRequest(Astro.url)
 	</header>
 	<main>
 		<AboutText/>
-		<pre>
-			{JSON.stringify(query, null, 4)}
-		</pre>
 		<SearchForm query={query}/>
-		<!-- <section id="film-results" aria-live="polite" :aria-busy="loading">
-			<LoadingBar v-if="loading"/>
-			<div v-else-if="submitted">
-				<NotFound
-					v-if="notFound"
-					:status="notFoundStatus"
-				/>
-				<FilmResult
-					v-else
-					:title="title"
-					:url="url"
-					:imgUrl="imgUrl"
-				/>
-			</div>
-		</section> -->
 	</main>
 	<Footer/>
 </Base>

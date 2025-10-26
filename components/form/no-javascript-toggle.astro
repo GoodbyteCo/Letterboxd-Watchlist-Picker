@@ -18,5 +18,7 @@ interface Props {
 />
 
 <script>
-	document.getElementById('no-javascript-toggle').remove()
+	document.addEventListener('DOMContentLoaded', () => {
+		document.getElementById('no-javascript-toggle').remove()
+	})
 </script>
