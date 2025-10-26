@@ -1,6 +1,7 @@
 ---
 import {Query} from '../../api/query'
-import {NoResultReason, Result, isNoResult} from '../../api/result'
+import {isNoResult} from '../../api/result'
+import {fetchFilm} from '../../api/letterboxd'
 import NoResults from './no-results.astro'
 import FilmResult from './film-result.astro'
 
@@ -8,9 +9,7 @@ interface Props {
 	query: Query
 }
 
-const props = Astro.props
-
-const result: Result = {status: 'success', url:'google.com', title:'test', img:'https://a.ltrbxd.com/resized/sm/upload/8g/5p/p4/6b/8YWirGQidtZeSEmhqvQM5FrI6N1-0-230-0-345-crop.jpg?v=10e3695a0f'} as Result
+const result = await fetchFilm(Astro.props.query)
 ---
 
 <section>
