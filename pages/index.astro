@@ -4,6 +4,8 @@ import Logo from '../components/logo.astro'
 // import DarkmodeSwitch from './components/DarkmodeSwitch.vue'
 import AboutText from '../components/about.astro'
 import SearchForm from '../components/form/search-form.astro'
+import ServerSideResult from '../components/result/server-side.astro'
+import ClientSideResult from '../components/result/client-side.astro'
 import Footer from '../components/footer.astro'
 import {parseRequest} from '../api/query'
 
@@ -17,6 +19,11 @@ const query = parseRequest(Astro.url)
 	<main>
 		<AboutText/>
 		<SearchForm query={query}/>
+		{(query.lists.length > 0) && (
+			(query.no_javascript)
+				? <ServerSideResult query={query}/>
+				: <ClientSideResult query={query}/>
+		)}
 	</main>
 	<Footer/>
 </Base>

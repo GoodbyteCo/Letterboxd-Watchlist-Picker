@@ -1,0 +1,12 @@
+---
+import {Query} from '../../api/query'
+
+interface Props {
+	query: Query
+}
+
+const props = Astro.props
+---
+<pre style="text-align: start">
+{JSON.stringify(props.query, null, 2)}
+</pre>
