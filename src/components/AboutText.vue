@@ -1,21 +1,19 @@
-<template>
-	<p>
-		Enter your <a href="https://letterboxd.com/">Letterboxd</a> username to
-		get a random film off of your watchlist. Add multiple usernames by separating
-		with a space, and enter public lists in "username/list-title" format. See
-		<a href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions" v-focus-visible>FAQs</a>
-		for more.
-	</p>
-</template>
+<p>
+	Enter your <a href="https://letterboxd.com/">Letterboxd</a> username to
+	get a random film off of your watchlist. Add multiple usernames by separating
+	with a space, and enter public lists in "username/list-title" format. See
+	<a href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker/blob/main/README.md#frequently-asked-questions">FAQs</a>
+	for more.
+</p>
 
-<script>
-	export default
+<style>
+	p
 	{
-		name: 'AboutText'
+		max-width: 60ch;
+		margin: 0rem auto 1rem;
+		padding: 1.5rem 2rem 0;
 	}
-</script>
 
-<style scoped>
 	a
 	{
 		color: var(--foreground);
@@ -30,24 +28,10 @@
 	}
 
 	a:hover,
-	[v-focus-visible=true] a:focus
+	a:focus
 	{
 		color: var(--primary);
 		background-image: linear-gradient(var(--primary), var(--primary));
 		transition: none;
-		outline: none;
-	}
-
-	[v-focus-visible=true] a:focus
-	{
-		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
-		border-radius: 3px;
-	}
-
-	p
-	{
-		max-width: 60ch;
-		margin: 0rem auto 1rem;
-		padding: 1.5rem 2rem 0;
 	}
 </style>
