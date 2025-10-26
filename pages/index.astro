@@ -1,7 +1,7 @@
 ---
 import Base from '../components/base.astro'
 import Logo from '../components/logo.astro'
-// import DarkmodeSwitch from './components/DarkmodeSwitch.vue'
+import DarkmodeSwitch from '../components/darkmode-switch.astro'
 import AboutText from '../components/about.astro'
 import SearchForm from '../components/form/search-form.astro'
 import ServerSideResult from '../components/result/server-side.astro'
@@ -10,11 +10,14 @@ import Footer from '../components/footer.astro'
 import {parseRequest} from '../api/query'
 
 const query = parseRequest(Astro.url)
+const cookie = Astro.cookies.get('dark-mode')
+const darkmode = (cookie?.value == 'true')
 ---
-<Base>
+
+<Base darkmode={darkmode}>
 	<header>
 		<Logo/>
-		<!-- <DarkmodeSwitch/> -->
+		<DarkmodeSwitch darkmode={darkmode}/>
 	</header>
 	<main>
 		<AboutText/>

@@ -1,3 +1,8 @@
+---
+interface Props {darkmode: boolean}
+const {darkmode} = Astro.props
+---
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -23,7 +28,7 @@
 		<meta property="og:site_name" content="Watchlist Picker">
 		<meta name="og:description" content="A website that gets a random film off your Letterboxd watchlist.">
 	</head>
-	<body>
+	<body class={darkmode ? 'dark' : ''}>
 		<!--
 		╭───────╮
 		│ ◯ ◯ ◯ │   Watchlist Picker -- Goodbyte (c) 2020-2025

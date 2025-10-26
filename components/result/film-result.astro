@@ -49,7 +49,7 @@ const {title, url, img} = Astro.props
 		}
 	}
 
-	.dark a.poster
+	:global(body.dark) a.poster
 	{
 		background-color: var(--tertiary);
 	}

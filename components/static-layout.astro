@@ -1,12 +1,16 @@
 ---
 import Base from '../components/base.astro'
 import Logo from '../components/logo.astro'
-// import DarkmodeSwitch from './components/DarkmodeSwitch.vue'
+import DarkmodeSwitch from '../components/darkmode-switch.astro'
+
+const cookie = Astro.cookies.get('dark-mode')
+const darkmode = (cookie?.value == 'true')
 ---
-<Base>
+
+<Base darkmode={darkmode}>
 	<header>
 		<Logo/>
-		<!-- <DarkmodeSwitch/> -->
+		<DarkmodeSwitch darkmode={darkmode}/>
 	</header>
 	<main>
 		<slot/>
@@ -37,6 +41,14 @@ import Logo from '../components/logo.astro'
 		background: var(--off-white);
 		padding: 0.1em 0.5ch;
 		border-radius: 4px;
+	}
+
+	:global(body.dark) main :global(code),
+	:global(body.dark) main :global(kbd)
+	{
+		background: var(--tertiary);
+		color: var(--white);
+		opacity: 0.6;
 	}
 
 	main :global(a)

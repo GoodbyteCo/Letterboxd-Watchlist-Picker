@@ -142,7 +142,7 @@ const {query} = Astro.props
 		}
 	}
 
-	.dark button 
+	:global(body.dark) input[type="submit"] 
 	{
 		background: var(--tertiary);
 	}
