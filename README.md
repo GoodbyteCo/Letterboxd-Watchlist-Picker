@@ -97,34 +97,22 @@ If at any point you have issues using the website, please do not hesitate to con
 us at [support@goodbyte.ca](mailto:support@goodbyte.ca).
 
 
-## Operational notes
+## Building locally
 
-[[Building locally](#building-locally)] [[So where are things?](#so-where-are-things)]
-
-The status of the site can be checked on [the public dashboard](https://watchlistpicker.checklyhq.com/).
-
-### Building locally
-
-Clone the project and run `pnpm install`.
+Clone the project and run `bun install`.
 
 The API uses Vercel functions, so use `vercel dev` to test. However, this requires
 a [Vercel](https://vercel.com) account. To test without the films propagating (everything
 will work, just the picture of the film will not fill in), run:
 
 ```
-pnpm run dev
+bun run dev
 ```
 
-### So where are things?
 
-- **Backend:** the backend the site communicates with is located in the `api/` directory,
-  and deployed alongside the rest of the app.
-- **Frontend:** the frontend is written in Vue and located in the `src/` folder.
-- **Assets:** the favicons and occasional image are located in the `public/` directory,
-  while the actual on-site logo is located in `Logo.vue` as an svg. Watchlist Picker
-  does not import any custom typefaces.
+## Operational notes
 
-## Credits
+The status of the site can be checked on [the public dashboard](https://watchlistpicker.checklyhq.com/).
 
 Watchlist Picker is a [Goodbyte](https://goodbyte.ca) project. Development by
 [Quinn Pollock](https://github.com/HoloPollock) and [Jack Guinane](https://github.com/qjack001).
