@@ -1,18 +1,10 @@
 .DS_Store
 node_modules
 /dist
-
-# local env files
+.astro/
+.env
 .env.local
 .env.*.local
-
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor directories and files
 .idea
 .vscode
 *.suo
@@ -21,4 +13,4 @@ pnpm-debug.log*
 *.sln
 *.sw?
 .vercel
-
+.netlify
