@@ -1,110 +1,145 @@
-<template>
-	<section>
-		<label for="userbox">
-			Username(s):
-		</label>
-    <div class="form-container">
-      <input
-        id="userbox"
-        class="userfield"
-        type="text"
-        placeholder="ex: holopollock, qjack"
-        :value="value"
-        v-on:keyup.enter=action()
-        v-on:input="updateValue($event.target.value)"
-      />
-      <button 
-        v-on:click="action()"
-      >
-        Submit
-      </button>
-    </div>
-    <slot/>
-	</section>
-</template>
+---
+import ScreenreaderOnly from './screenreader-only.astro'
+import CheckboxGroup from './advanced/checkbox-group.astro'
+import {key, Query} from '../api/query'
+import {MovieType} from '../api/movie-types'
+import CombineOptions from './advanced/combine-options.astro'
+import NoJavascriptToggle from './advanced/no-javascript-toggle.astro'
 
-<script>
-	export default
+interface Props {
+	query: Query
+}
+
+const {query} = Astro.props
+---
+
+<form>
+	<section>
+		<label>
+			<ScreenreaderOnly>
+				Username(s):
+			</ScreenreaderOnly>
+			<input
+				name={key.lists}
+				type="text"
+				placeholder="ex: holopollock, qjack"
+				spellcheck="false"
+				value={query.lists.join(', ')}
+				data-1p-ignore
+				required
+			/>
+		</label>
+		<input type="submit" value="Submit">
+	</section>
+	<br/>
+	<details>
+		<summary>Advanced Options</summary>
+		<CombineOptions
+			legend="Combine by:"
+			name={key.intersect}
+			value={query.intersect}
+		/>
+		<CheckboxGroup
+			legend="Do not include:"
+			name={key.ignore}
+			selected={query.ignore}
+			options={{
+				"Unreleased films": MovieType.unreleased,
+				"Short films": MovieType.shorts,
+				"Feature-length films": MovieType.feature,
+			}}
+		/>
+		<NoJavascriptToggle
+			name={key.no_javascript}
+		/>
+	</details>
+</form>
+
+<style>
+	section
 	{
-		name: 'SearchBar',
-		props:
-		[
-			'value',
-			'action'
-		],
-		methods:
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	br
+	{
+		/* the <br> here is just to signal to non-css browsers
+		 * that the sections should be broken up
+		 */
+		display: none;
+	}
+
+	summary
+	{
+		opacity: 0.8;
+		color: var(--foreground);
+		font-size: 0.8rem;
+		font-weight: bold;
+		letter-spacing: 0.04em;
+		line-height: 2.8rem;
+		user-select: none;
+		cursor: pointer;
+	}
+
+	summary:hover
+	{
+		opacity: 1;
+		color: var(--primary);
+		text-decoration: underline;
+	}
+
+	input
+	{
+		font-family: Avenir, system-ui, Helvetica, Arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		border: 0;
+		outline: none;
+		
+		line-height: 2.8rem;
+		padding: 0 1rem;
+	}
+
+	input[type="text"]
+	{
+		color: var(--black);
+		background: var(--off-white);
+		border-radius: 4px 0 0 4px;
+
+		font-size: 1.1rem;
+		width: 220px;
+		max-width: calc(100vw - 140px);
+
+		&:active,
+		&:focus
 		{
-			updateValue: function (value)
-			{
-				this.$emit('input', value)
-			}
+			box-shadow: inset 0 0 0 3px var(--primary);
 		}
 	}
-</script>
 
-<style scoped>
-	label
-	{
-		visibility: hidden;
-		display: block;
-	}
-
-  .form-container 
-  {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-	.userfield
-	{
-		font-family: Avenir, Helvetica, Arial, sans-serif;
-		font-size: 1.1rem;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		line-height: 2.8rem;
-
-		background: var(--off-white);
-		padding: 0 1rem;
-		min-width: 220px;
-		border: 0;
-		border-radius: 4px 0 0 4px;
-		outline: none;
-	}
-
-	.userfield:active,
-	[v-focus-visible=true] .userfield:focus,
-	[v-focus-visible=true] .userfield:focus-within
-	{
-		box-shadow: inset 0 0 0 3px var(--primary);
-	}
-
-	::placeholder
-	{
-		opacity: 0.6;
-	}
-
-	button
+	input[type="submit"]
 	{
 		color: var(--white);
-		font-family: Avenir, Helvetica, Arial, sans-serif;
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
+		background: var(--secondary);
+		border-radius: 0 4px 4px 0;
+		
 		font-size: 0.8rem;
 		font-weight: 900;
 		text-transform: uppercase;
 		letter-spacing: 0.04em;
-		line-height: 2.8rem;
-
-		display: inline-block;
+		
 		cursor: pointer;
-		padding: 0 1rem;
-		border: 0;
-		border-radius: 0 4px 4px 0;
-		outline: none;
-
-		background: var(--secondary);
 		transition: background-color ease-in-out 0.2s; /* darkmode transition */
+
+		&:hover,
+		&:focus-visible
+		{
+			background: var(--primary);
+			transition: none;
+		}
 	}
 
 	.dark button 
@@ -112,20 +147,8 @@
 		background: var(--tertiary);
 	}
 
-	button:hover,
-	[v-focus-visible=true] button:focus
+	::placeholder
 	{
-		background: var(--primary);
-		transition: none;
-	}
-
-	@media screen and (max-width: 360px)
-	{
-		.userfield
-		{
-			min-width: 0px;
-			width: 50%;
-		}
+		opacity: 0.6;
 	}
 </style>
-

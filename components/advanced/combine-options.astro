@@ -1,0 +1,94 @@
+---
+import CombineIcon from './combine-icons.astro'
+
+interface Props {
+	legend: string
+	/** the query param name, used in URLSearchParams */
+	name: string
+	/** whether or not `intersect` is selected */
+	value: boolean
+}
+
+const props = Astro.props
+---
+
+<div>
+	<fieldset>
+		<legend>
+			<b>{props.legend}</b>
+		</legend>
+		<div>
+			<input
+				type="radio"
+				name={props.name}
+				value=""
+				checked={!props.value}
+				id="union-option"
+			>
+			<label for="union-option">
+				<CombineIcon type="union"/>
+				Union
+			</label>
+			<input
+				type="radio"
+				name={props.name}
+				value="true"
+				checked={props.value}
+				id="intersect-option"
+			>
+			<label for="intersect-option">
+				<CombineIcon type="intersection"/>
+				Intersect
+			</label>
+		</div>
+	</fieldset>
+</div>
+
+<style>
+	label
+	{
+		display: inline-flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 1ch;
+
+		cursor: pointer;
+		margin: 0.8ch 0;
+		padding: 8px 10px;
+		border: 2px solid transparent;
+		border-radius: 4px;
+
+		color: var(--black);
+		font-weight: bold;
+		background: var(--tertiary);
+		--icon-fill: transparent;
+	}
+
+	input
+	{
+		opacity: 0;
+		width: 0px;
+		margin: 0;
+	}
+
+	input:checked + label
+	{
+		color: var(--white);
+		background: var(--primary);
+		border-color: var(--secondary);
+		--icon-fill: var(--white);
+	}
+
+	input:focus + label
+	{
+		box-shadow:
+			0 0 0 3px var(--background),
+			0 0 0 5px #275ec5;
+	}
+
+	fieldset
+	{
+		border: none;
+		margin-block: 10px;
+	}
+</style>
