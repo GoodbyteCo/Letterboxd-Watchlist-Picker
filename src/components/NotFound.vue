@@ -1,41 +1,45 @@
-<template>
-	<div>
-		<h2>Nothing Found</h2>
-		<p v-if="status == 'no-intersect'">
-			The intersection between those two lists is empty.
-		</p>
-		<p v-else-if="status == 'possibly-ignored'">
+---
+import {NoResultReason} from '../../api/result'
+
+interface Props {
+	reason: NoResultReason
+}
+
+function explaination(reason: NoResultReason) {
+	switch (reason) {
+		case NoResultReason.ALL_IGNORED: return `
 			There were no films found in that list. It may be
 			empty, private, or only contain films ignored by
 			settings (check Advanced Options above).
-		</p>
-		<p v-else-if="status == 'timeout'">
+		`
+		case NoResultReason.NO_INTERSECTION: return `
+			The intersection between those two lists is empty.
+		`
+		case NoResultReason.TIMED_OUT: return `
 			Sorry your list was too powerful and we timed out. Try 
 			another list.
-		</p>
-		<p v-else>
+		`
+		default: return `
 			Sorry, that watchlist is empty, private, or doesn't
-			exist at all.
-		</p>
-		<img id="not-found-gif" width="250"
-			src="https://watchlistpicker.com/poe.gif"
-			alt="from the movie Kung-Fu Panda, protagonist Poe looks down at an empty scroll."
-		/>
-	</div>
-</template>
-
-<script>
-	export default
-	{
-		name: 'NotFound',
-		props: [ 'status' ]
+			exist at all.`
 	}
-</script>
+}
 
-<style scoped>
+const {reason} = Astro.props
+---
+
+<h2>Nothing Found</h2>
+<p>{explaination(reason)}</p>
+<img
+	id="not-found-gif"
+	width="250"
+	src="/poe.gif"
+	alt="from the movie Kung-Fu Panda, protagonist Poe looks down at an empty scroll"
+/>
+
+<style>
 	h2
 	{
-		margin-top: 5rem;
 		font-size: 1.2rem;
 	}
 
@@ -46,7 +50,7 @@
 		padding: 0 2rem;
 	}
 
-	#not-found-gif
+	img
 	{
 		margin: 30px 0;
 		border-radius: 4px;

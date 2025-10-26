@@ -1,110 +1,79 @@
+---
+import ScreenreaderOnly from '../screenreader-only.astro'
 
-<template>
-	<div class="result">
-		<a
-			v-bind:href="url"
-			:style="{ backgroundImage: 'url(' + imgUrl + ')' }"
-			class="film-cover"
-			alt="film poster">
-		</a>
-		<div>
-			<p>
-				You should watch
-			</p>
-			<a 
-				v-bind:href="url" 
-				class="title"
-			>
-				{{ title }}
-			</a>
-		</div>
-	</div>
-</template>
+interface Props {
+	title: string
+	url: string
+	img: string
+}
 
-<script>
-	export default
-	{
-		name: 'FilmResult',
-		props:
-		[
-			'title',
-			'url',
-			'imgUrl'
-		]
-	}
-</script>
+const {title, url, img} = Astro.props
+---
 
-<style scoped>
-	.result
-	{
-		display: grid;
-		grid-template-rows: 345px auto;
-		gap: 20px;
-		text-align: center;
-		max-width: 400px;
-		width: 90%;
-		margin: 30px auto -40px;
-	}
+<div class="result">
+	<a
+		class="poster"
+		href={url}
+		style={`background-image: url(${img})`}
+		role="presentation"
+	>
+		<ScreenreaderOnly>
+			Film poster for {title}
+		</ScreenreaderOnly>
+	</a>
+	<p>
+		You should watch <a href={url}>{title}</a>
+	</p>
+</div>
 
-	.advanced-active .result
-	{
-		margin-bottom: 100px;
-	}
-
-	.film-cover
+<style>
+	a.poster
 	{
 		display: block;
 		width: 230px;
 		height: 345px;
 		border-radius: 4px;
 		margin: auto;
-		outline: none;
 
 		background-color: var(--off-white);
 		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
 		transition: background-color ease-in-out 0.25s;
-		
+
+		&:hover,
+		&:focus
+		{
+			box-shadow:
+				inset 0 0 0 3px var(--primary),
+				0 1px 3px rgba(0, 0, 0, 0.35),
+				0 0 2px 1px rgb(0 0 0 / 5%);
+		}
 	}
 
-	.dark .film-cover
+	.dark a.poster
 	{
 		background-color: var(--tertiary);
 	}
 
-	.film-cover:hover,
-	[v-focus-visible=true] .film-cover:focus
-	{
-		box-shadow: inset 0 0 0 3px var(--primary),
-			0 1px 3px rgba(0, 0, 0, 0.35),
-			0 0 2px 1px rgb(0 0 0 / 5%);
-	}
-
 	p
 	{
+		text-align: center;
 		max-width: 60ch;
 		padding: 0 2rem;
-		margin: 1rem auto 0.5rem;
+		margin: 30px auto;
 	}
 
-	.title
+	p > a
 	{
+		display: block;
 		color: var(--foreground);
 		font-size: 1.5rem;
 		font-weight: bold;
-		margin: 0;
-	}
+		margin: 10px auto;
 
-	.title:hover
-	{
-		color: var(--primary);
-	}
-
-	[v-focus-visible=true] .title:focus
-	{
-		color: var(--primary);
-		outline: none;
-		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
-		border-radius: 3px;
-		padding: 0 1rem;
+		&:hover,
+		&:focus
+		{
+			color: var(--primary);
+		}
 	}
 </style>
