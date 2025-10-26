@@ -1,0 +1,22 @@
+---
+/**
+ * The idea here is that we hide a "disable Javascript" checkbox in the form,
+ * that is immediately client-side from the DOM... using Javascript. This allows
+ * Non-Javascript enabled browsers to submit queries specifying their request. 
+ */
+interface Props {
+	/** the query param name, used in URLSearchParams */
+	name: string
+}
+---
+
+<input
+	id="no-javascript-toggle"
+	type="hidden"
+	name={Astro.props.name}
+	value="true"
+/>
+
+<script>
+	document.getElementById('no-javascript-toggle').remove()
+</script>
