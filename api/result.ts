@@ -19,6 +19,7 @@ export enum NoResultReason {
 	NO_INTERSECTION,
 	ALL_IGNORED,
 	TIMED_OUT,
+	UNKNOWN,
 }
 
 export function isNoResult(result: Result): result is NoResult {
