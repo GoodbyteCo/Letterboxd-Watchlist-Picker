@@ -1,8 +1,8 @@
-import netlify from '@astrojs/netlify' // todo: replace with vercel?
+import vercel from '@astrojs/vercel'
 import {defineConfig} from 'astro/config'
 
 export default defineConfig({
-	adapter: netlify(),
+	adapter: vercel(),
 	output: 'server',
 	security: {checkOrigin: false},
 	srcDir: '.',
