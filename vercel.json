@@ -1,4 +1,5 @@
 {
+	"bunVersion": "1.x",
 	"functions": {
 		"api/index.go": {
 			"memory": 3008,
