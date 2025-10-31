@@ -1,7 +1,7 @@
 ---
 import {Query} from '../../api/query'
 import {isNoResult} from '../../api/result'
-import {fetchFilm} from '../../api/letterboxd'
+import {findFilm} from '../../api/letterboxd'
 import NoResults from './no-results.astro'
 import FilmResult from './film-result.astro'
 
@@ -9,7 +9,7 @@ interface Props {
 	query: Query
 }
 
-const result = await fetchFilm(Astro.props.query)
+const result = await findFilm(Astro.props.query)
 ---
 
 <section>
