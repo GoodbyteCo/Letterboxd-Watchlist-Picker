@@ -22,9 +22,13 @@ export async function POST({request}) {
 	}
 	catch (error) {
 		console.error('Error building client-side results', error)
-		return new Response(JSON.stringify({error: error.message}), {
+		const fallbackHtml = `
+			<h2>Unexpected error</h2>
+			<p>Something went wrong on our server processing your request.</p>
+		`
+		return new Response(fallbackHtml, {
 			status: 500,
-			headers: {'Content-Type': 'application/json'},
+			headers: {'Content-Type': 'text/html; charset=utf-8'},
 		})
 	}
 }
