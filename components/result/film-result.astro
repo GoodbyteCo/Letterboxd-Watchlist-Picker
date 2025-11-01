@@ -1,0 +1,80 @@
+---
+import ScreenreaderOnly from '../screenreader-only.astro'
+
+interface Props {
+	title: string
+	url: string
+	img: string
+}
+
+const {title, url, img} = Astro.props
+---
+
+<div class="result">
+	<a
+		class="poster"
+		href={url}
+		style={`background-image: url(${img})`}
+		role="presentation"
+	>
+		<ScreenreaderOnly>
+			Film poster for {title}
+		</ScreenreaderOnly>
+	</a>
+	<p>
+		You should watch <a href={url}><b>{title}</b></a>
+	</p>
+</div>
+
+<style>
+	a.poster
+	{
+		display: block;
+		width: 230px;
+		height: 345px;
+		border-radius: 4px;
+		margin: auto;
+
+		background-size: cover;
+		background-color: var(--off-white);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 0 2px 1px rgb(0 0 0 / 5%);
+		transition: background-color ease-in-out 0.25s;
+
+		&:hover,
+		&:focus
+		{
+			box-shadow:
+				inset 0 0 0 3px var(--primary),
+				0 1px 3px rgba(0, 0, 0, 0.35),
+				0 0 2px 1px rgb(0 0 0 / 5%);
+		}
+	}
+
+	:global(body.dark) a.poster
+	{
+		background-color: var(--tertiary);
+	}
+
+	p
+	{
+		text-align: center;
+		max-width: 60ch;
+		padding: 0 2rem;
+		margin: 30px auto;
+	}
+
+	p > a
+	{
+		display: block;
+		color: var(--foreground);
+		font-size: 1.5rem;
+		font-weight: bold;
+		margin: 10px auto;
+
+		&:hover,
+		&:focus
+		{
+			color: var(--primary);
+		}
+	}
+</style>

@@ -1,0 +1,102 @@
+---
+interface Props {darkmode: boolean}
+const {darkmode} = Astro.props
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<title>Letterboxd Watchlist Picker</title>
+
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<meta name="description" content="A website that gets a random film off your Letterboxd watchlist.">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="manifest" href="/site.webmanifest">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#00bdfb">
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="theme-color" content="#ffffff">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:site" content="@goodbytestudio">
+		<meta name="twitter:creator" content="Goodbyte Co">
+		<meta name="twitter:title" content="Watchlist Picker">
+		<meta name="twitter:description" content="A website that gets a random film off your Letterboxd watchlist.">
+		<meta name="twitter:image" content="https://watchlistpicker.com/twittercard.png">
+		<meta property="og:site_name" content="Watchlist Picker">
+		<meta name="og:description" content="A website that gets a random film off your Letterboxd watchlist.">
+	</head>
+	<body class={darkmode ? 'dark' : ''}>
+		<!--
+		╭───────╮
+		│ ◯ ◯ ◯ │   Watchlist Picker -- Goodbyte (c) 2020-2025
+		╰───────╯
+		-->
+		<slot/>
+		<script>
+			// ignore local-dev
+			if (window.location.host !== 'watchlistpicker.com') {
+				window['goatcounter'] = {
+					no_onload: true
+				}
+			}
+		</script>
+		<script data-goatcounter="https://goodbyte.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+	</body>
+</html>
+
+<style is:global>
+	:root
+	{
+		--background: #fff;
+		--foreground: #2c3e50;
+		--primary: #1caff2;
+		--secondary: #000;
+		--tertiary: rgb(64 188 244 / 0.5);
+
+		/* these ones are constant across theme */
+		--white: #fff;
+		--off-white: #ebebeb;
+		--black: #000;
+	}
+
+	.dark
+	{
+		--background: #14181d;
+		--foreground: #76a0ca;
+		--primary: #1caff2;
+		--secondary: #fff;
+		--tertiary: #526e89;
+	}
+
+	body 
+	{
+		background: var(--background);
+
+		font-family: Avenir, system-ui, Helvetica, Arial, sans-serif;
+		color: var(--foreground);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-align: center;
+
+		transition: color ease-in-out 0.25s, background-color ease-in-out 0.25s;
+		margin-top: 30px;
+	}
+
+	::selection 
+	{
+		background: var(--primary);
+		color: var(--white);
+	}
+
+	@media (prefers-reduced-motion) 
+	{
+		* 
+		{
+			animation: none !important;
+			transition: none !important;
+		}
+	}
+</style>

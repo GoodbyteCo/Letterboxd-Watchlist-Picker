@@ -1,0 +1,27 @@
+---
+import {Query} from '../../api/query'
+import {isNoResult} from '../../api/result'
+import {findFilm} from '../../api/letterboxd'
+import NoResults from './no-results.astro'
+import FilmResult from './film-result.astro'
+
+interface Props {
+	query: Query
+}
+
+const result = await findFilm(Astro.props.query)
+---
+
+<section>
+	{(isNoResult(result))
+		? <NoResults reason={result.status}/>
+		: <FilmResult title={result.title} url={result.url} img={result.img}/>
+	}
+</section>
+
+<style>
+	section
+	{
+		margin-block: 50px;
+	}
+</style>

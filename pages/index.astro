@@ -1,0 +1,50 @@
+---
+import Base from '../components/base.astro'
+import Logo from '../components/logo.astro'
+import DarkmodeSwitch from '../components/darkmode-switch.astro'
+import AboutText from '../components/about.astro'
+import SearchForm from '../components/form/search-form.astro'
+import ServerSideResult from '../components/result/server-side.astro'
+import ClientSideResult from '../components/result/client-side.astro'
+import Footer from '../components/footer.astro'
+import {parseRequest} from '../api/query'
+
+const query = parseRequest(Astro.url)
+const cookie = Astro.cookies.get('dark-mode')
+const darkmode = (cookie?.value == 'true')
+---
+
+<Base darkmode={darkmode}>
+	<header>
+		<Logo/>
+		<DarkmodeSwitch darkmode={darkmode}/>
+	</header>
+	<main>
+		<AboutText/>
+		<SearchForm query={query}/>
+		{(query.lists.length > 0) && (
+			(query.no_javascript)
+				? <ServerSideResult query={query}/>
+				: <ClientSideResult query={query}/>
+		)}
+	</main>
+	<Footer/>
+</Base>
+
+<style>
+	main 
+	{
+		/* take up ~full screen height */
+		min-height: calc(100vh - 100px);
+
+		/* logo expands in default (no search) view; push contents down to match */
+		transform: translateY(40px);
+		transition: transform 1.2s cubic-bezier(0.82, 0.01, 0.45, 1);
+	}
+
+	:global(body.loaded) main
+	{
+		/* resume regular position once searching/loaded */
+		transform: none;
+	}
+</style>

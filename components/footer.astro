@@ -1,34 +1,19 @@
-<template>
-	<footer>
-		<a
-			href="https://ko-fi.com/goodbyte"
-			class="support"
-			data-goatcounter-click="support-us"
-			data-goatcounter-title="Support Us"
-		>
-			Support this site
-		</a>
-		<p>
-			<a href="http://goodbyte.ca/">Goodbyte</a> &copy; 2020–{{ year }}
-		</p>
-	</footer>
-</template>
+<footer>
+	<a
+		href="https://ko-fi.com/goodbyte"
+		class="support"
+		data-goatcounter-click="support-us"
+		data-goatcounter-title="Support Us"
+	>
+		Support this site
+	</a>
+	<p>
+		<a href="http://goodbyte.ca/">Goodbyte</a>
+		&copy; 2020–{new Date().getFullYear()}
+	</p>
+</footer>
 
-<script>
-	export default
-	{
-		name: 'GoodbyteFooter',
-		computed:
-		{
-			year()
-			{
-				return new Date().getFullYear();
-			}
-		}
-	}
-</script>
-
-<style scoped>
+<style>
 	footer
 	{
 		text-align: center;
@@ -57,32 +42,35 @@
 		text-decoration: none;
 		white-space: nowrap;
 
+		/* only show the support link after we've delivered them a result */
 		width: 0px;
 		opacity: 0;
 		margin-right: 0px;
 		pointer-events: none;
 
-		transition: opacity 0.8s ease,
+		transition:
+			opacity 0.8s ease,
 			width 0.8s ease-in,
 			margin 0.8s ease-in;
 	}
 	
 	.done a.support,
-	[v-focus-visible=true] a.support:focus
+	a.support:focus
 	{
 		width: auto;
 		opacity: 1;
 		margin-right: 28px;
 		pointer-events: all;
 
-		transition: opacity 0.6s ease,
+		transition:
+			opacity 0.6s ease,
 			width 0.6s ease-out,
 			margin 0.6s ease-out;
 	}
 
 
 	a.support:hover,
-	[v-focus-visible=true] a.support:focus
+	a.support:focus
 	{
 		background: var(--primary);
 		border-color: var(--primary);
@@ -110,16 +98,8 @@
 	}
 
 	p a:hover,
-	[v-focus-visible=true] p a:focus
+	p a:focus
 	{
 		background-image: linear-gradient(var(--foreground), var(--foreground));
-	}
-
-	[v-focus-visible=true] a:focus,
-	[v-focus-visible=true] a.support:focus
-	{
-		opacity: 1;
-		box-shadow: 0 0 0 3px var(--background), 0 0 0 5px var(--primary);
-		outline: none;
 	}
 </style>

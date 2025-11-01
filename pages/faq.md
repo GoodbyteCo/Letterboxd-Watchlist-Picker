@@ -1,22 +1,8 @@
-<a href="https://github.com/GoodbyteCo/Letterboxd-Watchlist-Picker">
-  <img width="230" alt="Watchlist Picker Development" src="public/dev-logo.png">
-</a>
+---
+layout: '../components/static-layout.astro'
+---
 
-<br><br><br>
-
-# Letterboxd Watchlist Picker (Web App)
-
-[[Frequently asked questions](#frequently-asked-questions)]
-[[Operational notes](#operational-notes)]
-[[Credits](#credits)]
-
-A simple website that gives you a random film off your watchlist (or any list).
-The site is built with Vue 2, and deployed at
-[watchlistpicker.com](https://watchlistpicker.com) via Vercel. See also, the
-[Watchlist Picker backend](https://github.com/GoodbyteCo/Watchlist-Picker-Backend)
-and [CLI version](https://github.com/HoloPollock/watchlist-picker).
-
-## Frequently asked questions
+# Frequently asked questions
 
 If you have a question that isn't listed below, send us an email at
 [support@goodbyte.ca](mailto:support@goodbyte.ca).
@@ -95,25 +81,3 @@ If you wish to help cover operational costs, we have a [ko-fi](https://ko-fi.com
 #### I'm having trouble using the site.
 If at any point you have issues using the website, please do not hesitate to contact
 us at [support@goodbyte.ca](mailto:support@goodbyte.ca).
-
-
-## Building locally
-
-Clone the project and run `bun install`.
-
-The API uses Vercel functions, so use `vercel dev` to test. However, this requires
-a [Vercel](https://vercel.com) account. To test without the films propagating (everything
-will work, just the picture of the film will not fill in), run:
-
-```
-bun run dev
-```
-
-
-## Operational notes
-
-The status of the site can be checked on [the public dashboard](https://watchlistpicker.checklyhq.com/).
-
-Watchlist Picker is a [Goodbyte](https://goodbyte.ca) project. Development by
-[Quinn Pollock](https://github.com/HoloPollock) and [Jack Guinane](https://github.com/qjack001).
-Many thanks to Letterboxd for letting us scrape their website. 

@@ -1,0 +1,27 @@
+---
+interface Props {
+	type: 'union' | 'intersection'
+}
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131 87" role="presentation">
+	<g transform="translate(-796 -208)">
+		<circle cx="883.3" cy="251.7" r="42"/>
+		<circle cx="839.7" cy="251.7" r="42"/>
+		<circle cx="883.3" cy="251.7" r="42" fill="none"/>
+	</g>
+	{(Astro.props.type == 'union')
+		? <path d="m15 13 73 73zM2 40l46 46zm35 45L2 50zM20 8l77 77zm56 76L10 18zM3 31l53 53zM27 5l77 77zM6 24l57 57zm16 56L8 66zM35 3l76 76zm9-1 72 72zm11 1 66 66zm13 3 57 57zm7-3 53 53zm9-1 45 45zm10 0 35 35zm16 6 13 13z"/>
+		: <path d="M47 55l22 22zm-2-12l29 29zm1-9l33 33zm3-7l33 33zm3-7l33 33zm5-5l29 29zm5-5l22 22z"/>
+	}
+</svg>
+
+<style>
+	svg
+	{
+		width: 40px;
+		stroke-width: 3px;
+		stroke: var(--black);
+		fill: var(--icon-fill);
+	}
+</style>

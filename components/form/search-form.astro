@@ -1,0 +1,154 @@
+---
+import ScreenreaderOnly from '../screenreader-only.astro'
+import CheckboxGroup from './checkbox-group.astro'
+import CombineOptions from './combine-options.astro'
+import NoJavascriptToggle from './no-javascript-toggle.astro'
+import {key, Query} from '../../api/query'
+import {MovieType} from '../../api/movie-types'
+
+interface Props {
+	query: Query
+}
+
+const {query} = Astro.props
+---
+
+<form>
+	<section>
+		<label>
+			<ScreenreaderOnly>
+				Username(s):
+			</ScreenreaderOnly>
+			<input
+				name={key.lists}
+				type="text"
+				placeholder="ex: holopollock, qjack"
+				spellcheck="false"
+				value={query.lists.join(', ')}
+				data-1p-ignore
+				required
+			/>
+		</label>
+		<input type="submit" value="Submit">
+	</section>
+	<br/>
+	<details>
+		<summary>Advanced Options</summary>
+		<CombineOptions
+			legend="Combine by:"
+			name={key.intersect}
+			value={query.intersect}
+		/>
+		<CheckboxGroup
+			legend="Do not include:"
+			name={key.ignore}
+			selected={query.ignore}
+			options={{
+				"Unreleased films": MovieType.unreleased,
+				"Short films": MovieType.shorts,
+				"Feature-length films": MovieType.feature,
+			}}
+		/>
+		<NoJavascriptToggle
+			name={key.no_javascript}
+		/>
+	</details>
+</form>
+
+<style>
+	section
+	{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	br
+	{
+		/* the <br> here is just to signal to non-css browsers
+		 * that the sections should be broken up
+		 */
+		display: none;
+	}
+
+	summary
+	{
+		opacity: 0.8;
+		color: var(--foreground);
+		font-size: 0.8rem;
+		font-weight: bold;
+		letter-spacing: 0.04em;
+		line-height: 2.8rem;
+		user-select: none;
+		cursor: pointer;
+	}
+
+	summary:hover
+	{
+		opacity: 1;
+		color: var(--primary);
+		text-decoration: underline;
+	}
+
+	input
+	{
+		font-family: Avenir, system-ui, Helvetica, Arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		border: 0;
+		outline: none;
+		
+		line-height: 2.8rem;
+		padding: 0 1rem;
+	}
+
+	input[type="text"]
+	{
+		color: var(--black);
+		background: var(--off-white);
+		border-radius: 4px 0 0 4px;
+
+		font-size: 1.1rem;
+		width: 220px;
+		max-width: calc(100vw - 140px);
+
+		&:active,
+		&:focus
+		{
+			box-shadow: inset 0 0 0 3px var(--primary);
+		}
+	}
+
+	input[type="submit"]
+	{
+		color: var(--white);
+		background: var(--secondary);
+		border-radius: 0 4px 4px 0;
+		
+		font-size: 0.8rem;
+		font-weight: 900;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		
+		cursor: pointer;
+		transition: background-color ease-in-out 0.2s; /* darkmode transition */
+
+		&:hover,
+		&:focus-visible
+		{
+			background: var(--primary);
+			transition: none;
+		}
+	}
+
+	:global(body.dark) input[type="submit"] 
+	{
+		background: var(--tertiary);
+	}
+
+	::placeholder
+	{
+		opacity: 0.6;
+	}
+</style>

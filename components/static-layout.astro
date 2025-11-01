@@ -1,0 +1,70 @@
+---
+import Base from '../components/base.astro'
+import Logo from '../components/logo.astro'
+import DarkmodeSwitch from '../components/darkmode-switch.astro'
+
+const cookie = Astro.cookies.get('dark-mode')
+const darkmode = (cookie?.value == 'true')
+---
+
+<Base darkmode={darkmode}>
+	<header>
+		<Logo/>
+		<DarkmodeSwitch darkmode={darkmode}/>
+	</header>
+	<main>
+		<slot/>
+	</main>
+</Base>
+
+<style>
+	main 
+	{
+		text-align: start;
+		max-width: 60ch;
+		margin: 60px auto;
+	}
+
+	main :global(h4)
+	{
+		margin-block: 2rem 1rem;
+	}
+
+	main :global(p)
+	{
+		margin-block: 1rem;
+	}
+
+	main :global(code),
+	main :global(kbd)
+	{
+		background: var(--off-white);
+		padding: 0.1em 0.5ch;
+		border-radius: 4px;
+	}
+
+	:global(body.dark) main :global(code),
+	:global(body.dark) main :global(kbd)
+	{
+		background: var(--tertiary);
+		color: var(--white);
+		opacity: 0.6;
+	}
+
+	main :global(a)
+	{
+		color: var(--foreground);
+		text-decoration: none;
+		background-image: linear-gradient(var(--foreground), var(--foreground));
+		background-size: 100% 1px;
+		background-position: 0 1.2em;
+		background-repeat: no-repeat;
+	}
+
+	main :global(a:hover),
+	main :global(a:focus)
+	{
+		color: var(--primary);
+		background-image: linear-gradient(var(--primary), var(--primary));
+	}
+</style>

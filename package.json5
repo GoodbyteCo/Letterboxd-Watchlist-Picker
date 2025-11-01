@@ -1,29 +1,15 @@
 {
-	name: '@goodbyteco/watchlist-picker',
-	version: '1.1.0',
+	name: "@goodbyteco/watchlist-picker",
+	version: "2.0.0",
 	private: true,
-	browserslist:
-	[
-		'> 1%',
-		'last 2 versions',
-		'not dead',
-	],
-	scripts:
-	{
-		dev: 'vue-cli-service serve',
-		build: 'vue-cli-service build',
+	type: "module",
+	scripts: {
+		"dev": "astro dev",
+		"build": "astro build"
 	},
-	dependencies:
-	{
-		'core-js': '^3.6.5',
-		'vue': '^2.6.14',
-		'vue-focus-visible': '^2.1.0',
-	},
-	devDependencies:
-	{
-		'@babel/core': '^7.0.0',
-		'@vue/cli-plugin-babel': '~5.0.1',
-		'@vue/cli-service': '~5.0.1',
-		'vue-template-compiler': '^2.6.11',
-	},
+	dependencies: {
+		"@astrojs/vercel": "^9.0.0",
+		"astro": "^5.12.8",
+		"cheerio": "^1.1.2",
+	}
 }
