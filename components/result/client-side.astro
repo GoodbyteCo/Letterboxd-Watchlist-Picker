@@ -44,7 +44,6 @@ const request = {
 		
 		fetch('/get-film', request)
 			.then(res => res.text())
-			// todo: this is currently an xss vector. fix!
 			.then(html => target.innerHTML = html)
 			.then(() => document.body.classList.remove('loading'))
 			.then(() => document.body.classList.add('loaded'))
