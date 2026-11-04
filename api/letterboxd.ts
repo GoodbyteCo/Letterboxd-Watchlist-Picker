@@ -40,10 +40,34 @@ export async function findFilm(query: Query): Promise<Result> {
 		: urlFromUsername(list)
 
 	try {
-		const response = await fetch(letterboxdUrl)
+		const response = await fetch(letterboxdUrl, {
+			headers: {
+				'User-Agent': 'WatchlistPicker (+https://watchlistpicker.com)',
+				'Accept': 'text/html',
+			},
+		})
 
 		if (!response.ok) {
-			console.error(`Error fetching ${letterboxdUrl}: ${response.status} ${response.statusText}`)
+			let bodySummary: string
+			try {
+				const document = cheerio.load(await response.text())
+				// Keep readable error text, excluding scripts and embedded challenge data.
+				document('script, style, input').remove()
+				bodySummary = document('body').text().replace(/\s+/g, ' ').trim().slice(0, 500)
+			}
+			catch {
+				bodySummary = '[Unable to read response body]'
+			}
+
+			console.error('Letterboxd request failed', {
+				url: letterboxdUrl.toString(),
+				status: response.status,
+				statusText: response.statusText,
+				headers: Object.fromEntries([
+					'cf-mitigated', 'cf-ray', 'retry-after', 'server', 'content-type',
+				].map(name => [name, response.headers.get(name)])),
+				bodySummary,
+			})
 			return buildError(NoResultReason.UNKNOWN)
 		}
 
