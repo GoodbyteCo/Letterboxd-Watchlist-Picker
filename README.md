@@ -99,15 +99,17 @@ us at [support@goodbyte.ca](mailto:support@goodbyte.ca).
 
 ## Building locally
 
-Clone the project and run `bun install`.
+Use Node.js 24 and pnpm 9.15.9, then run `pnpm install --frozen-lockfile`.
 
 The API uses Vercel functions, so use `vercel dev` to test. However, this requires
 a [Vercel](https://vercel.com) account. To test without the films propagating (everything
 will work, just the picture of the film will not fill in), run:
 
 ```
-bun run dev
+pnpm dev
 ```
+
+Run `pnpm build` to generate the production Vercel output.
 
 
 ## Operational notes
