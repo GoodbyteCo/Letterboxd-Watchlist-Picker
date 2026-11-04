@@ -40,7 +40,12 @@ export async function findFilm(query: Query): Promise<Result> {
 		: urlFromUsername(list)
 
 	try {
-		const response = await fetch(letterboxdUrl)
+		const response = await fetch(letterboxdUrl, {
+			headers: {
+				'User-Agent': 'WatchlistPicker (+https://watchlistpicker.com)',
+				'Accept': 'text/html',
+			},
+		})
 
 		if (!response.ok) {
 			console.error(`Error fetching ${letterboxdUrl}: ${response.status} ${response.statusText}`)
